@@ -9,7 +9,7 @@
             "name": "Run npm start",
             "request": "launch",
             "type": "node-terminal",
-            "outputCapture": "console"
+            "outputCapture": "std"
         },       
     ]
 }

@@ -1,17 +1,9 @@
 import $ from 'jquery';
+import { waitForEl } from '../../../helper/wait.js';
+import { GMWindow } from './../../../helper/gmWindow';
 
 var initialized = false;
 var callbacks = [];
-
-const waitForEl = function(selector, callback) {
-    if ($(selector).length) {
-        callback();
-    } else {
-        setTimeout(function() {
-        waitForEl(selector, callback);
-        }, 100);
-    }
-};
 
 const getReactFiber = (elem) => {
     const keys = Object.keys(elem).filter(function(k) {
@@ -67,3 +59,21 @@ export const subscribeForCacheChanges = (callback) => {
         initialized = true;
     }
 };
+
+var _mapInstance = null;
+export const mapFinderHook = (callback) => {
+    if (_mapInstance == null){
+        // @ts-ignore
+        const oldUseState = GMWindow.React.useState;
+        // @ts-ignore
+        GMWindow.React.useState = (initialState) => {
+            const hookResult = oldUseState(initialState);
+            if(_mapInstance == null && hookResult && hookResult[0] && hookResult[0]._map){
+                _mapInstance = hookResult[0]._map;
+                console.log("found map instance");
+                callback(_mapInstance);
+            }
+            return hookResult;
+        } 
+    }
+}

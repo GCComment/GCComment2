@@ -7,6 +7,7 @@ const sanitize = (content) =>{
     return content;
 } 
 
+/** @type {Editor} */ ;
 export const createEditor = (div, content) => {
     const editor = new Editor({
         el: div,
@@ -17,20 +18,10 @@ export const createEditor = (div, content) => {
         usageStatistics: false,
     });
 
-    /*
-    editor.insertToolbarItem({ groupIndex: 0, itemIndex: 0 }, {
-        name: 'closeFullscreen',
-        tooltip: 'Close Fullscreen Editor',
-        command: 'bold',
-        text: 'X',
-        className: 'toastui-editor-toolbar-icons first',
-        style: { backgroundImage: 'none', display: 'none' } // TODO Close icon
-    });
-    */
-
     return editor;
-} /** @type {Viewer} */ ;
+} 
 
+ /** @type {Viewer} */ ;
 export const createViewer = (div, content) => {
     const viewer = new Viewer({
         el: div,
@@ -39,4 +30,4 @@ export const createViewer = (div, content) => {
     });   
 
     return viewer;
-} /** @type {Viewer} */ ;
+}

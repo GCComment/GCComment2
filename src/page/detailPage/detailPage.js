@@ -132,8 +132,7 @@ const generateCommentSection = (comment) => {
             //TODO 
             // detailFinalCacheState.options.selectedIndex = detailCommentCacheState.options.selectedIndex;
 
-            comment.commentValue = editor_instance.getMarkdown();
-            debugger;         
+            comment.commentValue = editor_instance.getMarkdown();       
             $('#gccommentEditor').hide();
             viewer_instance.setMarkdown(comment.commentValue); 
             $('#gccommentViewer').show();

@@ -1,11 +1,10 @@
 import $ from 'jquery';
 import { log } from './helper/logger.js';
 import { gccommentOnDetailpage } from './page/detailPage/detailPage.js';
-import { gccommentOnOnMapPage } from './page/mapPage/mapPage.js';
-import { gccommentOnNewMapPage } from './page/MapPage/newMapPage.js';
+import { gccommentOnMapPage } from './page/mapPage/mapPage.js';
+import { gccommentOnNewMapPage } from './page/mapPage/newMapPage.js';
 import { addCommentBubblesToPage } from './page/other/addCommentBubblesToPage.js';
 import { gccommentOnProfilePage } from './page/profilePage/profilePage.js';
-
 
 $(() =>{
     // starting the GCC
@@ -32,8 +31,8 @@ $(() =>{
         log('debug', 'matched gccommentOnNewProfilePage');
         gccommentOnProfilePage(true);
     } else if (document.URL.search("www.geocaching.com\/map") >= 0) {
-        log('debug', 'matched gccommentOnOnMapPage');
-        gccommentOnOnMapPage();
+        log('debug', 'matched gccommentOnMapPage');
+        gccommentOnMapPage();
     }
     else if (document.URL.search("www.geocaching.com\/play\/map") >= 0) {
         log('debug', 'matched gccommentOnNewMapPage');
