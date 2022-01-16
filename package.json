@@ -28,7 +28,7 @@
     "lighterhtml": "^4.2.0"
   },
   "devDependencies": {
-    "@parcel/transformer-inline-string": "^2.0.1",
+    "@parcel/transformer-inline-string": "^2.2.0",
     "@types/jquery": "^3.5.11",
     "@types/leaflet": "^1.7.8",
     "@types/tampermonkey": "^4.0.5",
