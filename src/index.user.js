@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { log } from './helper/logger.js';
 import { gccommentOnDetailpage } from './page/detailPage/detailPage.js';
+import { gccommentOnHidePage } from './page/hidePage/hidePage.js';
 import { gccommentOnMapPage } from './page/mapPage/mapPage.js';
 import { gccommentOnNewMapPage } from './page/mapPage/newMapPage.js';
 import { addCommentBubblesToPage } from './page/other/addCommentBubblesToPage.js';
@@ -49,6 +50,9 @@ $(() =>{
     } else if (document.URL.search("\/play\/geocache\/") >= 0) {
         log('debug', 'matched gccommentOnNewLogPage');
         gccommentOnNewLogPage();
+    } else if (document.URL.search("\/hide\/planning") >= 0) {
+        log('debug', 'matched gccommentOnHidePage');
+        gccommentOnHidePage();
     } else if (document.URL.search("lukeiam\.github\.io\/gcc") >= 0) {
         log('debug', 'matched gccommentOnSharingPage');
         gccommentOnSharingPage();

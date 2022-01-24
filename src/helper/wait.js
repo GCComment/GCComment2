@@ -15,7 +15,7 @@ export const waitForPropOfObject = function(selector, obj, callback) {
     var currentObj = obj;
     
     for(var i=0;i<splittedSelector.length;i++){        
-        if(currentObj.hasOwnProperty(splittedSelector[i])){
+        if(currentObj.hasOwnProperty(splittedSelector[i]) && currentObj[splittedSelector[i]] !== null){
             currentObj = currentObj[splittedSelector[i]];
         }
         else{

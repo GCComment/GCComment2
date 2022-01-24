@@ -31,15 +31,11 @@ import { GMWindow } from "../helper/gmWindow.js";
 // @ts-ignore
 // css hack
 import leafletMenuCss from 'bundle-text:./leafletMenu.css';
-// @ts-ignore
-// css hack
-import fontAwesomeCss from 'bundle-text:@fortawesome/fontawesome-free/css/all.min.css';
 import { appendCSS } from './../helper/css';
 import { close } from "../consts/icons.js";
 
 
 appendCSS('text', leafletMenuCss);
-appendCSS('text', fontAwesomeCss);
 
 const SlideMenu = () => {
     const leaflet = GMWindow.L;

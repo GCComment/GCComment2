@@ -12,7 +12,6 @@ import { stateOptions, COMPREFIX, ARCHIVED } from '../../../consts/general.js';
 import { doLoadCommentFromGUID } from '../../../function/db.js';
 import { parseCoordinates } from '../../../helper/coordinates.js';
 
-
 /** @type {L.Map} */ 
 var map = null;
 /** @type {L} */ 
@@ -30,7 +29,8 @@ export const deleteAllGccMarkers = () => {
     if(gccLayer !== null){
         map.removeLayer(gccLayer);
         gccLayer = null;
-    }    
+    }
+    createGccLayerIfRequired();
 };
 
 const updateMoveMysteries = () =>{
@@ -128,6 +128,61 @@ export const addGccMenu = () =>{
     }, 500);
 };
 
+export const addGccMenuHide = () =>{
+    NewSlideMenu('', {iconImg: gccIcon, position: 'topright', menuposition: 'topright', marginvertical:'65'} ).addTo(map);
+    render($('.leaflet-menu-contents')[0],
+    html`
+        <b>
+            ${appendCheckBox(AUTOMOVEMYSTERIESBETA, lang.map_enablemm, ()=>{
+                $('#mmSub').slideToggle();
+                _updateMapViewHide();
+            })}
+        </b>
+        <div id="mmSub" style="display:none; padding: 0 15px;">
+            ${appendCheckBox(AUTOMOVEMYSTERIESBETAINCLUDEWPT, lang.map_includewpt, _updateMapViewHide)}
+        </div>
+    `);
+
+    setTimeout(function() {
+        $('#mmSub').slideToggle();
+        _updateMapViewHide();
+    }, 500);
+};
+
+const _updateMapViewHide = () =>{
+    deleteAllGccMarkers();
+    if (!$(`#${AUTOMOVEMYSTERIESBETA}`).prop('checked')){
+        return;
+    }
+    const includeWaypoints = GM_getValue(AUTOMOVEMYSTERIESBETAINCLUDEWPT);
+    var keys = GM_listValues();
+    for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        if (key.indexOf(COMPREFIX) > -1) {
+            var guid = key.substring(COMPREFIX.length, key.length);
+            var comment = doLoadCommentFromGUID(guid);     
+
+            if (comment.lat && comment.lng) {
+                drawCircleWithData(comment.lat, comment.lng, "161", `<a href="https://coord.info/${comment.gccode}" target="_blank">${comment.name}<br>(${comment.gccode})</a>`, "#0000FF");
+            }
+
+            if (includeWaypoints && comment.waypoints && (comment.waypoints.length > 0)) {                
+                for (var j = 0; j < comment.waypoints.length; j++) {
+                    var coords = parseCoordinates(comment.waypoints[j].coordinate);
+                    var wpName = comment.waypoints[j].name;
+                    if(wpName === null || wpName === ""){
+                        wpName = "unnamed_wp"
+                    }
+                    debugger;
+                    if (coords.length == 2) {                        
+                        drawCircleWithData(coords[0], coords[1], "161", `<a href="https://coord.info/${comment.gccode}" target="_blank">WP: ${wpName}\n${comment.name}<br>(${comment.gccode})</a>`, "#00FF00");                        
+                    }
+                }
+            }            
+        }
+    }
+}
+
 const createGccLayerIfRequired = () => {
     if(gccLayer === null){        
         gccLayer = new leaflet.LayerGroup();
@@ -208,7 +263,7 @@ export const drawMarker = (/** @type {number} */ lat, /** @type {number} */ lng,
     gccLayer.addLayer(marker);
 };
 
-export const  drawLine = (finallat, finallng, origlat, origlng, state) => {
+export const drawLine = (finallat, finallng, origlat, origlng, state) => {
     var latlngs = new Array();
     latlngs.push(new leaflet.LatLng(finallat, finallng));
     latlngs.push(new leaflet.LatLng(origlat, origlng));
@@ -253,9 +308,8 @@ export const drawMultiline = (aWaypoints, state) => {
     gccLayer.addLayer(link);
 };
 
-export const drawCircle = (finallat, finallng, radius) => {
-    var latlng = new leaflet.LatLng(finallat, finallng);
-    var color = "#000000";
+export const drawCircle = (finallat, finallng, radius, color="#000000") => {
+    var latlng = new leaflet.LatLng(finallat, finallng);   
 
     var circle = new leaflet.Circle(latlng, radius, {
         color : color,
@@ -265,6 +319,40 @@ export const drawCircle = (finallat, finallng, radius) => {
         opacity : 1,
         fillOpacity : 0.2
     });
+
+    gccLayer.addLayer(circle);
+};
+
+export const drawCircleWithData = (finallat, finallng, radius, popupContent="", color="#000000") => {
+    const geoJson = {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [finallng, finallat]
+        },
+        "properties": {
+            "popupContent": popupContent
+        }
+    };
+
+    // @ts-ignore
+    const circle = leaflet.geoJson(geoJson, {
+        pointToLayer: function(feature, latlng) {
+            return new leaflet.Circle(latlng, radius, {
+                color : color,
+                weight : 2,
+                fill : true,
+                interactive : false,
+                opacity : 1,
+                fillOpacity : 0.2
+            });
+        },
+        onEachFeature: function(feature, layer) {
+            if (feature.properties && feature.properties.popupContent) {
+                layer.bindPopup(feature.properties.popupContent);
+            }
+        }
+    })
 
     gccLayer.addLayer(circle);
 };
