@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import  { Editor } from '@toast-ui/editor';
 import  Viewer  from '@toast-ui/editor/dist/toastui-editor-viewer';
 
@@ -26,6 +27,17 @@ export const createViewer = (div, content) => {
     const viewer = new Viewer({
         el: div,
         initialValue: sanitize(content),
+        usageStatistics: false,
+    });   
+
+    return viewer;
+}
+
+ /** @type {Viewer} */ ;
+ export const createViewerFromDivDataAttr = (div) => {
+    const viewer = new Viewer({
+        el: div,
+        initialValue: sanitize($(div).attr("data")),
         usageStatistics: false,
     });   
 

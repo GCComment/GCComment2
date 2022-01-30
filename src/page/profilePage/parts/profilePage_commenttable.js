@@ -18,6 +18,7 @@ import { doLoadCommentFromGUID, doSaveCommentToGUID } from "../../../function/db
 import { calculateDistance, convertDec2DMS } from "../../../helper/coordinates.js";
 import { log } from "../../../helper/logger";
 import { GCC_getValue, GCC_listValues, GCC_setValue } from "../../../helper/storage.js";
+import { createViewerFromDivDataAttr } from '../../../helper/commentEditor.js';
 
 // @ts-ignore
 // connect datatables with jquery
@@ -161,9 +162,8 @@ const generateTableRow = (comment, rowCount) => {
             ${
                 (comment.commentValue)?
                 html`
-                    <p class='tableComment'>
-                        ${comment.commentValue.replace(/\n/g, '<br/>')}                      
-                    </p>
+                    <div class='tableComment' data=${comment.commentValue}>
+                    </div>
                 `
                 :null
             }
@@ -480,7 +480,9 @@ export const refreshTableDiv = (show) =>{
     `);
 
 
-    
+    $(".tableComment").each((i,e)=> {
+        createViewerFromDivDataAttr(e);
+    });
 
 
     $('#gccommentoverviewtable').DataTable({
