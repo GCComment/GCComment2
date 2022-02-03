@@ -10,7 +10,7 @@ import {
     PATCHGPX_REMOVE_OTHERS,
     PATCHGPX_REMOVE_SOLVED,
     PATCHGPX_REMOVE_UNSOLVED,
-    PATCHGPX_STRIP_EMOJIS,
+    PATCHGPX_STRIP_EMOJIS
 } from "../../../consts/preferences";
 import { appendCheckBox } from "../../other/controls";
 

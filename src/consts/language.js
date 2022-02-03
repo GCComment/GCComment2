@@ -3,7 +3,7 @@ import {
     SETTINGS_LANGUAGE,
     SETTINGS_LANGUAGE_AUTO,
     SETTINGS_LANGUAGE_DE,
-    SETTINGS_LANGUAGE_EN,
+    SETTINGS_LANGUAGE_EN
 } from "./preferences.js";
 import { GCC_getValue } from "../helper/storage.js";
 
@@ -184,7 +184,7 @@ _languages[SETTINGS_LANGUAGE_EN] = {
     gistNoticeMoreInfo: "[More info]",
     gistNoticeHide: "[Do not show again]",
     gistNoticeLink:
-        "https://github.com/lukeIam/gcc/wiki/ShareLinksGerman#mehr-informationen-zum-teilen-von-kommentaren-als-links",
+        "https://github.com/lukeIam/gcc/wiki/ShareLinksGerman#mehr-informationen-zum-teilen-von-kommentaren-als-links"
 };
 _languages[SETTINGS_LANGUAGE_DE] = {
     mycomments: "Meine Kommentare",
@@ -367,7 +367,7 @@ _languages[SETTINGS_LANGUAGE_DE] = {
     gistNoticeMoreInfo: "[Mehr Informationen]",
     gistNoticeHide: "[Zeige diesen Hinweis nicht mehr]",
     gistNoticeLink:
-        "https://github.com/lukeIam/gcc/wiki/ShareLinksGerman#mehr-informationen-zum-teilen-von-kommentaren-als-links",
+        "https://github.com/lukeIam/gcc/wiki/ShareLinksGerman#mehr-informationen-zum-teilen-von-kommentaren-als-links"
 };
 
 export const languages = _languages;

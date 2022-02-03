@@ -14,7 +14,7 @@ const sanitize = (content) => {
         initialEditType: "wysiwyg",
         previewStyle: "tab",
         initialValue: sanitize(content),
-        usageStatistics: false,
+        usageStatistics: false
     });
 
     return editor;
@@ -25,7 +25,7 @@ export const createViewer = (div, content) => {
     const viewer = new Viewer({
         el: div,
         initialValue: sanitize(content),
-        usageStatistics: false,
+        usageStatistics: false
     });
 
     return viewer;
@@ -36,7 +36,7 @@ export const createViewerFromDivDataAttr = (div) => {
     const viewer = new Viewer({
         el: div,
         initialValue: sanitize($(div).attr("data")),
-        usageStatistics: false,
+        usageStatistics: false
     });
 
     return viewer;

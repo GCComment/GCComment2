@@ -1,7 +1,10 @@
 {
-    "trailingComma": "es5",
+    "trailingComma": "none",
     "tabWidth": 4,
     "semi": true,
     "bracketSpacing": true,
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "singleQuote": false,
+    "htmlWhitespaceSensitivity": "css",
+    "embeddedLanguageFormatting": "auto"
 }

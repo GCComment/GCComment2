@@ -50,7 +50,7 @@ const SlideMenu = () => {
             delay: "10",
             icon: "fas fa-bars",
             iconImg: "",
-            hidden: false,
+            hidden: false
         },
 
         initialize: (innerHTML, options) => {
@@ -286,7 +286,7 @@ const SlideMenu = () => {
 
         show: () => {
             this._container.style.display = "inherit";
-        },
+        }
     });
 };
 

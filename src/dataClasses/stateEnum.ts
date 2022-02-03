@@ -3,5 +3,5 @@ export enum StateEnum {
     unknown = "-",
     unsolved = "not solved",
     solved = "solved",
-    found = "found",
+    found = "found"
 }

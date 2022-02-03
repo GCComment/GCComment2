@@ -8,7 +8,7 @@ import { gccIcon } from "../../consts/icons";
 import { lang } from "../../consts/language";
 import {
     ARCHIVE_FILTER_NO_ARCHIVED,
-    SETTING_ARCHIVE_FILTER,
+    SETTING_ARCHIVE_FILTER
 } from "../../consts/preferences.js";
 import { getNumberOfComments } from "../../function/db";
 import { appendCSS } from "../../helper/css.js";
@@ -21,7 +21,7 @@ import { addCommentBubblesToPage } from "../other/addCommentBubblesToPage.js";
 import {
     generateDisplayFilters,
     generateTableDiv,
-    refreshTableDiv,
+    refreshTableDiv
 } from "./parts/profilePage_commenttable";
 import { generateConfigDiv } from "./parts/profilePage_config";
 import { generateDeleteAllDiv } from "./parts/profilePage_delete";

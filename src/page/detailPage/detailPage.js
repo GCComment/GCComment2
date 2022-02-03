@@ -10,13 +10,13 @@ import {
     commentIconEditCancel,
     commentIconSave,
     commentIconShare,
-    deleteMysteryIcon,
+    deleteMysteryIcon
 } from "../../consts/icons.js";
 import { lang } from "../../consts/language.js";
 import { AUTO_UPDATE_GS_FINAL } from "../../consts/preferences.js";
 import {
     doLoadCommentFromGUID,
-    doSaveCommentToGUID,
+    doSaveCommentToGUID
 } from "../../function/db.js";
 import { convertDec2DMS, parseCoordinates } from "../../helper/coordinates.js";
 import { appendCSS } from "../../helper/css.js";
@@ -124,7 +124,7 @@ const generateCommentSection = (comment) => {
                 comment = new CacheComment({
                     guid: getGUID(),
                     gccode: getCachecode(),
-                    name: getCachename(),
+                    name: getCachename()
                 });
                 const orgigCoords = retrieveOriginalCoordinates();
                 if (comment && orgigCoords.length === 2) {
@@ -194,8 +194,8 @@ const generateCommentSection = (comment) => {
                             "/seek/cache_details.aspx/ResetUserCoordinate",
                             JSON.stringify({
                                 dto: {
-                                    ut: userToken,
-                                },
+                                    ut: userToken
+                                }
                             }),
                             (response) => {
                                 var r = JSON.parse(response.d);

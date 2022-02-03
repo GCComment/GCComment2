@@ -2,13 +2,13 @@ import $ from "jquery";
 import { log } from "../../helper/logger.js";
 import {
     doLoadCommentFromGCCode,
-    doLoadCommentFromGUID,
+    doLoadCommentFromGUID
 } from "../../function/db.js";
 import {
     state_default,
     state_found,
     state_solved,
-    state_unsolved,
+    state_unsolved
 } from "../../consts/icons.js";
 import { html } from "lighterhtml";
 import { lang } from "../../consts/language.js";

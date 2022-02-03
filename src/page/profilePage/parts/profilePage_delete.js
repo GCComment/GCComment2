@@ -12,7 +12,7 @@ import {
     DELETEALL_FILTER_SOLVED,
     DELETEALL_FILTER_UNSOLVED,
     DELETEALL_FILTER_UNTYPED,
-    EXPORT_FILTER_ALL,
+    EXPORT_FILTER_ALL
 } from "../../../consts/preferences";
 import { appendCheckBox, appendRadioGroup } from "../../other/controls";
 import { log } from "../../../helper/logger";
@@ -137,16 +137,16 @@ export const generateDeleteAllDiv = () => {
                 [
                     {
                         label: lang.both,
-                        attr: DELETEALL_FILTER_ARCHIVED_BOTH,
+                        attr: DELETEALL_FILTER_ARCHIVED_BOTH
                     },
                     {
                         label: lang.not_archived,
-                        attr: DELETEALL_FILTER_ARCHIVED_NOT_ARCHIVED,
+                        attr: DELETEALL_FILTER_ARCHIVED_NOT_ARCHIVED
                     },
                     {
                         label: lang.archived,
-                        attr: DELETEALL_FILTER_ARCHIVED_ARCHIVED,
-                    },
+                        attr: DELETEALL_FILTER_ARCHIVED_ARCHIVED
+                    }
                 ],
                 GCC_getValue(
                     DELETEALL_FILTER_ARCHIVED,
@@ -161,8 +161,9 @@ export const generateDeleteAllDiv = () => {
                 onclick=${performFilteredDeleteAll}
             />
             <div id="deleteAllResult" />
+            <!-- prettier-ignore -->
             <script>
-                ${initFilterOptionsDisabledState};
+                ${initFilterOptionsDisabledState}
             </script>
         </div>
     `;

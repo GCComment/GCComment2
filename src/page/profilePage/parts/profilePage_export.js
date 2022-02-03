@@ -11,7 +11,7 @@ import {
     EXPORT_FILTER_FOUND,
     EXPORT_FILTER_SOLVED,
     EXPORT_FILTER_UNSOLVED,
-    EXPORT_FILTER_UNTYPED,
+    EXPORT_FILTER_UNTYPED
 } from "../../../consts/preferences";
 import { appendCheckBox, appendRadioGroup } from "../../other/controls";
 import { GCC_getValue } from "../../../helper/storage.js";
@@ -71,16 +71,16 @@ export const generateExportDiv = () => {
                     [
                         {
                             label: lang.both,
-                            attr: EXPORT_FILTER_ARCHIVE_BOTH,
+                            attr: EXPORT_FILTER_ARCHIVE_BOTH
                         },
                         {
                             label: lang.not_archived,
-                            attr: EXPORT_FILTER_ARCHIVE_NOT_ARCHIVED,
+                            attr: EXPORT_FILTER_ARCHIVE_NOT_ARCHIVED
                         },
                         {
                             label: lang.archived,
-                            attr: EXPORT_FILTER_ARCHIVE_ARCHIVED,
-                        },
+                            attr: EXPORT_FILTER_ARCHIVE_ARCHIVED
+                        }
                     ],
                     GCC_getValue(
                         EXPORT_FILTER_ARCHIVE,
@@ -135,8 +135,9 @@ export const generateExportDiv = () => {
                 >Auth with DropBox</a
             >
         </div>
+        <!-- prettier-ignore -->
         <script>
-            ${initFilterOptionsDisabledState};
+            ${initFilterOptionsDisabledState}
         </script>
     `;
 };

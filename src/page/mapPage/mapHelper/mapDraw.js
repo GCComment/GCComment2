@@ -9,7 +9,7 @@ import {
     state_found,
     state_solved,
     state_unsolved,
-    waypointIcon,
+    waypointIcon
 } from "../../../consts/icons.js";
 import {
     AUTOMOVEMYSTERIESBETA,
@@ -18,7 +18,7 @@ import {
     AUTOMOVEMYSTERIESBETAHOME,
     AUTOMOVEMYSTERIESBETAINCLUDEWPT,
     AUTOMOVEMYSTERIESBETASOLVED,
-    AUTOMOVEMYSTERIESBETAUNSOLVED,
+    AUTOMOVEMYSTERIESBETAUNSOLVED
 } from "../../../consts/preferences.js";
 import { GMWindow } from "../../../helper/gmWindow.js";
 import { log } from "../../../helper/logger.js";
@@ -140,7 +140,7 @@ export const addGccMenu = () => {
         iconImg: gccIcon,
         position: "topright",
         menuposition: "topright",
-        marginvertical: "65",
+        marginvertical: "65"
     }).addTo(map);
     render(
         $(".leaflet-menu-contents")[0],
@@ -209,7 +209,7 @@ export const addGccMenuHide = () => {
         iconImg: gccIcon,
         position: "topright",
         menuposition: "topright",
-        marginvertical: "65",
+        marginvertical: "65"
     }).addTo(map);
     render(
         $(".leaflet-menu-contents")[0],
@@ -276,7 +276,7 @@ const _updateMapViewHide = () => {
                     if (wpName === null || wpName === "") {
                         wpName = "unnamed_wp";
                     }
-                    debugger;
+
                     if (coords.length == 2) {
                         drawCircleWithData(
                             coords[0],
@@ -332,10 +332,10 @@ export const drawMarker = (
     var finalMarker = new leaflet.Icon({
         iconUrl: url,
         iconSize: iconSize,
-        iconAnchor: iconAnchor,
+        iconAnchor: iconAnchor
     });
     var marker = new leaflet.Marker(new leaflet.LatLng(lat, lng), {
-        icon: finalMarker,
+        icon: finalMarker
     });
     marker.on("click", (event) => {
         /*
@@ -387,7 +387,7 @@ export const drawLine = (finallat, finallng, origlat, origlng, state) => {
         weight: 2,
         interactive: false,
         opacity: 1,
-        fillOpacity: 1,
+        fillOpacity: 1
     });
 
     gccLayer.addLayer(link);
@@ -406,7 +406,7 @@ export const drawMultiline = (aWaypoints, state) => {
         weight: 2,
         interactive: false,
         opacity: 1,
-        fillOpacity: 1,
+        fillOpacity: 1
     });
 
     gccLayer.addLayer(link);
@@ -421,7 +421,7 @@ export const drawCircle = (finallat, finallng, radius, color = "#000000") => {
         fill: true,
         interactive: false,
         opacity: 1,
-        fillOpacity: 0.2,
+        fillOpacity: 0.2
     });
 
     gccLayer.addLayer(circle);
@@ -438,11 +438,11 @@ export const drawCircleWithData = (
         type: "Feature",
         geometry: {
             type: "Point",
-            coordinates: [finallng, finallat],
+            coordinates: [finallng, finallat]
         },
         properties: {
-            popupContent: popupContent,
-        },
+            popupContent: popupContent
+        }
     };
 
     // @ts-ignore
@@ -454,14 +454,14 @@ export const drawCircleWithData = (
                 fill: true,
                 interactive: false,
                 opacity: 1,
-                fillOpacity: 0.2,
+                fillOpacity: 0.2
             });
         },
         onEachFeature: (feature, layer) => {
             if (feature.properties && feature.properties.popupContent) {
                 layer.bindPopup(feature.properties.popupContent);
             }
-        },
+        }
     });
 
     gccLayer.addLayer(circle);

@@ -78,7 +78,7 @@ export const tooltip = (() => {
             tt.timer = setInterval(() => {
                 funcCollection.fade(-1);
             }, timer);
-        },
+        }
     };
 
     init();

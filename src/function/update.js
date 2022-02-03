@@ -83,7 +83,7 @@ export const updateCheck = () => {
                 GM_xmlhttpRequest({
                     method: "GET",
                     headers: {
-                        "Cache-Control": "max-age=3600, must-revalidate",
+                        "Cache-Control": "max-age=3600, must-revalidate"
                     },
                     url: updatechangesurl,
                     onload: (responseDetails) => {
@@ -115,7 +115,7 @@ export const updateCheck = () => {
                             "Unable to get version from Github! Errorcode " +
                                 responseDetails.status
                         );
-                    },
+                    }
                 });
                 GCC_setValue("updateDate", "" + (currentDate - 0));
             }

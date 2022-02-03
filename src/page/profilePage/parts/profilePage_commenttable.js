@@ -15,7 +15,7 @@ import {
     state_default,
     state_found,
     state_solved,
-    state_unsolved,
+    state_unsolved
 } from "../../../consts/icons.js";
 import { lang } from "../../../consts/language";
 import {
@@ -23,21 +23,21 @@ import {
     ARCHIVE_FILTER_NO_ARCHIVED,
     ARCHIVE_FILTER_ONLY_ARCHIVED,
     LAZY_TABLE_REFRESH,
-    SETTING_ARCHIVE_FILTER,
+    SETTING_ARCHIVE_FILTER
 } from "../../../consts/preferences";
 import {
     doLoadCommentFromGUID,
-    doSaveCommentToGUID,
+    doSaveCommentToGUID
 } from "../../../function/db.js";
 import {
     calculateDistance,
-    convertDec2DMS,
+    convertDec2DMS
 } from "../../../helper/coordinates.js";
 import { log } from "../../../helper/logger";
 import {
     GCC_getValue,
     GCC_listValues,
-    GCC_setValue,
+    GCC_setValue
 } from "../../../helper/storage.js";
 import { createViewerFromDivDataAttr } from "../../../helper/commentEditor.js";
 import { CacheComment } from "./../../../dataClasses/cacheComment";
@@ -362,25 +362,25 @@ const generateTableRow = (comment, rowCount) => {
                 command: `#${comment.guid}=markdefault`,
                 label: `${lang.table_markcacheas} ${lang.type_untyped}`,
                 icon: state_default,
-                callback: changeState,
+                callback: changeState
             },
             {
                 command: `#${comment.guid}=markunsolved`,
                 label: `${lang.table_markcacheas} ${lang.type_unsolved}`,
                 icon: state_unsolved,
-                callback: changeState,
+                callback: changeState
             },
             {
                 command: `#${comment.guid}=marksolved`,
                 label: `${lang.table_markcacheas} ${lang.type_solved}`,
                 icon: state_solved,
-                callback: changeState,
+                callback: changeState
             },
             {
                 command: `#${comment.guid}=markfound`,
                 label: `${lang.table_markcacheas} ${lang.type_found}`,
                 icon: state_found,
-                callback: changeState,
+                callback: changeState
             },
             {
                 command: `#${comment.guid}=del`,
@@ -409,13 +409,13 @@ const generateTableRow = (comment, rowCount) => {
                             refreshTableDiv(true);
                         }
                     }
-                },
+                }
             },
             {
                 command: `https://www.geocaching.com/seek/cache_details.aspx?guid=${comment.guid}#mycomments`,
                 label: lang.table_editondetail,
                 icon: commentIconEdit,
-                callback: null,
+                callback: null
             },
             {
                 command:
@@ -428,8 +428,8 @@ const generateTableRow = (comment, rowCount) => {
                         : lang.table_addtoarchive,
                 icon:
                     comment.archived === ARCHIVED ? archiveRemove : archiveAdd,
-                callback: changeState,
-            },
+                callback: changeState
+            }
         ];
 
         return html`
@@ -622,19 +622,19 @@ export const refreshTableDiv = (show) => {
         jQueryUI: false,
         columns: [
             {
-                width: "200px",
+                width: "200px"
             },
             {
-                width: "505px",
+                width: "505px"
             },
             {
-                width: "80px",
+                width: "80px"
             },
             {
                 width: "72px",
-                orderable: false,
-            },
-        ],
+                orderable: false
+            }
+        ]
     });
 
     if (!show) {

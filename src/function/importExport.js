@@ -107,7 +107,7 @@ function parseXMLImport(importText) {
                     name: Xwpt.childNodes[2].childNodes[0].nodeValue,
                     coordinate: unescapeXML(
                         unescape(Xwpt.childNodes[3].childNodes[0].nodeValue)
-                    ),
+                    )
                 });
             }
         }
@@ -143,7 +143,7 @@ function parseXMLImport(importText) {
                     origlat: imOriglat,
                     origlng: imOriglng,
                     archived: imArchived,
-                    waypoints: imWaypoints,
+                    waypoints: imWaypoints
                 };
                 // comment is more recent than existing one, import and replace
                 // existing!
@@ -164,7 +164,7 @@ function parseXMLImport(importText) {
                 origlat: imOriglat,
                 origlng: imOriglng,
                 archived: imArchived,
-                waypoints: imWaypoints,
+                waypoints: imWaypoints
             };
             doSaveCommentWTimeToGUID(comment);
             importedCount++;

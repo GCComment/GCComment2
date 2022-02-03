@@ -8,7 +8,7 @@ import {
     LAZY_TABLE_REFRESH,
     SETTINGS_LANGUAGE,
     SETTINGS_LANGUAGE_DE,
-    SETTINGS_LANGUAGE_EN,
+    SETTINGS_LANGUAGE_EN
 } from "../../../consts/preferences";
 import { appendCheckBox } from "../../other/controls";
 import { GCC_setValue } from "../../../helper/storage.js";
