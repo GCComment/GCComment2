@@ -1,5 +1,5 @@
 
-export const appendScript = function (type, script, context) {
+export const appendScript = (type, script, context) => {
     var element = document.createElement('script');
     element.setAttribute('type', 'text/javascript');
     if (type == 'src') {
@@ -12,12 +12,12 @@ export const appendScript = function (type, script, context) {
     return element;
 }
 
-export const addEvent = function (obj, type, fn) {
-    if (obj.addEventListener){
+export const addEvent = (obj, type, fn) => {
+    if (obj.addEventListener) {
         obj.addEventListener(type, fn, false);
     }
-    else if (obj.attachEvent){
-        obj.attachEvent('on' + type, function () {
+    else if (obj.attachEvent) {
+        obj.attachEvent('on' + type, () => {
             return fn.apply(obj, new Array(window.event));
         });
     }

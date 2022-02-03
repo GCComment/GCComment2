@@ -9,7 +9,7 @@ export const parseImport = (importText) => {
         var aExisted = [];
         var aOverwrite = [];
         var aNew = [];
-        aJSON.forEach(function(element, index) {
+        aJSON.forEach((element, index) => {
             var oExisting = doLoadCommentFromGUID(element.guid);
             if (oExisting) {
                 if ((oExisting.saveTime != null) && (oExisting.saveTime >= element.saveTime)) {

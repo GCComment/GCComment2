@@ -2,12 +2,12 @@ import $ from "jquery";
 
 import {doLoadCommentFromGUID, doSaveCommentToGUID} from "../function/db.js";
 import {AUTOMARKARCHIVE, AUTOMARKFOUND} from "../consts/preferences.js";
-import {ARCHIVED, stateOptions} from "../consts/general.js";
+import {ARCHIVED} from "../consts/general.js";
 import {GCC_getValue} from "../helper/storage.js"
 import { html } from "lighterhtml";
 
 
-export const gccommentOnLogPage = function () {
+export const gccommentOnLogPage = () => {
     if (("" + window.location).indexOf('LUID=') >= 0) {
         // do something if we watch the user log.
     } else {
@@ -37,13 +37,13 @@ export const gccommentOnLogPage = function () {
 
                 $('#ctl00_ContentBody_LogBookPanel1_btnSubmitLog')[0].addEventListener(
                     "click",
-                    function (event) {
+                    (event) => {
                         var input = $('#ctl00_ContentBody_LogBookPanel1_ddLogType')[0];
 
                         var c = doLoadCommentFromGUID(guid);
                         if(c !== null)
                         {
-                            var markFoundState = (input.value == 2) && GCC_getValue(AUTOMARKFOUND) ? stateOptions[3]
+                            var markFoundState = (input.value == 2) && GCC_getValue(AUTOMARKFOUND) ? StateEnum.found
                                 : c.state;
                             var markArchiveState = GCC_getValue(AUTOMARKARCHIVE) ? ARCHIVED : c.archived;
 
@@ -60,7 +60,7 @@ export const gccommentOnLogPage = function () {
                 else
                     markfound.style.display = 'none';
 
-                input.addEventListener('change', function () {
+                input.addEventListener('change', () => {
                     if (input.value == 2) {
                         markfound.style.display = 'inline';
                     } else

@@ -1,13 +1,14 @@
 import {lang} from "../consts/language.js"
 
 // helper detailpage: macht aus dem Time-Long eine lesbare Zeitangabe
-export const createTimeString = function(time, simple) {
+export const createTimeString = (time, simple) => {
     if (time < 0)
         return lang.never;
     else {
         var lastSave = null;
         if (typeof time === "object")
             lastSave = time;
+
         else
             lastSave = new Date(parseInt(time));
         // lastSave.setTime(time);
@@ -29,6 +30,7 @@ export const createTimeString = function(time, simple) {
 
         if (simple)
             return lastSave.getFullYear() + "-" + month + "-" + day;
+
         else
             return lastSave.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + sec;
     }

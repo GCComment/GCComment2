@@ -314,7 +314,7 @@ _languages[SETTINGS_LANGUAGE_DE] = {
 export const languages = _languages
 
 
-var getLanguage = function(){
+var getLanguage = () =>{
     var langsetting = GCC_getValue(SETTINGS_LANGUAGE);
 
     if (langsetting === SETTINGS_LANGUAGE_AUTO) {

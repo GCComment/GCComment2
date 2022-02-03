@@ -3,14 +3,14 @@ import $ from 'jquery';
 import {log} from '../../helper/logger.js';
 import {doLoadCommentFromGCCode, doLoadCommentFromGUID} from "../../function/db.js";
 import { state_default, state_found, state_solved, state_unsolved } from '../../consts/icons.js';
-import { stateOptions } from '../../consts/general.js';
 import { html } from 'lighterhtml';
 import { lang } from '../../consts/language.js';
 import { convertDec2DMS } from '../../helper/coordinates.js';
 import { tooltip } from '../../helper/tooltip.js';
+import { StateEnum } from '../../dataClasses/stateEnum';
 
 
-export const addCommentBubblesToPage = function () {
+export const addCommentBubblesToPage = () => {
     log("info", "weaving comments into table...");    
 
     const style = document.createElement('style');
@@ -58,11 +58,11 @@ export const addCommentBubblesToPage = function () {
         if (!comment.state)
             target.src = state_default;
         else {
-            if (comment.state == stateOptions[1])
+            if (comment.state == StateEnum.unsolved)
                 target.src = state_unsolved;
-            else if (comment.state == stateOptions[2])
+            else if (comment.state == StateEnum.solved)
                 target.src = state_solved;
-            else if (comment.state == stateOptions[3])
+            else if (comment.state == StateEnum.found)
                 target.src = state_found;
             else
                 target.src = state_default;
@@ -73,7 +73,7 @@ export const addCommentBubblesToPage = function () {
         target.alt = 'Comment available';
         target.setAttribute("guid", comment.guid);
 
-        target.addEventListener('mouseover', function (evt) {
+        target.addEventListener('mouseover', (evt) => {
             let targetNode = evt.relatedTarget;
             if (!targetNode)
                 return;

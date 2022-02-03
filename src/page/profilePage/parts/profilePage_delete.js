@@ -16,11 +16,12 @@ import {
 } from "../../../consts/preferences";
 import {appendCheckBox, appendRadioGroup} from "../../other/controls";
 import {log} from "../../../helper/logger";
-import {ARCHIVED, COMPREFIX, stateOptions} from "../../../consts/general";
+import {ARCHIVED, COMPREFIX} from "../../../consts/general";
 import {doLoadCommentFromGUID} from "../../../function/db";
 import {GCC_getValue} from "../../../helper/storage.js"
+import { StateEnum } from '../../../dataClasses/stateEnum';
 
-const toggleDeleteAllFilterOptions = function() {
+const toggleDeleteAllFilterOptions = () => {
     if (GCC_getValue(DELETEALL_FILTER_ALL)) {
         $('#DELETEALL_FILTER_UNTYPED').attr('disabled', 'disabled');
         $('#DELETEALL_FILTER_UNSOLVED').attr('disabled', 'disabled');
@@ -52,10 +53,10 @@ function performFilteredDeleteAll() {
                     || (archiveSetting === DELETEALL_FILTER_ARCHIVED_ARCHIVED && isArchived) || (archiveSetting === DELETEALL_FILTER_ARCHIVED_NOT_ARCHIVED && !isArchived));
 
                 if ((GCC_getValue(DELETEALL_FILTER_ALL) && includeArchive)
-                    || (comment.state === stateOptions[0] && GCC_getValue(DELETEALL_FILTER_UNTYPED) && includeArchive)
-                    || (comment.state === stateOptions[1] && GCC_getValue(DELETEALL_FILTER_UNSOLVED) && includeArchive)
-                    || (comment.state === stateOptions[2] && GCC_getValue(DELETEALL_FILTER_SOLVED) && includeArchive)
-                    || (comment.state === stateOptions[3] && GCC_getValue(DELETEALL_FILTER_FOUND) && includeArchive)) {
+                    || (comment.state === StateEnum.unknown && GCC_getValue(DELETEALL_FILTER_UNTYPED) && includeArchive)
+                    || (comment.state === StateEnum.unsolved && GCC_getValue(DELETEALL_FILTER_UNSOLVED) && includeArchive)
+                    || (comment.state === StateEnum.solved && GCC_getValue(DELETEALL_FILTER_SOLVED) && includeArchive)
+                    || (comment.state === StateEnum.found && GCC_getValue(DELETEALL_FILTER_FOUND) && includeArchive)) {
 
                     const removeTooltip = createCachePrintout(comment);
                     resultRemoved = resultRemoved
@@ -71,7 +72,7 @@ function performFilteredDeleteAll() {
                     removedCount++;
 
                     log("info", "deleted: " + key + "(" + GCC_getValue(key) + ")");
-                    deleteComment(comment.guid, comment.gccode);
+                    comment.delete();
                 }
             }
         }

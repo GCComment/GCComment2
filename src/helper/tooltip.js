@@ -28,7 +28,7 @@ export const tooltip = ( () => {
     }
 
     const funcCollection = {
-        show: function (v, w) {
+        show: (v, w) => {
             tt.style.display = "block";
             if (typeof(v) === "object"){
                 render($("#tt_cont")[0], v);
@@ -42,17 +42,17 @@ export const tooltip = ( () => {
             }
             h = parseInt(tt.offsetHeight) + top;
             clearInterval(tt.timer);
-            tt.timer = setInterval(function () {
+            tt.timer = setInterval(() => {
                 funcCollection.fade(1);
             }, timer);
         },
-        pos: function (/** @type {{ pageY: any; pageX: any; }} */ e) {
+        pos: (/** @type {{ pageY: any; pageX: any; }} */ e) => {
             var u = e.pageY;
             var l = e.pageX;
             tt.style.top = u - h + "px";
             tt.style.left = l + left + "px";
         },
-        fade: function (d) {
+        fade: (d) => {
             var a = alpha;
             if ((a != endalpha && d == 1) || (a != 0 && d == -1)) {
                 var i = speed;
@@ -71,9 +71,9 @@ export const tooltip = ( () => {
                 }
             }
         },
-        hide: function () {
+        hide: () => {
             clearInterval(tt.timer);
-            tt.timer = setInterval(function () {
+            tt.timer = setInterval(() => {
                 funcCollection.fade(-1);
             }, timer);
         },

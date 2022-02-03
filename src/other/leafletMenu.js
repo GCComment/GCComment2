@@ -54,7 +54,7 @@ const SlideMenu = () => {
             hidden: false
         },
     
-        initialize: function(innerHTML, options){
+        initialize: (innerHTML, options) => {
             leaflet.Util.setOptions(this, options);
             this._innerHTML = innerHTML;
             this._isLeftPosition = this.options.menuposition == 'topleft' ||
@@ -64,7 +64,7 @@ const SlideMenu = () => {
             this._isHorizontal = this.options.direction == 'horizontal' ? true : false;
         },
     
-        onAdd: function(map){
+        onAdd: (map) => {
             this._container = leaflet.DomUtil.create('div', 'leaflet-control-slidemenu leaflet-bar leaflet-control');
             $(this._container).css('margin-top', parseInt(this.options.marginvertical, 10) + 'px'); 
             var link = leaflet.DomUtil.create('a', 'leaflet-bar-part leaflet-bar-part-single', this._container);
@@ -152,7 +152,7 @@ const SlideMenu = () => {
             leaflet.DomEvent.disableClickPropagation(this._menu);
             leaflet.DomEvent
                 .on(link, 'click', leaflet.DomEvent.stopPropagation)
-                .on(link, 'click', function(e){
+                .on(link, 'click', (e)=>{
                     // Open                  
                     $('#search-map-cta').hide();
                     this.show();
@@ -161,17 +161,17 @@ const SlideMenu = () => {
                     e.stopPropagation();
                 }, this)
                 .on(closeButton, 'click', leaflet.DomEvent.stopPropagation)
-                .on(closeButton, 'click', function(e){                    
+                .on(closeButton, 'click', (e)=>{                    
                     // Close                   
                     this._animate(this._menu, 0, frominit, false, ispx, unit);
                     $('#search-map-cta').show();
                     e.preventDefault();
                     e.stopPropagation();
                 }, this);
-            leaflet.DomEvent.on(this._menu, 'mouseover', function(){
+            leaflet.DomEvent.on(this._menu, 'mouseover', () => {
                 map.scrollWheelZoom.disable();
             });
-            leaflet.DomEvent.on(this._menu, 'mouseout', function(){
+            leaflet.DomEvent.on(this._menu, 'mouseout', () => {
                 map.scrollWheelZoom.enable();
             });
     
@@ -182,18 +182,18 @@ const SlideMenu = () => {
             return this._container;
         },
     
-        onRemove: function(map){
+        onRemove: (map) => {
             //Remove sliding menu from DOM
             map._container.removeChild(this._menu);
             delete this._menu;
         },
     
-        setContents: function(innerHTML){
+        setContents: (innerHTML) => {
             this._innerHTML = innerHTML;
             this._contents.innerHTML = this._innerHTML;
         },
     
-        _animate: function(menu, from, to, isOpen, ispx, unit){
+        _animate: (menu, from, to, isOpen, ispx, unit) => {
             if(this._isHorizontal){
                 if(this._isLeftPosition){
                     menu.style.left = from + (ispx ? 'px' : '%');
@@ -212,7 +212,7 @@ const SlideMenu = () => {
             }
     
             if(from != to){
-                setTimeout(function(slideMenu){
+                setTimeout((slideMenu) => {
                     var value = isOpen ? from + unit : from - unit;
                     slideMenu._animate(slideMenu._menu, value, to, isOpen, ispx, unit);
                 }, parseInt(this.options.delay), this);
@@ -222,17 +222,15 @@ const SlideMenu = () => {
             }      
         },
     
-        hide: function () {
+        hide: () => {
             this._container.style.display = 'none';
         },
     
-        show: function () {
+        show: () => {
             this._container.style.display = 'inherit';
         }
     });    
 };
 
 
-export const NewSlideMenu = function(innerHTML, options) {
-    return new (SlideMenu())(innerHTML, options);
-};
+export const NewSlideMenu = (innerHTML, options) => new (SlideMenu())(innerHTML, options);

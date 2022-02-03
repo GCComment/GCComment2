@@ -1,3 +1,1 @@
-export const trim = function(/** @type {string} */ str) {
-    return str.replace(/^\s+/, '').replace(/\s+$/, '');
-}
+export const trim = (/** @type {string} */ str) => str.replace(/^\s+/, '').replace(/\s+$/, '')

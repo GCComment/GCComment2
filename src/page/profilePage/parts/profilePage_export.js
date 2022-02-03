@@ -16,7 +16,7 @@ import {
 import {appendCheckBox, appendRadioGroup} from "../../other/controls";
 import {GCC_getValue} from "../../../helper/storage.js"
 
-const toggleExportFilterOptions =function() {
+const toggleExportFilterOptions =() => {
     if (GCC_getValue(EXPORT_FILTER_ALL)) {
         $('#EXPORT_FILTER_UNTYPED').attr('disabled', 'disabled');
         $('#EXPORT_FILTER_UNSOLVED').attr('disabled', 'disabled');

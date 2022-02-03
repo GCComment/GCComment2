@@ -3,14 +3,15 @@ import {log} from "./logger.js"
 import {lang} from "../consts/language.js"
 import {toRad} from "../helper/math.js"
 
-export const convertDec2DMS = function(/** @type {Number} */ lt, /** @type {Number} */ lg) {
+export const convertDec2DMS = (/** @type {Number} */ lt, /** @type {Number} */ lg) => {
     var lat = lt;
     var lng = lg;
     var result = "";
     if (lat < 0) {
         result = result + "S ";
         lat = lat * -1;
-    } else
+    }
+    else
         result = result + "N ";
 
     if ((lat < 10) && (lat > -10))
@@ -25,7 +26,8 @@ export const convertDec2DMS = function(/** @type {Number} */ lt, /** @type {Numb
     if (lng < 0) {
         result = result + " W ";
         lng = lng * -1;
-    } else
+    }
+    else
         result = result + " E ";
 
     if ((lng < 10) && (lng > -10))
@@ -43,7 +45,7 @@ export const convertDec2DMS = function(/** @type {Number} */ lt, /** @type {Numb
     return result;
 }
 
-export const parseCoordinates = function(cstr) {
+export const parseCoordinates = (cstr) => {
     var regexDegMin = /([NS])\s*(\d+)\D\s*(\d+\.\d+)'*\s*([EW])\s*(\d+)\D\s*(\d+\.\d+)'*/i;
 
     var fin = [];
@@ -134,7 +136,7 @@ export const parseCoordinates = function(cstr) {
     return fin;
 }
 
-export const calculateDistance = function(lat_1, lon_1, lat_2, lon_2) {
+export const calculateDistance = (lat_1, lon_1, lat_2, lon_2) => {
     var R = 6371; // km
     var lat1dec = parseFloat(lat_1);
     var lon1dec = parseFloat(lon_1);
@@ -146,7 +148,7 @@ export const calculateDistance = function(lat_1, lon_1, lat_2, lon_2) {
     var lat2 = toRad(lat2dec);
 
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1)
-            * Math.cos(lat2);
+        * Math.cos(lat2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d;

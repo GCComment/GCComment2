@@ -1,4 +1,4 @@
-export const escapeXML = function(/** @type {string} */ unescaped) {
+export const escapeXML = (/** @type {string} */ unescaped) => {
     if (unescaped === null || unescaped === undefined) {
         return null;
     }
@@ -10,11 +10,10 @@ export const escapeXML = function(/** @type {string} */ unescaped) {
 
     // escape line breaks
     // result = result.replace(/\n/g, "&#10;");
-
     return result;
 }
 
-export const unescapeXML = function(/** @type {string} */ escaped) {
+export const unescapeXML = (/** @type {string} */ escaped) => {
     if (escaped === null || escaped === undefined) {
         return null;
     }

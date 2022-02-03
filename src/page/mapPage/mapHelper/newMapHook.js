@@ -6,7 +6,7 @@ var initialized = false;
 var callbacks = [];
 
 const getReactFiber = (elem) => {
-    const keys = Object.keys(elem).filter(function(k) {
+    const keys = Object.keys(elem).filter((k) => {
         return k.indexOf('__reactFiber') == 0;
     });
     if (keys.length == 0){

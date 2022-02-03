@@ -62,30 +62,30 @@ const generateGccRoot = (targetNode) => {
             `);
 }
 
-const onGccommenttabledivButtonMouseUp = function () {
+const onGccommenttabledivButtonMouseUp = () => {
     toggleTabOnProfile('gccommenttablediv');
 };
 
 
-const onDeleteAllDivButtonMouseUp = function () {
+const onDeleteAllDivButtonMouseUp = () => {
     toggleTabOnProfile('deleteAllDiv');
 };
 
 
-const onExportDivButtonMouseUp = function () {
+const onExportDivButtonMouseUp = () => {
     toggleTabOnProfile('exportDiv');
 };
 
-const onImportDivButtonMouseUp = function () {
+const onImportDivButtonMouseUp = () => {
     toggleTabOnProfile('importDiv');
 };
 
-const onPatchDivButtonMouseUp = function () {
+const onPatchDivButtonMouseUp = () => {
     toggleTabOnProfile('patchDiv');
 };
 
 
-const onConfigDivButtonMouseover = function (evt) {
+const onConfigDivButtonMouseover = (evt) => {
     var lastim = GCC_getValue(LAST_IMPORT);
     var lastex = GCC_getValue(LAST_EXPORT);
 
@@ -111,15 +111,15 @@ const onConfigDivButtonMouseover = function (evt) {
     tooltip.show(stats, 500);
 };
 
-const onConfigDivButtonMouseUp = function (evt) {
+const onConfigDivButtonMouseUp = (evt) => {
     toggleTabOnProfile('configDiv');
 };
 
-const onConfigDivButtonMouseOut = function (evt) {
+const onConfigDivButtonMouseOut = (evt) => {
     tooltip.hide();
 };
 
-export const toggleTabOnProfile = function (tabid) {
+export const toggleTabOnProfile = (tabid) => {
     log('debug', 'tabid ' + tabid);
     // do specials
     if ((tabid == 'gccommenttablediv')
@@ -162,7 +162,7 @@ export const toggleTabOnProfile = function (tabid) {
     }
 }
 
-export const gccommentOnProfilePage = function (newGcDesign = false) {
+export const gccommentOnProfilePage = (newGcDesign = false) => {
     // append Datatables CSS
     appendCSS('text',  jquery_dataTables_css);
 

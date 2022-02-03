@@ -8,9 +8,10 @@ import { gccIcon } from './../../../consts/icons';
 import { html, render } from 'lighterhtml';
 import { lang } from '../../../consts/language.js';
 import { appendCheckBox } from '../../other/controls.js';
-import { stateOptions, COMPREFIX, ARCHIVED } from '../../../consts/general.js';
+import { COMPREFIX, ARCHIVED } from '../../../consts/general.js';
 import { doLoadCommentFromGUID } from '../../../function/db.js';
 import { parseCoordinates } from '../../../helper/coordinates.js';
+import { StateEnum } from '../../../dataClasses/stateEnum';
 
 /** @type {L.Map} */ 
 var map = null;
@@ -47,17 +48,17 @@ const updateMoveMysteries = () =>{
 
     var stUnsolved = null;
     if (unsolved){
-        stUnsolved = stateOptions[1];
+        stUnsolved = StateEnum.unsolved;
     }
 
     var stSolved = null;
     if (solved){
-        stSolved = stateOptions[2];
+        stSolved = StateEnum.solved;
     }
 
     var stFound = null;
     if (found){
-        stFound = stateOptions[3];
+        stFound = StateEnum.found;
     }    
 
     var keys = GM_listValues();
@@ -122,7 +123,7 @@ export const addGccMenu = () =>{
         </div>
     `);
 
-    setTimeout(function() {
+    setTimeout(() => {
         $('#mmSub').slideToggle();
         updateMoveMysteries();
     }, 500);
@@ -143,7 +144,7 @@ export const addGccMenuHide = () =>{
         </div>
     `);
 
-    setTimeout(function() {
+    setTimeout(() => {
         $('#mmSub').slideToggle();
         _updateMapViewHide();
     }, 500);
@@ -227,10 +228,10 @@ export const drawMarker = (/** @type {number} */ lat, /** @type {number} */ lng,
     var marker = new leaflet.Marker(new leaflet.LatLng(lat, lng), {
         icon: finalMarker
     });
-    marker.on('click', function (event) {
+    marker.on('click', (event) => {
         /*
         var gcurl = "https://tiles01.geocaching.com/map/map.details?i=" + gccode + "&jsoncallback=?";
-        var success = function (a) {            
+        var success = (a) => {            
             var b = "cd" + Math.ceil(9999999999999 * Math.random());
             var h = `<div id="${b}"></div>`;           
 
@@ -242,17 +243,17 @@ export const drawMarker = (/** @type {number} */ lat, /** @type {number} */ lng,
             map.openPopup(popup);
 
             $('#map_canvas').find("#" + b).link(a, "#cachePopupTemplate")
-                .delegate("a.prev-item", "click", function (a) {
+                .delegate("a.prev-item", "click", (a) => {
                         a.preventDefault();
                         $(this).parents("div.map-item").hide().prev().show();
                         return false;
-                }).delegate("a.next-item", "click", function (a) {
+                }).delegate("a.next-item", "click", (a) => {
                     a.preventDefault();
                     $(this).parents("div.map-item").hide().next().show();
                     return false;
                 });
             $('#map_canvas').find("#" + b).parent().width('401px');
-            setTimeout(function () {
+            setTimeout(() => {
                 popup._adjustPan();
             }, 100);
         };
@@ -337,7 +338,7 @@ export const drawCircleWithData = (finallat, finallng, radius, popupContent="", 
 
     // @ts-ignore
     const circle = leaflet.geoJson(geoJson, {
-        pointToLayer: function(feature, latlng) {
+        pointToLayer: (feature, latlng) => {
             return new leaflet.Circle(latlng, radius, {
                 color : color,
                 weight : 2,
@@ -347,7 +348,7 @@ export const drawCircleWithData = (finallat, finallng, radius, popupContent="", 
                 fillOpacity : 0.2
             });
         },
-        onEachFeature: function(feature, layer) {
+        onEachFeature: (feature, layer) => {
             if (feature.properties && feature.properties.popupContent) {
                 layer.bindPopup(feature.properties.popupContent);
             }

@@ -3,8 +3,7 @@ import $ from 'jquery';
 import * as dt from 'datatables.net';
 
 import { html, render } from "lighterhtml";
-import { COMPREFIX, stateOptions } from "../../../consts/general";
-import { ARCHIVED } from "../../../consts/general.js";
+import { COMPREFIX, ARCHIVED } from "../../../consts/general";
 import { archive, archiveAdd, archiveRemove, commentIconDelete, commentIconEdit, finalIcon, state_clear, state_default, state_found, state_solved, state_unsolved } from "../../../consts/icons.js";
 import { lang } from "../../../consts/language";
 import {
@@ -19,6 +18,8 @@ import { calculateDistance, convertDec2DMS } from "../../../helper/coordinates.j
 import { log } from "../../../helper/logger";
 import { GCC_getValue, GCC_listValues, GCC_setValue } from "../../../helper/storage.js";
 import { createViewerFromDivDataAttr } from '../../../helper/commentEditor.js';
+import { CacheComment } from './../../../dataClasses/cacheComment';
+import { StateEnum } from '../../../dataClasses/stateEnum';
 
 // @ts-ignore
 // connect datatables with jquery
@@ -67,43 +68,43 @@ export const generateDisplayFilters = () => {
             `;
 };
 
-const onFilterclearIconMouseUp = function () {
+const onFilterclearIconMouseUp = () => {
     $('#displayFilters > img').css('opacity', '0.3');
     $('#filterclearIcon').css('opacity', '1');
     filter = null;
     refreshTableDiv(true);
 };
 
-const onFilterallIconMouseUp = function () {
+const onFilterallIconMouseUp = () => {
     $('#displayFilters > img').css('opacity', '0.3');
     $('#filterallIcon').css('opacity', '1');
-    filter = stateOptions[0];
+    filter = StateEnum.unknown;
     refreshTableDiv(true);
 };
 
-const onFilterunsolvedIconMouseUp = function () {
+const onFilterunsolvedIconMouseUp = () => {
     $('#displayFilters > img').css('opacity', '0.3');
     $('#filterunsolvedIcon').css('opacity', '1');
-    filter = stateOptions[1];
+    filter = StateEnum.unsolved;
     refreshTableDiv(true);
 }
 
-const onFiltersolvedIconMouseUp = function () {
+const onFiltersolvedIconMouseUp = () => {
     $('#displayFilters > img').css('opacity', '0.3');
     $('#filtersolvedIcon').css('opacity', '1');
-    filter = stateOptions[2];
+    filter = StateEnum.solved;
     refreshTableDiv(true);
 };
 
-const onFilterFoundIconMouseUp = function () {
+const onFilterFoundIconMouseUp = () => {
     $('#displayFilters > img').css('opacity', '0.3');
     $('#filterFoundIcon').css('opacity', '1');
-    filter = stateOptions[3];
+    filter = StateEnum.found;
     refreshTableDiv(true);
 };
 
 
-const onArchivedSelectorChanged = function () {
+const onArchivedSelectorChanged = () => {
     var indexSelected = $('#archivedSelector option:selected').index();
     var archivedFilter = "";
     if (indexSelected === 0) {
@@ -127,11 +128,11 @@ export const generateTableDiv = () => {
 
 const generateTableRow = (comment, rowCount) => {
     const getStateIcon = (state) =>{
-        if (state == stateOptions[1])
+        if (state == StateEnum.unsolved)
             return state_unsolved;
-        if (state == stateOptions[2])
+        if (state == StateEnum.solved)
             return state_solved;
-        if (state == stateOptions[3])
+        if (state == StateEnum.found)
             return state_found;
         
         return state_default;
@@ -243,17 +244,17 @@ const generateTableRow = (comment, rowCount) => {
 			return;
 
 		if (action === "markunsolved") {
-			comment.state = stateOptions[1];
-			targetState = stateOptions[1];
+			comment.state = StateEnum.unsolved;
+			targetState = StateEnum.unsolved;
 		} else if (action === "marksolved") {
-			comment.state = stateOptions[2];
-			targetState = stateOptions[2];
+			comment.state = StateEnum.solved;
+			targetState = StateEnum.solved;
 		} else if (action === "markfound") {
-			comment.state = stateOptions[3];
-			targetState = stateOptions[3];
+			comment.state = StateEnum.found;
+			targetState = StateEnum.found;
 		} else if (action === "markdefault") {
-			comment.state = stateOptions[0];
-			targetState = stateOptions[0];
+			comment.state = StateEnum.unknown;
+			targetState = StateEnum.unknown;
 		} else if (action === "addToArchive") {
 			comment.archived = ARCHIVED;
 			targetState = comment.state;
@@ -328,7 +329,7 @@ const generateTableRow = (comment, rowCount) => {
                         if (action === "del") {
                             var oldcomment = doLoadCommentFromGUID(guid);
                             log('info', 'deleting: ' + oldcomment);
-                            deleteComment(oldcomment.guid, oldcomment.gccode);
+                            oldcomment.delete();
                         }
                         if (GCC_getValue(LAZY_TABLE_REFRESH) == 0) {
                             refreshTableDiv(true);
@@ -401,13 +402,13 @@ const updateCounters = (comments) =>{
     var commentCountArchive = 0;
 
     comments.forEach(comment => {
-        if (comment.state == stateOptions[0])
+        if (comment.state == StateEnum.unknown)
             commentCountWhite++;
-        else if (comment.state == stateOptions[1])
+        else if (comment.state == StateEnum.unsolved)
             commentCountRed++;
-        else if (comment.state == stateOptions[2])
+        else if (comment.state == StateEnum.solved)
             commentCountGreen++;
-        else if (comment.state == stateOptions[3])
+        else if (comment.state == StateEnum.found)
             commentCountGray++;
 
         if (comment.archived === ARCHIVED) {
@@ -424,6 +425,9 @@ const updateCounters = (comments) =>{
 
 export const refreshTableDiv = (show) =>{
     const commentKeys = GCC_listValues().filter(key => key.indexOf(COMPREFIX) != -1);
+    /**
+     * @type {Array<CacheComment>}
+     */
     var comments = commentKeys.map((key) => doLoadCommentFromGUID(key.substr(COMPREFIX.length)));
 
     updateCounters(comments);
@@ -509,7 +513,7 @@ export const refreshTableDiv = (show) =>{
     }
 
     var filteredByString = filter;
-    if (filter === stateOptions[0]) {
+    if (filter === StateEnum.unknown) {
         filteredByString = lang.type_untyped;
     } else if (!filter) {
         filteredByString = lang.nothing;

@@ -1,4 +1,4 @@
-export const appendCSS = function(/** @type {string} */ type, /** @type {string} */ css, /** @type {Document} */ context) {
+export const appendCSS = (/** @type {string} */ type, /** @type {string} */ css, /** @type {Document} */ context) => {
     var element = document.createElement('style');
     element.setAttribute('type', 'text/css');
     if (type == 'src') {

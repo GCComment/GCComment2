@@ -5,7 +5,7 @@ import {GCC_setValue} from "../helper/storage.js"
 import {GCC_getValue} from "../helper/storage.js"
 import { doLoadCommentFromGUID } from "../function/db.js"
 
-export const doMaintenance = function() {
+export const doMaintenance = () => {
     var INDEXBUILT = "indexbuilt";
     var INDEXREPAIRED = "indexRepaired";
 

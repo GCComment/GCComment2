@@ -2,7 +2,8 @@
 import {COMGCPREFIX} from "../consts/general.js"
 import {GCC_getValue} from "../helper/storage.js"
 
-export const getGUIDFromGCCode = function(gcCode) {
+/** @returns {string} */
+export const getGUIDFromGCCode = (/** @type {string} */ gcCode) => {
     var value = GCC_getValue(COMGCPREFIX + gcCode);
     if (value)
         return value;
@@ -10,7 +11,7 @@ export const getGUIDFromGCCode = function(gcCode) {
     // log('info', 'no GUID for GCCode ' + gcCode + ' saved. ');
 }
 
-export const GC2DBId = function(gcCode) {
+export const GC2DBId = (gcCode) => {
     var gcId = 0;
 
     var sequence = "0123456789ABCDEFGHJKMNPQRTVWXYZ";
@@ -33,7 +34,7 @@ export const GC2DBId = function(gcCode) {
     return gcId;
 }
 
-export const DBId2GCNew = function(newGcId) {
+export const DBId2GCNew = (newGcId) => {
     var gcNewCode = "";
     var sequence = "tHpXJR8gyfzCrdV5G0Kb3Y92N47lTBPAhWnvLZkaexmSwq6sojDcEQMFO";
 

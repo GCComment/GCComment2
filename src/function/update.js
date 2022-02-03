@@ -5,7 +5,7 @@ import {GCC_setValue} from "../helper/storage.js"
 import {updatechangesurl, updateurl, version} from "../helper/versionInfo.js"
 import {GCC_getValue} from "../helper/storage.js"
 
-export const updateCheck = function(){
+export const updateCheck = () =>{
     //Update check
     if ((document.URL.search("\/my\/default\.aspx") >= 0) || (document.URL.search("\/my\/$") >= 0)
                     || (document.URL.search("\/my\/\#") >= 0) || (document.URL.search("\/my\/\\?.*=.*") >= 0)) {       
@@ -26,11 +26,11 @@ export const updateCheck = function(){
             updateInfo.appendChild(document.createElement('br'));
             document.getElementById("gccRoot").insertBefore(updateInfo, document.getElementById("gccRoot").firstChild);
 
-            var aNewChanges = oChanges.changes.filter(function(oChange) {
+            var aNewChanges = oChanges.changes.filter((oChange) => {
                 return oChange.version > version;
             });
 
-            aNewChanges.forEach(function(oChange) {
+            aNewChanges.forEach((oChange) => {
                 updateInfo.appendChild(document.createTextNode(lang.update_changes + oChange.version + " ("
                         + oChange.date + ")"));
                 updateInfo.appendChild(document.createElement('br'));
@@ -58,11 +58,11 @@ export const updateCheck = function(){
 
                 GM_xmlhttpRequest({
                     method : 'GET',
-                    header : {
+                    headers : {
                         'Cache-Control' : 'max-age=3600, must-revalidate'
                     },
                     url : updatechangesurl,
-                    onload : function(responseDetails) {
+                    onload : (responseDetails) => {
                         try {
                             var oChanges = JSON.parse(responseDetails.responseText);
                             var serverVersion = oChanges.latestVersion;
@@ -74,7 +74,7 @@ export const updateCheck = function(){
                             log("error", "Could not load update info: " + JSONException);
                         }
                     },
-                    onerror : function(responseDetails) {
+                    onerror : (responseDetails) => {
                         log("info", "Unable to get version from Github! Errorcode " + responseDetails.status);
                     }
                 });

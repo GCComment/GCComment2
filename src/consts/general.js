@@ -4,7 +4,7 @@
  export const COMGCPREFIX = "gccode-";
  export const DEG = String.fromCharCode(176);
  export const DEFAULTCOORDS = "<N dd" + DEG + " mm.mmm E dd" + DEG + " mm.mmm>";
- export const stateOptions = ["-", "not solved", "solved", "found"];
+ // export const stateOptions = ["-", "not solved", "solved", "found"];
  export const LAST_IMPORT = "lastimport";
  export const LAST_EXPORT = "lastexport";
  export const ARCHIVED = "archive";

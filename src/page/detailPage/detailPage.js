@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { html, render } from 'lighterhtml';
-import { ARCHIVED, browser, DEFAULTCOORDS, stateOptions } from '../../consts/general.js';
+import { ARCHIVED, browser, DEFAULTCOORDS } from '../../consts/general.js';
 import { archiveAdd, commentIcon, commentIconAdd, commentIconDelete, commentIconEdit, commentIconEditCancel, commentIconSave, commentIconShare, deleteMysteryIcon } from '../../consts/icons.js';
 import { lang } from '../../consts/language.js';
 import { AUTO_UPDATE_GS_FINAL } from '../../consts/preferences.js';
@@ -23,6 +23,8 @@ import toastuiEditorViewerCss from 'bundle-text:@toast-ui/editor/dist/toastui-ed
 import editorFullscreenCss from 'bundle-text:./../../css/editorFullscreen.css';
 import { unescapeXML } from '../../helper/xml.js';
 import { trim } from '../../helper/string.js';
+import { StateEnum } from '../../dataClasses/stateEnum';
+import { CacheComment } from '../../dataClasses/cacheComment.js';
 
 
 var viewer_instance;
@@ -35,7 +37,7 @@ const generateHeaderSection = (comment) => {
 };
 
 const generateCommentSection = (comment) => {
-    const generateCommentSectionHeader = (comment) =>{
+    const generateCommentSectionHeader = (/** @type {import("../../dataClasses/cacheComment.js").CacheComment} */ comment) =>{
         const mouseupAdd = () =>{
             $('#commentCommandAdd').hide();
             $("#detailCommentCacheState").prop('disabled', false);
@@ -45,7 +47,7 @@ const generateCommentSection = (comment) => {
             editor_instance.setMarkdown(comment.commentValue); 
             $('#gccommentEditor').show();
             $("#detailCommentInputLatLng").prop("disabled", false);
-            setTimeout(function() {
+            setTimeout(() => {
                 editor_instance.focus();
             }, 50);
         };
@@ -64,7 +66,7 @@ const generateCommentSection = (comment) => {
             $('#commentCommandShare').hide();
             $('#commentCommandArchive').hide();
             $('#commentCommandCancel').show();
-            setTimeout(function() {
+            setTimeout(() => {
                 editor_instance.focus();
             }, 50);
         };
@@ -106,11 +108,11 @@ const generateCommentSection = (comment) => {
         const mouseupSave = () => {
             console.log("debug", "Saving comment");
             if (!comment) {
-                comment = {
+                comment = new CacheComment({
                     guid : getGUID(),
                     gccode : getCachecode(),
                     name : getCachename()
-                };
+                });
                 const orgigCoords = retrieveOriginalCoordinates();
                 if (comment && orgigCoords.length === 2) {
                     if (!comment.origlat || !comment.origlng) {
@@ -149,7 +151,7 @@ const generateCommentSection = (comment) => {
             $("#commentCommandDelete").show();
             lastSaveTime=createTimeString(new Date());
             
-            doSaveCommentToGUID(comment);
+            comment.save();
             // TODO
 		    // saveToCacheNote(comment);
 
@@ -174,12 +176,12 @@ const generateCommentSection = (comment) => {
 
                 saveFinalCoords();
                 if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
-                    var pageMethodCaller =  function(userToken){
+                    var pageMethodCaller =  (userToken) => {
                         $.pageMethod("/seek/cache_details.aspx/ResetUserCoordinate", JSON.stringify({
                             dto : {
                                 ut : userToken
                             }
-                        }), function(response) {
+                        }), (response) => {
                             var r = JSON.parse(response.d);
                                 if (r.status == "success") {
                                     window.location.reload();
@@ -204,7 +206,7 @@ const generateCommentSection = (comment) => {
         const mouseupDelete = () =>{
             var check = confirm(lang.detail_deleteconfirmation);
             if (check) {
-                deleteComment(comment.guid, comment.gccode);
+                comment.delete();
                 comment = null;
 
                 $('.customWaypointRow').remove();
@@ -245,17 +247,7 @@ const generateCommentSection = (comment) => {
 
         var currentlyArchived = comment !== null && comment.archived === ARCHIVED;
         var lastSaveTime = comment.saveTime?createTimeString(comment.saveTime):createTimeString(comment.saveTime);
-        var commentState = 0;
-
-        if (comment.state === stateOptions[0]) {
-            commentState=0;
-        } else if (comment.state === stateOptions[1]) {
-            commentState=1;
-        } else if (comment.state === stateOptions[2]) {
-            commentState=2;
-        } else if (comment.state === stateOptions[3]) {
-            commentState=3;
-        }
+        var commentState = comment.state;        
         
         return html`
             <p>
@@ -299,11 +291,11 @@ const generateCommentSection = (comment) => {
                 State:
                 <select id="detailCommentCacheState" name="detailCommentCacheState" disabled="true" style="margin-right: 10px; width: 115px; padding-right: 0px; display: inline; background-position: right;" size="1" >
                     ${
-                        [0,1,2,3].map((i) => {
-                            if (i == commentState){
-                                return html`<option val="${i}" selected=selected>${stateOptions[i]}</option>`;
+                        Object.values(StateEnum).map((state) => {
+                            if (state == commentState){
+                                return html`<option val="${state}" selected=selected>${state}</option>`;
                             }
-                            return html`<option>${stateOptions[i]}</option>`;
+                            return html`<option>${state}</option>`;
                         })
                     }
                                        

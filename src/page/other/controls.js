@@ -4,7 +4,7 @@ import {log} from "../../helper/logger";
 import {GCC_setValue} from "../../helper/storage.js"
 import {GCC_getValue} from "../../helper/storage.js"
 
-export const appendCheckBox = function(id, label, extrafunction, floatLeft, imageURL) {
+export const appendCheckBox = (id, label, extrafunction, floatLeft, imageURL) => {
     const updateValue = () => {
         const checked = $('#' + id ).is(':checked');
         log('debug', 'update : ' + id + " to new value " + !checked);
@@ -38,35 +38,34 @@ export const appendCheckBox = function(id, label, extrafunction, floatLeft, imag
     `;
 };
 
-export const appendRadioGroup = function(settingsName, options, defaultSelection) {
-    const onInputMouseUp = function(event) {
+export const appendRadioGroup = (settingsName, options, defaultSelection) => {
+    const onInputMouseUp = (event) => {
         GCC_setValue(settingsName, event.target.value);
         log('debug', 'update : ' + settingsName + " to new value " + event.target.value);
     };
 
-    const onLabelMouseUp = function(event) {
+    const onLabelMouseUp = (event) => {
         GCC_setValue(settingsName, event.target.previousSibling.value);
         log('debug', 'update : ' + settingsName + " to new value " + event.target.previousSibling.value);
     };
 
     return html`
         <div>
-            ${
-                options.map((option, idx) => {
-                    var checked = false;
-                    if (defaultSelection && option.attr===defaultSelection){
-                        checked = true;
-                        GCC_setValue(settingsName, defaultSelection);
-                        log('debug', 'update : ' + settingsName + " to new (default) value " + defaultSelection);
-                    }
+            ${options.map((option, idx) => {
+        var checked = false;
+        if (defaultSelection && option.attr === defaultSelection) {
+            checked = true;
+            GCC_setValue(settingsName, defaultSelection);
+            log('debug', 'update : ' + settingsName + " to new (default) value " + defaultSelection);
+        }
 
-                    return html`
+        return html`
                     <input id="id${settingsName}${option.attr}" name=${settingsName} type="radio" value=${option.attr} checked="${checked}" onmouseup=${onInputMouseUp} />
                     <label for="id${settingsName}${option.attr}" style="'margin: 0 8px 0 3px;" onmouseup=${onLabelMouseUp}>
                         ${option.label}
                     </label>
-                `})
-            }
+                `;
+    })}
         </div>
     `;
 }

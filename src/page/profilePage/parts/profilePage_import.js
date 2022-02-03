@@ -46,18 +46,18 @@ export const generateImportDiv = () => {
     `;
 }
 
-const onCancelImportButtonMouseUp = function () {
+const onCancelImportButtonMouseUp = () => {
     $('#importresult')[0].innerHTML = "";
     toggleTabOnProfile('importDiv');
 };
 
 
-const onFileinputChanged = function (evt) {
+const onFileinputChanged = (evt) => {
     const files = evt.target.files;
     const file = files[0];
     const reader = new FileReader();
-    reader.onload = (function (theFile) {
-        return function (e) {
+    reader.onload = ((theFile) => {
+        return (e) => {
             $("#gccommentimporttextarea").val(String(e.target.result));
         };
     })(file);

@@ -20,13 +20,6 @@ export const generateConfigDiv = () => {
             <p style="width:600px">
                 ${lang.settings_intro}
             </p>
-            <a target="_blank" rel="noopener" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8FK6XVH5SULGL" style="position:absolute;left:650px;top:10px;text-align:center;text-decoration:none;">
-                ${lang.settings_feelfree}
-                <br>
-                <img src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif">
-                <br>
-                ${lang.thank_you}
-            </a>
             ${appendCheckBox(ENABLE_EXPORT, lang.settings_allowExport)}
             ${appendCheckBox(LAZY_TABLE_REFRESH, lang.settings_lazyTable)}
             ${appendCheckBox(AUTO_UPDATE_GS_FINAL, lang.settings_syncWithGS)}
@@ -41,7 +34,7 @@ export const generateConfigDiv = () => {
     `;
 };
 
-const initLangSettings = function(){
+const initLangSettings = () =>{
     var langsetting = GCC_getValue(SETTINGS_LANGUAGE);
     if (langsetting === SETTINGS_LANGUAGE_EN || langsetting === SETTINGS_LANGUAGE_DE)
         $('#languageSelector').val(langsetting);
@@ -49,7 +42,7 @@ const initLangSettings = function(){
         $('#languageSelector').val(lang.SETTINGS_LANGUAGE_AUTO);
 };
 
-const onLanguageSelectorChange = function () {
+const onLanguageSelectorChange = () => {
     GCC_setValue(SETTINGS_LANGUAGE, $('#languageSelector option:selected').text());
     // showSuccessIcon(languageSelector);
 };

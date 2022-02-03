@@ -42,12 +42,12 @@ export const generatePatchDiv = () => {
     `;
 };
 
-const onInputChanged = function (evt) {
+const onInputChanged = (evt) => {
     var files = evt.target.files;
     var file = files[0];
     var reader = new FileReader();
-    reader.onload = (function (theFile) {
-        return function (e) {
+    reader.onload = ((theFile) => {
+        return (e) => {
             handleGPXFileSelected(file.name, e.target.result);
         };
     })(file);
