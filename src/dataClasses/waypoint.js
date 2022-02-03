@@ -1,24 +1,22 @@
 export class Waypoint {
-    
     /**
      * @type {string}
      */
-    prefix
+    prefix;
     /**
      * @type {string}
-    */
-    lookup
+     */
+    lookup;
 
     /**
      * @type {string}
-    */
-    name 
-    
+     */
+    name;
+
     /**
      * @type {Object}
-    */
-    coordinate
-
+     */
+    coordinate;
 
     /**
      * @param {Waypoint} init

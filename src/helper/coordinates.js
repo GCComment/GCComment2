@@ -1,79 +1,73 @@
+import { log } from "./logger.js";
+import { lang } from "../consts/language.js";
+import { toRad } from "../helper/math.js";
 
-import {log} from "./logger.js"
-import {lang} from "../consts/language.js"
-import {toRad} from "../helper/math.js"
-
-export const convertDec2DMS = (/** @type {Number} */ lt, /** @type {Number} */ lg) => {
+export const convertDec2DMS = (
+    /** @type {Number} */ lt,
+    /** @type {Number} */ lg
+) => {
     var lat = lt;
     var lng = lg;
     var result = "";
     if (lat < 0) {
         result = result + "S ";
         lat = lat * -1;
-    }
-    else
-        result = result + "N ";
+    } else result = result + "N ";
 
-    if ((lat < 10) && (lat > -10))
-        result = result + "0";
+    if (lat < 10 && lat > -10) result = result + "0";
     result = result + parseInt(lat) + String.fromCharCode(176) + " ";
     lat = lat - parseInt(lat);
-    var latFormatted = (Math.round(parseFloat(lat * 60) * 1000) / 1000).toFixed(3);
-    if ((latFormatted < 10) && (latFormatted > -10))
-        result = result + "0";
+    var latFormatted = (Math.round(parseFloat(lat * 60) * 1000) / 1000).toFixed(
+        3
+    );
+    if (latFormatted < 10 && latFormatted > -10) result = result + "0";
     result = result + latFormatted + " ";
 
     if (lng < 0) {
         result = result + " W ";
         lng = lng * -1;
-    }
-    else
-        result = result + " E ";
+    } else result = result + " E ";
 
-    if ((lng < 10) && (lng > -10))
-        result = result + "00";
-    else if ((lng < 100) && (lng > -100))
-        result = result + "0";
+    if (lng < 10 && lng > -10) result = result + "00";
+    else if (lng < 100 && lng > -100) result = result + "0";
 
     result = result + parseInt(lng) + String.fromCharCode(176) + " ";
     lng = lng - parseInt(lng);
-    var lngFormatted = (Math.round(parseFloat(lng * 60) * 1000) / 1000).toFixed(3);
-    if ((lngFormatted < 10) && (lngFormatted > -10))
-        result = result + "0";
+    var lngFormatted = (Math.round(parseFloat(lng * 60) * 1000) / 1000).toFixed(
+        3
+    );
+    if (lngFormatted < 10 && lngFormatted > -10) result = result + "0";
     result = result + lngFormatted;
 
     return result;
-}
+};
 
 export const parseCoordinates = (cstr) => {
-    var regexDegMin = /([NS])\s*(\d+)\D\s*(\d+\.\d+)'*\s*([EW])\s*(\d+)\D\s*(\d+\.\d+)'*/i;
+    var regexDegMin =
+        /([NS])\s*(\d+)\D\s*(\d+\.\d+)'*\s*([EW])\s*(\d+)\D\s*(\d+\.\d+)'*/i;
 
     var fin = [];
     var items = regexDegMin.exec(cstr);
-    if ((items != null) && (items.length == 7)) {
+    if (items != null && items.length == 7) {
         log("info", `parsing successful DegMin: ${items}`);
         var lat1 = RegExp.$2;
         while (lat1.indexOf(0) == 0) {
             lat1 = lat1.substring(1, lat1.length);
         }
-        if (lat1.length == 0)
-            lat1 = 0;
+        if (lat1.length == 0) lat1 = 0;
 
         var lat2 = RegExp.$3;
         var lat = parseInt(lat1) + parseFloat(lat2) / 60;
-        if (RegExp.$1 == "S")
-            lat = lat * -1;
+        if (RegExp.$1 == "S") lat = lat * -1;
 
         var lng1 = RegExp.$5;
         while (lng1.indexOf(0) == 0) {
             lng1 = lng1.substring(1, lng1.length);
         }
-        if (lng1.length == 0)
-            lng1 = 0;
+        if (lng1.length == 0) lng1 = 0;
         var lng2 = RegExp.$6;
         var lng = parseInt(lng1) + parseFloat(lng2) / 60;
-        if (RegExp.$4 == "W")
-            lng = lng * -1;
+        if (RegExp.$4 == "W") lng = lng * -1;
 
         fin.push(lat);
         fin.push(lng);
@@ -82,14 +76,13 @@ export const parseCoordinates = (cstr) => {
 
     var regexPlain = /(\d+)\s+(\d+\.\d+)\s+(\d+)\s+(\d+\.\d+)/i;
     items = regexPlain.exec(cstr);
-    if ((items != null) && (items.length == 5)) {
+    if (items != null && items.length == 5) {
         log("info", `parsing successful Plain: ${items}`);
         var lat1 = RegExp.$1;
         while (lat1.indexOf(0) == 0) {
             lat1 = lat1.substring(1, lat1.length);
         }
-        if (lat1.length == 0)
-            lat1 = 0;
+        if (lat1.length == 0) lat1 = 0;
 
         var lat2 = RegExp.$2;
         var lat = parseInt(lat1) + parseFloat(lat2) / 60;
@@ -98,8 +91,7 @@ export const parseCoordinates = (cstr) => {
         while (lng1.indexOf(0) == 0) {
             lng1 = lng1.substring(1, lng1.length);
         }
-        if (lng1.length == 0)
-            lng1 = 0;
+        if (lng1.length == 0) lng1 = 0;
         var lng2 = RegExp.$4;
         var lng = parseInt(lng1) + parseFloat(lng2) / 60;
         fin.push(lat);
@@ -109,14 +101,13 @@ export const parseCoordinates = (cstr) => {
 
     var regexDec = /(\d+\.\d+)(,\s*|\s+)(\d+\.\d+)/i;
     items = regexDec.exec(cstr);
-    if ((items != null) && (items.length == 4)) {
+    if (items != null && items.length == 4) {
         log("info", `parsing successful Dec: ${items}`);
         var lat1 = RegExp.$1;
         while (lat1.indexOf(0) == 0) {
             lat1 = lat1.substring(1, lat1.length);
         }
-        if (lat1.length == 0)
-            lat1 = 0;
+        if (lat1.length == 0) lat1 = 0;
 
         var lat = parseFloat(lat1);
 
@@ -124,8 +115,7 @@ export const parseCoordinates = (cstr) => {
         while (lng1.indexOf(0) == 0) {
             lng1 = lng1.substring(1, lng1.length);
         }
-        if (lng1.length == 0)
-            lng1 = 0;
+        if (lng1.length == 0) lng1 = 0;
         var lng = parseFloat(lng1);
         fin.push(lat);
         fin.push(lng);
@@ -134,7 +124,7 @@ export const parseCoordinates = (cstr) => {
 
     fin.push(lang.alert_coordsnotvalid);
     return fin;
-}
+};
 
 export const calculateDistance = (lat_1, lon_1, lat_2, lon_2) => {
     var R = 6371; // km
@@ -147,9 +137,13 @@ export const calculateDistance = (lat_1, lon_1, lat_2, lon_2) => {
     var lat1 = toRad(lat1dec);
     var lat2 = toRad(lat2dec);
 
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1)
-        * Math.cos(lat2);
+    var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.sin(dLon / 2) *
+            Math.sin(dLon / 2) *
+            Math.cos(lat1) *
+            Math.cos(lat2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d;
-}
+};

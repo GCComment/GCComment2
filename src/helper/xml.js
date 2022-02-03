@@ -11,7 +11,7 @@ export const escapeXML = (/** @type {string} */ unescaped) => {
     // escape line breaks
     // result = result.replace(/\n/g, "&#10;");
     return result;
-}
+};
 
 export const unescapeXML = (/** @type {string} */ escaped) => {
     if (escaped === null || escaped === undefined) {
@@ -19,9 +19,9 @@ export const unescapeXML = (/** @type {string} */ escaped) => {
     }
     var result = escaped.replace(/&gt;/g, ">");
     result = result.replace(/&lt;/g, "<");
-    result = result.replace(/&quot;/g, "\"");
+    result = result.replace(/&quot;/g, '"');
     result = result.replace(/&amp;/g, "&");
     result = result.replace(/&apos;/g, "'");
     // result = result.replace(/&#10;/g, "\n");
     return result;
-}
+};

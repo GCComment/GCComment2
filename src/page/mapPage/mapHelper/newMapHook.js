@@ -1,42 +1,43 @@
-import $ from 'jquery';
-import { waitForEl } from '../../../helper/wait.js';
-import { GMWindow } from './../../../helper/gmWindow';
+import $ from "jquery";
+import { waitForEl } from "../../../helper/wait.js";
+import { GMWindow } from "./../../../helper/gmWindow";
 
 var initialized = false;
 var callbacks = [];
 
 const getReactFiber = (elem) => {
     const keys = Object.keys(elem).filter((k) => {
-        return k.indexOf('__reactFiber') == 0;
+        return k.indexOf("__reactFiber") == 0;
     });
-    if (keys.length == 0){
+    if (keys.length == 0) {
         return null;
     }
-    return elem[keys[0]];  
+    return elem[keys[0]];
 };
 
 const getCacheData = () => {
-    const elem = $('#geocache-list');
-    if (elem.length == 0){
+    const elem = $("#geocache-list");
+    if (elem.length == 0) {
         return [];
     }
     const react_node = getReactFiber(elem[0]);
     return react_node.return.memoizedProps.results;
 };
 
-const init = (callback) =>{
-    $("#clear-map-control").on("click", ()=>{
+const init = (callback) => {
+    $("#clear-map-control").on("click", () => {
         setTimeout(() => callback(getCacheData()), 500);
-
     });
     var filterHookAdded = false;
-    $('.gc-filter-toggle').on("click", ()=>{
-        if(!filterHookAdded){      
-            waitForEl(".gc-search-filter-controls > .gc-button-primary", () =>{
-                $(".gc-search-filter-controls > .gc-button-primary").on("click", ()=>{
-                    setTimeout(() => callback(getCacheData()), 500);
-
-                });
+    $(".gc-filter-toggle").on("click", () => {
+        if (!filterHookAdded) {
+            waitForEl(".gc-search-filter-controls > .gc-button-primary", () => {
+                $(".gc-search-filter-controls > .gc-button-primary").on(
+                    "click",
+                    () => {
+                        setTimeout(() => callback(getCacheData()), 500);
+                    }
+                );
             });
             filterHookAdded = true;
         }
@@ -45,15 +46,15 @@ const init = (callback) =>{
 };
 
 const callback_handler = (cacheData) => {
-    callbacks.forEach(func => {
+    callbacks.forEach((func) => {
         func(cacheData);
     });
-}
+};
 
 export const subscribeForCacheChanges = (callback) => {
     callbacks.push(callback);
-    if(!initialized){
-        setTimeout(()=>{
+    if (!initialized) {
+        setTimeout(() => {
             waitForEl(".geocache-item-data", () => init(callback_handler));
         }, 1);
         initialized = true;
@@ -62,18 +63,23 @@ export const subscribeForCacheChanges = (callback) => {
 
 var _mapInstance = null;
 export const mapFinderHook = (callback) => {
-    if (_mapInstance == null){
+    if (_mapInstance == null) {
         // @ts-ignore
         const oldUseState = GMWindow.React.useState;
         // @ts-ignore
         GMWindow.React.useState = (initialState) => {
             const hookResult = oldUseState(initialState);
-            if(_mapInstance == null && hookResult && hookResult[0] && hookResult[0]._map){
+            if (
+                _mapInstance == null &&
+                hookResult &&
+                hookResult[0] &&
+                hookResult[0]._map
+            ) {
                 _mapInstance = hookResult[0]._map;
                 console.log("found map instance");
                 callback(_mapInstance);
             }
             return hookResult;
-        } 
+        };
     }
-}
+};

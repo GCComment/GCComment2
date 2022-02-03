@@ -1,8 +1,8 @@
-import { GMWindow } from '../../helper/gmWindow.js';
-import { waitForPropOfObject } from '../../helper/wait.js';
-import { addGccMenu, setMap} from './mapHelper/mapDraw.js';
+import { GMWindow } from "../../helper/gmWindow.js";
+import { waitForPropOfObject } from "../../helper/wait.js";
+import { addGccMenu, setMap } from "./mapHelper/mapDraw.js";
 
-const getMapInstance = () =>{
+const getMapInstance = () => {
     // @ts-ignore
     return GMWindow.MapSettings.Map;
 };

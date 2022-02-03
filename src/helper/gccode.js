@@ -1,15 +1,13 @@
-
-import {COMGCPREFIX} from "../consts/general.js"
-import {GCC_getValue} from "../helper/storage.js"
+import { COMGCPREFIX } from "../consts/general.js";
+import { GCC_getValue } from "../helper/storage.js";
 
 /** @returns {string} */
 export const getGUIDFromGCCode = (/** @type {string} */ gcCode) => {
     var value = GCC_getValue(COMGCPREFIX + gcCode);
-    if (value)
-        return value;
+    if (value) return value;
     // else
     // log('info', 'no GUID for GCCode ' + gcCode + ' saved. ');
-}
+};
 
 export const GC2DBId = (gcCode) => {
     var gcId = 0;
@@ -19,7 +17,10 @@ export const GC2DBId = (gcCode) => {
     var rightPart = gcCode.substring(2).toUpperCase();
 
     var base = 31;
-    if ((rightPart.length < 4) || ((rightPart.length == 4) && (sequence.indexOf(rightPart.charAt(0)) < 16))) {
+    if (
+        rightPart.length < 4 ||
+        (rightPart.length == 4 && sequence.indexOf(rightPart.charAt(0)) < 16)
+    ) {
         base = 16;
     }
 
@@ -32,7 +33,7 @@ export const GC2DBId = (gcCode) => {
         gcId += Math.pow(16, 4) - 16 * Math.pow(31, 3);
     }
     return gcId;
-}
+};
 
 export const DBId2GCNew = (newGcId) => {
     var gcNewCode = "";
@@ -50,4 +51,4 @@ export const DBId2GCNew = (newGcId) => {
     } while (divResult != 0);
 
     return gcNewCode;
-}
+};

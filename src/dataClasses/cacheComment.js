@@ -1,80 +1,77 @@
-import { doSaveCommentToGUID } from "../function/db.js"
-import { Waypoint } from "./waypoint.js"
+import { doSaveCommentToGUID } from "../function/db.js";
+import { Waypoint } from "./waypoint.js";
 
-const { StateEnum } = require("./stateEnum")
+const { StateEnum } = require("./stateEnum");
 
 export class CacheComment {
     /**
      * @type {string}
      */
-    guid
+    guid;
 
     /**
      * @type {string}
      */
-    gccode
+    gccode;
 
     /**
      * @type {string}
      */
-    name
+    name;
 
     /**
      * @type {string}
      */
-    commentValue = ""
+    commentValue = "";
 
     /**
      * @type {number}
      */
-    saveTime = Date.now()
+    saveTime = Date.now();
 
     /**
      * @type {StateEnum}
      */
-    state = StateEnum.unknown
+    state = StateEnum.unknown;
 
     /**
      * @type {number}
      */
-    lat= null
+    lat = null;
 
     /**
      * @type {number}
      */
-    lng= null
+    lng = null;
 
     /**
      * @type {number}
      */
-    origlat = null
+    origlat = null;
 
     /**
      * @type {number}
      */
-    origlng = null
+    origlng = null;
 
     // TODO: to bool
     /**
      * @type {string}
      */
-    archived = "false"
+    archived = "false";
 
     /**
      * @type {Array<Waypoint>}
      */
-    waypoints = []
+    waypoints = [];
 
-    
     constructor(init) {
         Object.assign(this, init);
     }
 
-    save(){
+    save() {
         doSaveCommentToGUID(this);
     }
 
-    delete(){
-
-    }
+    delete() {}
 }

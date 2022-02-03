@@ -3,61 +3,61 @@
 }
 
 .leaflet-menu {
-    position        : absolute;
+    position: absolute;
     background-color: rgba(255, 255, 255, 255);
-    overflow        : auto;
-    cursor          : default;
-    z-index         : 9999;
+    overflow: auto;
+    cursor: default;
+    z-index: 9999;
 }
 
 .leaflet-menu::-webkit-scrollbar {
-    width     : 7px;
-    height    : 7px;
+    width: 7px;
+    height: 7px;
     background: #f2f2f2;
 }
 
 .leaflet-menu::-webkit-scrollbar-thumb {
     border-radius: 2px;
-    background   : #777;
+    background: #777;
 }
 
 .leaflet-menu-close-button {
     background-color: transparent;
-    border          : none;
-    font-size       : 14pt;
-    color           : #777;
-    cursor          : pointer;
+    border: none;
+    font-size: 14pt;
+    color: #777;
+    cursor: pointer;
 }
 
 .leaflet-menu-close-button:hover {
-    color: #4285F4;
+    color: #4285f4;
 }
 
 /* toolbar styles from new leaflet */
 
 .leaflet-bar {
-    box-shadow   : 0 1px 5px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     border-radius: 4px;
 }
 
 .leaflet-bar a,
 .leaflet-bar a:hover {
     background-color: #fff;
-    border-bottom   : 1px solid #ccc;
-    width           : 26px;
-    height          : 26px;
-    line-height     : 26px;
-    display         : block;
-    text-align      : center;
-    text-decoration : none;
-    color           : black;
+    border-bottom: 1px solid #ccc;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
 }
 
 .leaflet-bar a,
 .leaflet-control-layers-toggle {
     background-position: 50% 50%;
-    background-repeat  : no-repeat;
-    display            : block;
+    background-repeat: no-repeat;
+    display: block;
 }
 
 .leaflet-bar a:hover {
@@ -65,35 +65,35 @@
 }
 
 .leaflet-bar a:first-child {
-    border-top-left-radius : 4px;
+    border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
 .leaflet-bar a:last-child {
-    border-bottom-left-radius : 4px;
+    border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    border-bottom             : none;
+    border-bottom: none;
 }
 
 .leaflet-bar a.leaflet-disabled {
-    cursor          : default;
+    cursor: default;
     background-color: #f4f4f4;
-    color           : #bbb;
+    color: #bbb;
 }
 
 .leaflet-touch .leaflet-bar a {
-    width      : 30px;
-    height     : 30px;
+    width: 30px;
+    height: 30px;
     line-height: 30px;
 }
 
 .leaflet-touch .leaflet-bar a:first-child {
-    border-top-left-radius : 2px;
+    border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
 
 .leaflet-touch .leaflet-bar a:last-child {
-    border-bottom-left-radius : 2px;
+    border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
 

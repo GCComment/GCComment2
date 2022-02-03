@@ -1,8 +1,8 @@
-import $ from 'jquery';
+import $ from "jquery";
 import { html } from "lighterhtml";
-import { render } from 'lighterhtml';
+import { render } from "lighterhtml";
 
-export const tooltip = ( () => {
+export const tooltip = (() => {
     var top = 3;
     var left = 3;
     var maxw = 500;
@@ -10,33 +10,35 @@ export const tooltip = ( () => {
     var timer = 20;
     var endalpha = 95;
     var alpha = 0;
-    var tt, h
+    var tt, h;
 
-    const init = () =>{
+    const init = () => {
         tt = document.createElement("div");
         tt.setAttribute("id", "tt");
         document.body.appendChild(tt);
-        $(tt).css('opacity', 0);
-        $(tt).css('filter', 'alpha(opacity=0)');
+        $(tt).css("opacity", 0);
+        $(tt).css("filter", "alpha(opacity=0)");
         document.onmousemove = funcCollection.pos;
 
-        render(tt, html`
-            <div id="tt_top"> </div>
-            <div id="tt_cont"> </div>
-            <div id="tt_bot"> </div>
-        `);
-    }
+        render(
+            tt,
+            html`
+                <div id="tt_top"></div>
+                <div id="tt_cont"></div>
+                <div id="tt_bot"></div>
+            `
+        );
+    };
 
     const funcCollection = {
         show: (v, w) => {
             tt.style.display = "block";
-            if (typeof(v) === "object"){
+            if (typeof v === "object") {
                 render($("#tt_cont")[0], v);
-            }
-            else{
+            } else {
                 $("#tt_cont")[0].innerHTML = v;
             }
-            tt.style.width = w ? w + "px" : "auto";            
+            tt.style.width = w ? w + "px" : "auto";
             if (tt.offsetWidth > maxw) {
                 tt.style.width = maxw + "px";
             }

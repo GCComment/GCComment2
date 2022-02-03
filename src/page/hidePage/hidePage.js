@@ -1,8 +1,8 @@
-import { GMWindow } from '../../helper/gmWindow.js';
-import { waitForPropOfObject } from '../../helper/wait.js';
-import { addGccMenuHide, setMap } from '../mapPage/mapHelper/mapDraw.js';
+import { GMWindow } from "../../helper/gmWindow.js";
+import { waitForPropOfObject } from "../../helper/wait.js";
+import { addGccMenuHide, setMap } from "../mapPage/mapHelper/mapDraw.js";
 
-const getMapInstance = () =>{
+const getMapInstance = () => {
     // @ts-ignore
     return GMWindow.map;
 };
@@ -10,10 +10,10 @@ const getMapInstance = () =>{
 export const gccommentOnHidePage = () => {
     waitForPropOfObject("L.Map", GMWindow, () => {
         waitForPropOfObject("map", GMWindow, () => {
-            setTimeout(() =>{
-            setMap(getMapInstance());
-            addGccMenuHide();
-            },100);
+            setTimeout(() => {
+                setMap(getMapInstance());
+                addGccMenuHide();
+            }, 100);
         });
     });
 };

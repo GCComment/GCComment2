@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from "jquery";
 export const waitForEl = (selector, callback) => {
     if ($(selector).length) {
         callback();
@@ -15,10 +15,12 @@ export const waitForPropOfObject = (selector, obj, callback) => {
     var currentObj = obj;
 
     for (var i = 0; i < splittedSelector.length; i++) {
-        if (currentObj.hasOwnProperty(splittedSelector[i]) && currentObj[splittedSelector[i]] !== null) {
+        if (
+            currentObj.hasOwnProperty(splittedSelector[i]) &&
+            currentObj[splittedSelector[i]] !== null
+        ) {
             currentObj = currentObj[splittedSelector[i]];
-        }
-        else {
+        } else {
             found = false;
             break;
         }
