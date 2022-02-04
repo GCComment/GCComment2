@@ -41,6 +41,11 @@ export const doSaveCommentWTimeToGUID = (
     }
 };
 
+export const deleteCommentFromDB = (/** @type {CacheComment} */ comment) => {
+    GM_deleteValue(COMPREFIX + comment.guid);
+    GM_deleteValue(COMGCPREFIX + comment.gccode);
+};
+
 export const doSaveCommentToGUID = (/** @type {CacheComment} */ comment) => {
     comment.saveTime = +new Date();
     doSaveCommentWTimeToGUID(comment);

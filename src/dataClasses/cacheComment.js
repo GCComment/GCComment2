@@ -1,4 +1,4 @@
-import { doSaveCommentToGUID } from "../function/db.js";
+import { deleteCommentFromDB, doSaveCommentToGUID } from "../function/db.js";
 import { Waypoint } from "./waypoint.js";
 
 const { StateEnum } = require("./stateEnum");
@@ -73,5 +73,7 @@ export class CacheComment {
         doSaveCommentToGUID(this);
     }
 
-    delete() {}
+    delete() {
+        deleteCommentFromDB(this);
+    }
 }

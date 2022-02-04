@@ -196,7 +196,7 @@ const generateCommentSection = (comment) => {
             comment.commentValue = editor_instance.getMarkdown();
 
             viewer_instance.setMarkdown(comment.commentValue);
-            viewState.isViewMode = false;
+            viewState.isViewMode = true;
             viewState.hasComment = true;
             updateUi();
             lastSaveTime = createTimeString(new Date());
@@ -271,16 +271,19 @@ const generateCommentSection = (comment) => {
                 comment.delete();
                 comment = null;
 
+                editor_instance.setMarkdown("");
+                viewer_instance.setMarkdown("");
+
                 $(".customWaypointRow").remove();
                 var $table = $("#ctl00_ContentBody_Waypoints");
                 if ($table.find("tbody").children().length === 0) {
                     $table.remove();
                 }
 
+                $("#detailCommentCacheState").val(StateEnum.unknown);
+
                 // TODO
-                // detailFinalCacheState.options.selectedIndex = $(
-                //    "#detailCommentCacheState"
-                // ).val();
+                // $("#detailFinalCacheState").val(StateEnum.unknown);
 
                 $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
                 $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
