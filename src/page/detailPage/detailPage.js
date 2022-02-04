@@ -8,6 +8,7 @@ import {
     commentIconDelete,
     commentIconEdit,
     commentIconEditCancel,
+    commentIconFullscreen,
     commentIconSave,
     commentIconShare,
     deleteMysteryIcon
@@ -334,7 +335,7 @@ const generateCommentSection = (comment) => {
         }" style="cursor:pointer">
                 </a>
                 <a id="commentCommandFullscreen" style="" onmouseup=${editorEnterFullscreen}>
-                    <img src="${commentIconShare}" title="Enter Fullscreen" style="cursor:pointer">
+                    <img src="${commentIconFullscreen}" title="Enter Fullscreen" style="cursor:pointer">
                 </a>
 
                 <small>last saved: ${
