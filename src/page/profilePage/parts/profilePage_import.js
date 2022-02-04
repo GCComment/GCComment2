@@ -5,10 +5,11 @@ import { html } from "lighterhtml";
 import { toggleTabOnProfile } from "../profilePage.js";
 import { parseImport } from "../../../function/ImportExport.js";
 
-//TODO: Remove DB
+//TODO: Remove dropbox
 const checkDropbox = () => {
     console.info("checkDropbox");
 };
+//TODO: Remove dropbox
 const loadFromDropbox = () => {
     console.info("loadFromDropbox");
 };

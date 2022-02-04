@@ -33,10 +33,11 @@ const toggleExportFilterOptions = () => {
 const performFilteredExport = () => {
     console.info("performFilteredExport");
 };
-//TODO: Remove
+//TODO: Remove dropbox func
 const performFilteredDropboxExport = () => {
     console.info("performFilteredDropboxExport");
 };
+//TODO: Remove dropbox func
 const storeToDropbox = () => {
     console.info("storeToDropbox");
 };

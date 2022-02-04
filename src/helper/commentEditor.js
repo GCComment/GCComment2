@@ -3,11 +3,13 @@ import { Editor } from "@toast-ui/editor";
 import Viewer from "@toast-ui/editor/dist/toastui-editor-viewer";
 
 const sanitize = (content) => {
-    // TODO
+    // TODO add sanitize if required
+    // (TUI editor already takes care of the most stuff)
     return content;
 };
 
-/** @type {Editor} */ export const createEditor = (div, content) => {
+/** @returns {Editor} */
+export const createEditor = (div, content) => {
     const editor = new Editor({
         el: div,
         height: "500px",
@@ -20,7 +22,7 @@ const sanitize = (content) => {
     return editor;
 };
 
-/** @type {Viewer} */
+/** @returns {Viewer} */
 export const createViewer = (div, content) => {
     const viewer = new Viewer({
         el: div,
@@ -31,7 +33,7 @@ export const createViewer = (div, content) => {
     return viewer;
 };
 
-/** @type {Viewer} */
+/** @returns {Viewer} */
 export const createViewerFromDivDataAttr = (div) => {
     const viewer = new Viewer({
         el: div,

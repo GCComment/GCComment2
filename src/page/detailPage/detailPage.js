@@ -3,6 +3,7 @@ import { html, render } from "lighterhtml";
 import { ARCHIVED, browser, DEFAULTCOORDS } from "../../consts/general.js";
 import {
     archiveAdd,
+    archiveRemove,
     commentIcon,
     commentIconAdd,
     commentIconDelete,
@@ -15,16 +16,11 @@ import {
 } from "../../consts/icons.js";
 import { lang } from "../../consts/language.js";
 import { AUTO_UPDATE_GS_FINAL } from "../../consts/preferences.js";
-import {
-    doLoadCommentFromGUID,
-    doSaveCommentToGUID
-} from "../../function/db.js";
+import { doLoadCommentFromGUID } from "../../function/db.js";
 import { convertDec2DMS, parseCoordinates } from "../../helper/coordinates.js";
 import { appendCSS } from "../../helper/css.js";
 import { log } from "../../helper/logger.js";
-import { appendScript } from "../../helper/script.js";
 import { createTimeString } from "../../helper/time.js";
-import { archiveRemove } from "./../../consts/icons";
 import { createEditor, createViewer } from "./../../helper/commentEditor";
 // @ts-ignore
 // css hack
@@ -47,38 +43,97 @@ const generateHeaderSection = (comment) => {
     return html``;
 };
 
+const viewState = {
+    isViewMode: true,
+    hasComment: false,
+    isArchived: false
+};
+
+const updateUi = () => {
+    console.log("updateUi");
+    // Editor modes
+    if (viewState.isViewMode) {
+        $("#gccommentEditor").hide();
+        $("#gccommentViewer").show();
+    } else {
+        $("#gccommentViewer").hide();
+        $("#gccommentEditor").show();
+    }
+
+    // Icon state
+    if (viewState.isViewMode) {
+        $("#commentCommandSave").hide();
+        $("#commentCommandCancel").hide();
+
+        if (viewState.hasComment) {
+            $("#commentCommandEdit").show();
+            $("#commentCommandShare").show();
+            $("#commentCommandArchive").show();
+            $("#commentCommandDelete").show();
+            $("#commentCommandAdd").hide();
+        } else {
+            $("#commentCommandAdd").show();
+            $("#commentCommandEdit").hide();
+            $("#commentCommandShare").hide();
+            $("#commentCommandArchive").hide();
+            $("#commentCommandDelete").hide();
+        }
+    } else {
+        $("#commentCommandSave").show();
+        $("#commentCommandCancel").show();
+        $("#commentCommandAdd").hide();
+        $("#commentCommandEdit").hide();
+        $("#commentCommandShare").hide();
+        $("#commentCommandArchive").hide();
+        $("#commentCommandDelete").hide();
+    }
+
+    // State and final coord field state
+    if (viewState.isViewMode) {
+        $("#detailCommentCacheState").prop("disabled", true);
+        $("#detailCommentInputLatLng").prop("disabled", true);
+    } else {
+        $("#detailCommentCacheState").prop("disabled", false);
+        $("#detailCommentInputLatLng").prop("disabled", false);
+    }
+
+    // Archive icon toggle
+    if (viewState.isArchived) {
+        $("#commentCommandArchive > img").attr("src", archiveRemove);
+        $("#commentCommandArchive > img").attr(
+            "title",
+            lang.table_removefromarchive
+        );
+    } else {
+        $("#commentCommandArchive > img").attr("src", archiveAdd);
+        $("#commentCommandArchive > img").attr(
+            "title",
+            lang.table_addtoarchive
+        );
+    }
+};
+
 const generateCommentSection = (comment) => {
     const generateCommentSectionHeader = (
         /** @type {import("../../dataClasses/cacheComment.js").CacheComment} */ comment
     ) => {
         const mouseupAdd = () => {
-            $("#commentCommandAdd").hide();
-            $("#detailCommentCacheState").prop("disabled", false);
-            $("#commentCommandSave").show();
-            $("#commentCommandCancel").show();
-            $("#gccommentViewer").hide();
-            editor_instance.setMarkdown(comment.commentValue);
-            $("#gccommentEditor").show();
-            $("#detailCommentInputLatLng").prop("disabled", false);
+            if (comment && comment.commentValue) {
+                editor_instance.setMarkdown(comment.commentValue);
+            }
+            viewState.isViewMode = false;
+            viewState.hasComment = true;
+            updateUi();
             setTimeout(() => {
                 editor_instance.focus();
             }, 50);
         };
 
         const mouseupEdit = () => {
-            $("#gccommentViewer").hide();
             editor_instance.setMarkdown(comment.commentValue);
-            $("#gccommentEditor").show();
-
-            $("#detailCommentCacheState").prop("disabled", false);
-            $("#detailCommentInputLatLng").prop("disabled", false);
-
-            $("#commentCommandAdd").hide();
-            $("#commentCommandSave").show();
-            $("#commentCommandEdit").hide();
-            $("#commentCommandShare").hide();
-            $("#commentCommandArchive").hide();
-            $("#commentCommandCancel").show();
+            viewState.isViewMode = false;
+            viewState.hasComment = true;
+            updateUi();
             setTimeout(() => {
                 editor_instance.focus();
             }, 50);
@@ -89,34 +144,23 @@ const generateCommentSection = (comment) => {
         };
 
         const mouseupCancel = () => {
-            $("#gccommentEditor").hide();
-            $("#gccommentViewer").show();
-            $("#detailCommentCacheState").prop("disabled", true);
-            $("#commentCommandSave").hide();
-            $("#detailCommentInputLatLng").prop("disabled", true);
-            $("#commentCommandCancel").hide();
-            if (comment == null) {
-                $("#commentCommandAdd").show();
-                $("#commentCommandEdit").hide();
-                $("#commentCommandShare").hide();
-                $("#commentCommandArchive").hide();
-                $("#gccommentEditor").hide();
-                $("#gccommentEditor").hide();
-            } else {
-                $("#commentCommandAdd").hide();
-                $("#commentCommandEdit").show();
-                $("#commentCommandShare").show();
-                $("#commentCommandArchive").show();
-                $("#commentCommandDelete").show();
-                $("#gccommentEditor").hide();
+            if (comment !== null) {
                 viewer_instance.setMarkdown(comment.commentValue);
                 $("#gccommentViewer").show();
                 if (comment.lat && comment.lng) {
                     $("#detailCommentInputLatLng").val(
                         convertDec2DMS(comment.lat, comment.lng)
                     );
-                } else $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
+                } else {
+                    $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
+                }
+                viewState.hasComment = true;
+            } else {
+                viewState.hasComment = false;
             }
+
+            viewState.isViewMode = true;
+            updateUi();
         };
 
         const mouseupSave = () => {
@@ -137,6 +181,7 @@ const generateCommentSection = (comment) => {
             }
 
             var fin = parseCoordinates($("#detailCommentInputLatLng").val());
+            // TODO: check if those lines can be removed or needs to be fixed
             var finlat, finlng;
             if (fin.length == 2) {
                 finlat = fin[0];
@@ -145,24 +190,15 @@ const generateCommentSection = (comment) => {
                 alert(lang.alert_couldnotparse + fin[0]);
                 return;
             }
-            //TODO
+            // TODO
             // detailFinalCacheState.options.selectedIndex = detailCommentCacheState.options.selectedIndex;
 
             comment.commentValue = editor_instance.getMarkdown();
-            $("#gccommentEditor").hide();
+
             viewer_instance.setMarkdown(comment.commentValue);
-            $("#gccommentViewer").show();
-
-            $("#detailCommentCacheState").prop("disabled", true);
-            $("#detailCommentInputLatLng").prop("disabled", "");
-
-            $("#commentCommandSave").hide();
-            $("commentCommandCancel").hide();
-            $("#commentCommandAdd").hide();
-            $("#commentCommandEdit").show();
-            $("#commentCommandShare").show();
-            $("#commentCommandArchive").show();
-            $("#commentCommandDelete").show();
+            viewState.isViewMode = false;
+            viewState.hasComment = true;
+            updateUi();
             lastSaveTime = createTimeString(new Date());
 
             comment.save();
@@ -174,6 +210,7 @@ const generateCommentSection = (comment) => {
                 clean = convertDec2DMS(comment.lat, comment.lng);
             }
             $("#detailCommentInputLatLng").val(clean);
+
             // TODO
             // $("#detailFinalInputLatLng").val(clean);
         };
@@ -207,24 +244,25 @@ const generateCommentSection = (comment) => {
                         );
                     };
 
-                    if (browser === "FireFox") {
-                        appendScript(
-                            "text",
-                            "(" +
-                                pageMethodCaller.toString() +
-                                ")('" +
-                                unsafeWindow.userToken.replace(/'/g, "%27") +
-                                "'.replace('%27','\\''));"
-                        );
-                    } else {
-                        pageMethodCaller(unsafeWindow.userToken);
-                    }
+                    pageMethodCaller(unsafeWindow.userToken);
                 }
+
+                viewState.isViewMode = true;
+                viewState.hasComment = false;
+                updateUi();
             }
         };
 
         const mouseupArchive = () => {
-            console.log("TODO: archive");
+            if (viewState.isArchived) {
+                comment.archived = "false";
+                viewState.isArchived = false;
+            } else {
+                comment.archived = "true";
+                viewState.isArchived = true;
+            }
+            comment.save();
+            updateUi();
         };
 
         const mouseupDelete = () => {
@@ -238,22 +276,18 @@ const generateCommentSection = (comment) => {
                 if ($table.find("tbody").children().length === 0) {
                     $table.remove();
                 }
-                $("#detailCommentCacheState").prop("disabled", true);
-                detailFinalCacheState.options.selectedIndex = $(
-                    "#detailCommentCacheState"
-                ).val();
-                $("#gccommentEditor").hide();
-                $("#gccommentEditor").hide();
-                $("#commentCommandAdd").show();
-                $("#commentCommandEdit").hide();
-                $("#commentCommandShare").hide();
-                $("#commentCommandArchive").hide();
-                $("#commentCommandSave").hide();
-                $("#commentCommandDelete").hide();
-                $("#commentCommandCancel").hide();
-                $("#detailCommentInputLatLng").prop("disabled", true);
+
+                // TODO
+                // detailFinalCacheState.options.selectedIndex = $(
+                //    "#detailCommentCacheState"
+                // ).val();
+
                 $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
                 $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
+
+                viewState.isViewMode = true;
+                viewState.hasComment = false;
+                updateUi();
                 lastSaveTime = createTimeString(-1);
             }
         };
@@ -270,72 +304,64 @@ const generateCommentSection = (comment) => {
             $("#gccommentEditor").removeClass("fsEditor");
         };
 
-        var currentlyArchived =
+        viewState.hasComment = comment !== null;
+        viewState.isArchived =
             comment !== null && comment.archived === ARCHIVED;
-        var lastSaveTime = comment.saveTime
-            ? createTimeString(comment.saveTime)
-            : createTimeString(comment.saveTime);
-        var commentState = comment.state;
+        var lastSaveTime =
+            comment !== null && comment.saveTime
+                ? createTimeString(comment.saveTime)
+                : createTimeString(-1);
+        var commentState = viewState.hasComment
+            ? comment.state
+            : StateEnum.unknown;
 
         return html`
             <p>
                 <strong>My comments</strong>
                 <a id="commentCommandAdd" style="display: none;" onmouseup=${mouseupAdd}>
-                    <img src="${commentIconAdd}" title="${
-            lang.detail_add
-        }" style="cursor:pointer">
+                    <img src="${commentIconAdd}" 
+                    title="${lang.detail_add}" style="cursor:pointer">
                 </a> 
                 <a id="commentCommandEdit" style="display: inline;" onmouseup=${mouseupEdit}>
-                    <img src="${commentIconEdit}" title="${
-            lang.detail_edit
-        }" style="cursor:pointer">
+                    <img src="${commentIconEdit}" 
+                    title="${lang.detail_edit}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandShare" style="display: inline;" onmouseup=${mouseupShare}>
-                    <img src="${commentIconShare}" title="${
-            lang.detail_share
-        }" style="cursor:pointer">
+                    <img src="${commentIconShare}" 
+                    title="${lang.detail_share}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandCancel" style="display: none;" onmouseup=${mouseupCancel}>
-                    <img src="${commentIconEditCancel}" title="${
-            lang.detail_cancel
-        }" style="cursor:pointer">
+                    <img src="${commentIconEditCancel}" 
+                    title="${lang.detail_cancel}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandSave" style="display: none;" onmouseup=${mouseupSave}>
-                    <img src="${commentIconSave}" title="${
-            lang.detail_save
-        }" style="cursor:pointer">
+                    <img src="${commentIconSave}"
+                     title="${lang.detail_save}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandFinalSave" style="display: none;" onmouseup=${mouseupFinalSave}>
-                    <img src="${commentIconSave}" title="${
-            lang.detail_finalsave
-        }" style="cursor:pointer">
+                    <img src="${commentIconSave}" 
+                    title="${lang.detail_finalsave}" style="cursor:pointer">
                 </a>
                 <a id="commentFinalDelete" style="display: none;" onmouseup=${mouseupFinalDelete}>
-                    <img src="${deleteMysteryIcon}" title="${
-            lang.detail_finaldelete
-        }" style="cursor:pointer">
+                    <img src="${deleteMysteryIcon}" 
+                    title="${lang.detail_finaldelete}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandJump" style="display: none;" href="#gccommentarea">
-                    <img src="${commentIcon}" title="${
-            lang.detail_jumptocomment
-        }" style="cursor:pointer">
+                    <img src="${commentIcon}" 
+                    title="${lang.detail_jumptocomment}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandArchive" style="display: none;" onmouseup=${mouseupArchive}>
-                    <img src="${
-                        currentlyArchived ? archiveRemove : archiveAdd
-                    }" title="${
-            currentlyArchived
-                ? lang.table_removefromarchive
-                : lang.table_addtoarchive
-        }" style="cursor:pointer">
+                    <img src="${archiveAdd}" 
+                    title="${lang.table_addtoarchive}"
+                    style="cursor:pointer">
                 </a>
                 <a id="commentCommandDelete" style="display: none;" onmouseup=${mouseupDelete}>
-                    <img src="${commentIconDelete}" title="${
-            lang.detail_delete
-        }" style="cursor:pointer">
+                    <img src="${commentIconDelete}"
+                     title="${lang.detail_delete}" style="cursor:pointer">
                 </a>
                 <a id="commentCommandFullscreen" style="" onmouseup=${editorEnterFullscreen}>
-                    <img src="${commentIconFullscreen}" title="Enter Fullscreen" style="cursor:pointer">
+                    <img src="${commentIconFullscreen}" 
+                    title="Enter Fullscreen" style="cursor:pointer">
                 </a>
 
                 <small>last saved: ${
@@ -343,7 +369,8 @@ const generateCommentSection = (comment) => {
                 }</small>
                 <br>
                 State:
-                <select id="detailCommentCacheState" name="detailCommentCacheState" disabled="true" style="margin-right: 10px; width: 115px; padding-right: 0px; display: inline; background-position: right;" size="1" >
+                <select id="detailCommentCacheState" name="detailCommentCacheState" disabled="true" 
+                style="margin-right: 10px; width: 115px; padding-right: 0px; display: inline; background-position: right;" size="1" >
                     ${Object.values(StateEnum).map((state) => {
                         if (state == commentState) {
                             return html`<option
@@ -375,6 +402,9 @@ const generateCommentSection = (comment) => {
                     <div id="gccommentEditor" style="display:none;"></div>
                 </div>
             </p>
+
+            <script>
+            </script>
         `;
     };
 
@@ -412,11 +442,15 @@ const retrieveOriginalCoordinates = () => {
     var origCoordinates;
     // try to get it from GS
     if (
+        // @ts-ignore
         window.userDefinedCoords &&
+        // @ts-ignore
         window.userDefinedCoords.data &&
+        // @ts-ignore
         window.userDefinedCoords.data.oldLatLngDisplay
     ) {
         origCoordinates = parseCoordinates(
+            // @ts-ignore
             window.userDefinedCoords.data.oldLatLngDisplay
         );
     } else {
@@ -482,4 +516,6 @@ export const gccommentOnDetailpage = () => {
     if (comment && comment.commentValue !== "") {
         $("#gccommentViewer").show();
     }
+
+    updateUi();
 };
