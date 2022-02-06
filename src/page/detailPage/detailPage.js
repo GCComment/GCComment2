@@ -35,6 +35,11 @@ import { unescapeXML } from "../../helper/xml.js";
 import { trim } from "../../helper/string.js";
 import { getStateKeyByValue, StateEnum } from "../../dataClasses/stateEnum";
 import { CacheComment } from "./../../dataClasses/cacheComment";
+import {
+    resetUserCoordinate,
+    retrieveOriginalCoordinates,
+    setUserCoordinate
+} from "./gsHelper.js";
 
 var viewer_instance;
 var editor_instance;
@@ -223,8 +228,10 @@ const generateCommentSection = () => {
 
             comment.save();
             updateCommentSection();
-            // TODO
-            // saveToCacheNote(comment);
+            // TODO: add setting for savetoCacheNote
+            if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
+                setUserCoordinate(comment.lat, comment.lng);
+            }
 
             var clean = DEFAULTCOORDS;
             if (comment && comment.lat && comment.lng) {
@@ -246,26 +253,11 @@ const generateCommentSection = () => {
                 $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
                 $("#detailFinalInputLatLng").css("color", "grey");
 
-                saveFinalCoords();
-                if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
-                    var pageMethodCaller = (userToken) => {
-                        $.pageMethod(
-                            "/seek/cache_details.aspx/ResetUserCoordinate",
-                            JSON.stringify({
-                                dto: {
-                                    ut: userToken
-                                }
-                            }),
-                            (response) => {
-                                var r = JSON.parse(response.d);
-                                if (r.status == "success") {
-                                    window.location.reload();
-                                }
-                            }
-                        );
-                    };
+                // TODO check and implement saveFinalCoords()
+                // saveFinalCoords();
 
-                    pageMethodCaller(unsafeWindow.userToken);
+                if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
+                    resetUserCoordinate();
                 }
 
                 viewState.isViewMode = true;
@@ -307,6 +299,10 @@ const generateCommentSection = () => {
 
                 $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
                 $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
+
+                if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
+                    resetUserCoordinate();
+                }
 
                 viewState.isViewMode = true;
                 updateCommentSection();
@@ -450,36 +446,6 @@ const getCachecode = () => {
             "ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode"
         ).innerHTML
     );
-};
-
-const retrieveOriginalCoordinates = () => {
-    var origCoordinates;
-    // try to get it from GS
-    if (
-        // @ts-ignore
-        window.userDefinedCoords &&
-        // @ts-ignore
-        window.userDefinedCoords.data &&
-        // @ts-ignore
-        window.userDefinedCoords.data.oldLatLngDisplay
-    ) {
-        origCoordinates = parseCoordinates(
-            // @ts-ignore
-            window.userDefinedCoords.data.oldLatLngDisplay
-        );
-    } else {
-        // grab it from page
-        origCoordinates = parseCoordinates(
-            document.getElementById("uxLatLon").innerHTML
-        );
-    }
-
-    if (origCoordinates.length == 2) {
-        return origCoordinates;
-    } else {
-        log("error", "Original Coordinates of cache could not be determined.");
-        return ["", ""];
-    }
 };
 
 export const gccommentOnDetailpage = () => {
