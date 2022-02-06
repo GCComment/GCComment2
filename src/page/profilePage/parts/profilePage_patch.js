@@ -1,7 +1,6 @@
 // event handler delete button (#patchDivButton)
-import $ from "jquery";
-import { lang } from "../../../consts/language";
 import { html } from "lighterhtml";
+import { lang } from "../../../consts/language";
 import {
     PATCHGPX_ADDFINALWPT,
     PATCHGPX_CHANGEORIGINAL,

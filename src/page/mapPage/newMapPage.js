@@ -1,8 +1,7 @@
-import $ from "jquery";
 import { GMWindow } from "../../helper/gmWindow.js";
 import { waitForPropOfObject } from "../../helper/wait.js";
-import { mapFinderHook } from "./mapHelper/newMapHook.js";
 import { addGccMenu, setMap } from "./mapHelper/mapDraw";
+import { mapFinderHook } from "./mapHelper/newMapHook.js";
 
 export const gccommentOnNewMapPage = () => {
     waitForPropOfObject("L.Map", GMWindow, () => {

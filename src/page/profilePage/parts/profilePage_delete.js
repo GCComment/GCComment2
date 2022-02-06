@@ -1,7 +1,8 @@
 // event handler delete button (#deleteAllDivButton)
 import $ from "jquery";
-import { lang } from "../../../consts/language";
 import { html } from "lighterhtml";
+import { COMPREFIX } from "../../../consts/general";
+import { lang } from "../../../consts/language";
 import {
     DELETEALL_FILTER_ALL,
     DELETEALL_FILTER_ARCHIVED,
@@ -11,15 +12,13 @@ import {
     DELETEALL_FILTER_FOUND,
     DELETEALL_FILTER_SOLVED,
     DELETEALL_FILTER_UNSOLVED,
-    DELETEALL_FILTER_UNTYPED,
-    EXPORT_FILTER_ALL
+    DELETEALL_FILTER_UNTYPED
 } from "../../../consts/preferences";
-import { appendCheckBox, appendRadioGroup } from "../../other/controls";
-import { log } from "../../../helper/logger";
-import { COMPREFIX } from "../../../consts/general";
-import { doLoadCommentFromGUID } from "../../../function/db";
-import { GCC_getValue } from "../../../helper/storage.js";
 import { StateEnum } from "../../../dataClasses/stateEnum";
+import { doLoadCommentFromGUID } from "../../../function/db";
+import { log } from "../../../helper/logger";
+import { GCC_getValue } from "../../../helper/storage.js";
+import { appendCheckBox, appendRadioGroup } from "../../other/controls";
 
 const toggleDeleteAllFilterOptions = () => {
     if (GCC_getValue(DELETEALL_FILTER_ALL)) {

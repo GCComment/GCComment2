@@ -1,8 +1,7 @@
-import { log } from "../helper/logger.js";
 import { lang } from "../consts/language.js";
-import { GCC_setValue } from "../helper/storage.js";
+import { log } from "../helper/logger.js";
+import { GCC_getValue, GCC_setValue } from "../helper/storage.js";
 import { updatechangesurl, updateurl, version } from "../helper/versionInfo.js";
-import { GCC_getValue } from "../helper/storage.js";
 
 export const updateCheck = () => {
     //Update check

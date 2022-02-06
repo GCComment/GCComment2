@@ -1,8 +1,7 @@
 import $ from "jquery";
 import { html } from "lighterhtml";
 import { log } from "../../helper/logger";
-import { GCC_setValue } from "../../helper/storage.js";
-import { GCC_getValue } from "../../helper/storage.js";
+import { GCC_getValue, GCC_setValue } from "../../helper/storage.js";
 
 export const appendCheckBox = (
     id,

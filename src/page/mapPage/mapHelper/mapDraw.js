@@ -1,4 +1,6 @@
 import $ from "jquery";
+import { html, render } from "lighterhtml";
+import { COMPREFIX } from "../../../consts/general.js";
 import {
     finaliconfound,
     finaliconsolved,
@@ -11,6 +13,7 @@ import {
     state_unsolved,
     waypointIcon
 } from "../../../consts/icons.js";
+import { lang } from "../../../consts/language.js";
 import {
     AUTOMOVEMYSTERIESBETA,
     AUTOMOVEMYSTERIESBETAAREA,
@@ -20,17 +23,14 @@ import {
     AUTOMOVEMYSTERIESBETASOLVED,
     AUTOMOVEMYSTERIESBETAUNSOLVED
 } from "../../../consts/preferences.js";
+import { StateEnum } from "../../../dataClasses/stateEnum";
+import { doLoadCommentFromGUID } from "../../../function/db.js";
+import { parseCoordinates } from "../../../helper/coordinates.js";
 import { GMWindow } from "../../../helper/gmWindow.js";
 import { log } from "../../../helper/logger.js";
 import { NewSlideMenu } from "../../../other/leafletMenu.js";
-import { gccIcon } from "./../../../consts/icons";
-import { html, render } from "lighterhtml";
-import { lang } from "../../../consts/language.js";
 import { appendCheckBox } from "../../other/controls.js";
-import { COMPREFIX } from "../../../consts/general.js";
-import { doLoadCommentFromGUID } from "../../../function/db.js";
-import { parseCoordinates } from "../../../helper/coordinates.js";
-import { StateEnum } from "../../../dataClasses/stateEnum";
+import { gccIcon } from "./../../../consts/icons";
 
 /** @type {L.Map} */
 var map = null;

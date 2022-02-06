@@ -1,6 +1,5 @@
 import $ from "jquery";
-import { html } from "lighterhtml";
-import { render } from "lighterhtml";
+import { html, render } from "lighterhtml";
 
 export const tooltip = (() => {
     var top = 3;

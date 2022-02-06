@@ -26,13 +26,13 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 // licence end
-import $ from "jquery";
-import { GMWindow } from "../helper/gmWindow.js";
 // @ts-ignore
 // css hack
 import leafletMenuCss from "bundle-text:./leafletMenu.css";
-import { appendCSS } from "./../helper/css";
+import $ from "jquery";
 import { close } from "../consts/icons.js";
+import { GMWindow } from "../helper/gmWindow.js";
+import { appendCSS } from "./../helper/css";
 
 appendCSS("text", leafletMenuCss);
 

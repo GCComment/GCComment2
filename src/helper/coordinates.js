@@ -1,6 +1,6 @@
-import { log } from "./logger.js";
 import { lang } from "../consts/language.js";
 import { toRad } from "../helper/math.js";
+import { log } from "./logger.js";
 
 export const convertDec2DMS = (
     /** @type {Number} */ lt,

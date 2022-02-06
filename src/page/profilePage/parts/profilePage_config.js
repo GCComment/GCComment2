@@ -1,6 +1,6 @@
 import $ from "jquery";
-import { lang } from "../../../consts/language";
 import { html } from "lighterhtml";
+import { lang } from "../../../consts/language";
 import {
     AUTO_UPDATE_GS_FINAL,
     AUTO_UPLOAD_CACHE_NOTES,
@@ -10,9 +10,8 @@ import {
     SETTINGS_LANGUAGE_DE,
     SETTINGS_LANGUAGE_EN
 } from "../../../consts/preferences";
+import { GCC_getValue, GCC_setValue } from "../../../helper/storage.js";
 import { appendCheckBox } from "../../other/controls";
-import { GCC_setValue } from "../../../helper/storage.js";
-import { GCC_getValue } from "../../../helper/storage.js";
 
 export const generateConfigDiv = () => {
     return html`

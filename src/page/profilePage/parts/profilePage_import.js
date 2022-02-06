@@ -1,9 +1,9 @@
 // event handler import button (#importDivButton)
 import $ from "jquery";
-import { lang } from "../../../consts/language";
 import { html } from "lighterhtml";
-import { toggleTabOnProfile } from "../profilePage.js";
+import { lang } from "../../../consts/language";
 import { parseImport } from "../../../function/ImportExport.js";
+import { toggleTabOnProfile } from "../profilePage.js";
 
 //TODO: Remove dropbox
 const checkDropbox = () => {

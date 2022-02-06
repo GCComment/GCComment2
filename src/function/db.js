@@ -1,8 +1,8 @@
-import { COMGCPREFIX, COMPREFIX, DELIM } from "../consts/general.js";
-import { log } from "../helper/logger.js";
-import { getGUIDFromGCCode } from "../helper/gccode.js";
-import { GCC_getValue, GCC_setValue } from "../helper/storage.js";
+import { COMGCPREFIX, COMPREFIX } from "../consts/general.js";
 import { CacheComment } from "../dataClasses/cacheComment.js";
+import { getGUIDFromGCCode } from "../helper/gccode.js";
+import { log } from "../helper/logger.js";
+import { GCC_getValue, GCC_setValue } from "../helper/storage.js";
 
 export const doSaveCommentWTimeToGUID = (
     /** @type {CacheComment} */ comment

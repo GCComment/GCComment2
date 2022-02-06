@@ -1,7 +1,7 @@
 // event handler import button (#exportDivButton)
 import $ from "jquery";
-import { lang } from "../../../consts/language";
 import { html } from "lighterhtml";
+import { lang } from "../../../consts/language";
 import {
     EXPORT_FILTER_ALL,
     EXPORT_FILTER_ARCHIVE,
@@ -13,8 +13,8 @@ import {
     EXPORT_FILTER_UNSOLVED,
     EXPORT_FILTER_UNTYPED
 } from "../../../consts/preferences";
-import { appendCheckBox, appendRadioGroup } from "../../other/controls";
 import { GCC_getValue } from "../../../helper/storage.js";
+import { appendCheckBox, appendRadioGroup } from "../../other/controls";
 
 const toggleExportFilterOptions = () => {
     if (GCC_getValue(EXPORT_FILTER_ALL)) {

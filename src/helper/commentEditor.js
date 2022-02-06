@@ -1,6 +1,6 @@
-import $ from "jquery";
 import { Editor } from "@toast-ui/editor";
 import Viewer from "@toast-ui/editor/dist/toastui-editor-viewer";
+import $ from "jquery";
 
 const sanitize = (content) => {
     // TODO add sanitize if required

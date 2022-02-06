@@ -1,8 +1,7 @@
-import { log } from "./logger.js";
 import { COMGCPREFIX, COMPREFIX } from "../consts/general.js";
-import { GCC_setValue } from "../helper/storage.js";
-import { GCC_getValue } from "../helper/storage.js";
 import { doLoadCommentFromGUID } from "../function/db.js";
+import { GCC_getValue, GCC_setValue } from "../helper/storage.js";
+import { log } from "./logger.js";
 
 export const doMaintenance = () => {
     var INDEXBUILT = "indexbuilt";

@@ -1,3 +1,12 @@
+// @ts-ignore
+// css hack
+import editorFullscreenCss from "bundle-text:./../../css/editorFullscreen.css";
+// @ts-ignore
+// css hack
+import toastuiEditorViewerCss from "bundle-text:@toast-ui/editor/dist/toastui-editor-viewer.css";
+// @ts-ignore
+// css hack
+import toastuiEditorCss from "bundle-text:@toast-ui/editor/dist/toastui-editor.css";
 import $ from "jquery";
 import { html, render } from "lighterhtml";
 import { DEFAULTCOORDS } from "../../consts/general.js";
@@ -16,25 +25,16 @@ import {
 } from "../../consts/icons.js";
 import { lang } from "../../consts/language.js";
 import { AUTO_UPDATE_GS_FINAL } from "../../consts/preferences.js";
+import { getStateKeyByValue, StateEnum } from "../../dataClasses/stateEnum";
 import { doLoadCommentFromGUID } from "../../function/db.js";
 import { convertDec2DMS, parseCoordinates } from "../../helper/coordinates.js";
 import { appendCSS } from "../../helper/css.js";
 import { log } from "../../helper/logger.js";
-import { createTimeString } from "../../helper/time.js";
-import { createEditor, createViewer } from "./../../helper/commentEditor";
-// @ts-ignore
-// css hack
-import toastuiEditorCss from "bundle-text:@toast-ui/editor/dist/toastui-editor.css";
-// @ts-ignore
-// css hack
-import toastuiEditorViewerCss from "bundle-text:@toast-ui/editor/dist/toastui-editor-viewer.css";
-// @ts-ignore
-// css hack
-import editorFullscreenCss from "bundle-text:./../../css/editorFullscreen.css";
-import { unescapeXML } from "../../helper/xml.js";
 import { trim } from "../../helper/string.js";
-import { getStateKeyByValue, StateEnum } from "../../dataClasses/stateEnum";
+import { createTimeString } from "../../helper/time.js";
+import { unescapeXML } from "../../helper/xml.js";
 import { CacheComment } from "./../../dataClasses/cacheComment";
+import { createEditor, createViewer } from "./../../helper/commentEditor";
 import {
     resetUserCoordinate,
     retrieveOriginalCoordinates,

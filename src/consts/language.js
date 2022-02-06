@@ -1,11 +1,11 @@
 import $ from "jquery";
+import { GCC_getValue } from "../helper/storage.js";
 import {
     SETTINGS_LANGUAGE,
     SETTINGS_LANGUAGE_AUTO,
     SETTINGS_LANGUAGE_DE,
     SETTINGS_LANGUAGE_EN
 } from "./preferences.js";
-import { GCC_getValue } from "../helper/storage.js";
 
 var _languages = {};
 

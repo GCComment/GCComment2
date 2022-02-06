@@ -1,9 +1,8 @@
 // Filter icons for Show my comments
-import $ from "jquery";
 import * as dt from "datatables.net";
-
+import $ from "jquery";
 import { html, render } from "lighterhtml";
-import { COMPREFIX, ARCHIVED } from "../../../consts/general";
+import { ARCHIVED, COMPREFIX } from "../../../consts/general";
 import {
     archive,
     archiveAdd,
@@ -25,10 +24,12 @@ import {
     LAZY_TABLE_REFRESH,
     SETTING_ARCHIVE_FILTER
 } from "../../../consts/preferences";
+import { StateEnum } from "../../../dataClasses/stateEnum";
 import {
     doLoadCommentFromGUID,
     doSaveCommentToGUID
 } from "../../../function/db.js";
+import { createViewerFromDivDataAttr } from "../../../helper/commentEditor.js";
 import {
     calculateDistance,
     convertDec2DMS
@@ -39,9 +40,7 @@ import {
     GCC_listValues,
     GCC_setValue
 } from "../../../helper/storage.js";
-import { createViewerFromDivDataAttr } from "../../../helper/commentEditor.js";
 import { CacheComment } from "./../../../dataClasses/cacheComment";
-import { StateEnum } from "../../../dataClasses/stateEnum";
 
 // @ts-ignore
 // connect datatables with jquery

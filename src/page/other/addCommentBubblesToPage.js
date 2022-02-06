@@ -1,20 +1,20 @@
 import $ from "jquery";
-import { log } from "../../helper/logger.js";
-import {
-    doLoadCommentFromGCCode,
-    doLoadCommentFromGUID
-} from "../../function/db.js";
+import { html } from "lighterhtml";
 import {
     state_default,
     state_found,
     state_solved,
     state_unsolved
 } from "../../consts/icons.js";
-import { html } from "lighterhtml";
 import { lang } from "../../consts/language.js";
-import { convertDec2DMS } from "../../helper/coordinates.js";
-import { tooltip } from "../../helper/tooltip.js";
 import { StateEnum } from "../../dataClasses/stateEnum";
+import {
+    doLoadCommentFromGCCode,
+    doLoadCommentFromGUID
+} from "../../function/db.js";
+import { convertDec2DMS } from "../../helper/coordinates.js";
+import { log } from "../../helper/logger.js";
+import { tooltip } from "../../helper/tooltip.js";
 
 export const addCommentBubblesToPage = () => {
     log("info", "weaving comments into table...");

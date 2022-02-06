@@ -1,9 +1,8 @@
 import $ from "jquery";
-
-import { doLoadCommentFromGUID, doSaveCommentToGUID } from "../function/db.js";
-import { AUTOMARKARCHIVE, AUTOMARKFOUND } from "../consts/preferences.js";
-import { GCC_getValue } from "../helper/storage.js";
 import { html } from "lighterhtml";
+import { AUTOMARKARCHIVE, AUTOMARKFOUND } from "../consts/preferences.js";
+import { doLoadCommentFromGUID, doSaveCommentToGUID } from "../function/db.js";
+import { GCC_getValue } from "../helper/storage.js";
 
 export const gccommentOnLogPage = () => {
     if (("" + window.location).indexOf("LUID=") >= 0) {
