@@ -36,7 +36,7 @@ import { close } from "../consts/icons.js";
 
 appendCSS("text", leafletMenuCss);
 
-const SlideMenu = () => {
+const SlideMenu = function () {
     const leaflet = GMWindow.L;
     return leaflet.Control.extend({
         options: {
@@ -53,7 +53,7 @@ const SlideMenu = () => {
             hidden: false
         },
 
-        initialize: (innerHTML, options) => {
+        initialize: function (innerHTML, options) {
             leaflet.Util.setOptions(this, options);
             this._innerHTML = innerHTML;
             this._isLeftPosition =
@@ -70,7 +70,7 @@ const SlideMenu = () => {
                 this.options.direction == "horizontal" ? true : false;
         },
 
-        onAdd: (map) => {
+        onAdd: function (map) {
             this._container = leaflet.DomUtil.create(
                 "div",
                 "leaflet-control-slidemenu leaflet-bar leaflet-control"
@@ -233,13 +233,13 @@ const SlideMenu = () => {
             return this._container;
         },
 
-        onRemove: (map) => {
+        onRemove: function (map) {
             //Remove sliding menu from DOM
             map._container.removeChild(this._menu);
             delete this._menu;
         },
 
-        setContents: (innerHTML) => {
+        setContents: function (innerHTML) {
             this._innerHTML = innerHTML;
             this._contents.innerHTML = this._innerHTML;
         },
@@ -280,11 +280,11 @@ const SlideMenu = () => {
             }
         },
 
-        hide: () => {
+        hide: function () {
             this._container.style.display = "none";
         },
 
-        show: () => {
+        show: function () {
             this._container.style.display = "inherit";
         }
     });

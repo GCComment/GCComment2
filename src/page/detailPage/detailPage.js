@@ -40,6 +40,7 @@ import {
     retrieveOriginalCoordinates,
     setUserCoordinate
 } from "./gsHelper.js";
+import { patchSmallMap } from "./smallMap.js";
 
 var viewer_instance;
 var editor_instance;
@@ -414,9 +415,6 @@ const generateCommentSection = () => {
                     <div id="gccommentEditor" style="display:none;"></div>
                 </div>
             </p>
-
-            <script>
-            </script>
         `;
     };
 
@@ -498,4 +496,5 @@ export const gccommentOnDetailpage = () => {
     }
 
     updateCommentSectionFunc();
+    patchSmallMap(comment);
 };

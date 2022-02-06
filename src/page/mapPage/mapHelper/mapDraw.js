@@ -36,13 +36,21 @@ import { StateEnum } from "../../../dataClasses/stateEnum";
 var map = null;
 /** @type {L} */
 var leaflet = null;
-
+/** @type {L.LayerGroup} */
 var gccLayer = null;
 
 export const setMap = (m) => {
     map = m;
     // @ts-ignore
     leaflet = GMWindow.L;
+};
+
+/**
+ * Allows to set an own layer (optional).
+ * @param {L.LayerGroup} layer
+ */
+export const setLayer = (layer) => {
+    gccLayer = layer;
 };
 
 export const deleteAllGccMarkers = () => {
@@ -59,27 +67,6 @@ const updateMoveMysteries = () => {
         return;
     }
 
-    const found = GM_getValue(AUTOMOVEMYSTERIESBETAFOUND);
-    const solved = GM_getValue(AUTOMOVEMYSTERIESBETASOLVED);
-    const unsolved = GM_getValue(AUTOMOVEMYSTERIESBETAUNSOLVED);
-    const drawOrigPos = GM_getValue(AUTOMOVEMYSTERIESBETAHOME);
-    const includeWaypoints = GM_getValue(AUTOMOVEMYSTERIESBETAINCLUDEWPT);
-
-    var stUnsolved = null;
-    if (unsolved) {
-        stUnsolved = StateEnum.unsolved;
-    }
-
-    var stSolved = null;
-    if (solved) {
-        stSolved = StateEnum.solved;
-    }
-
-    var stFound = null;
-    if (found) {
-        stFound = StateEnum.found;
-    }
-
     var keys = GM_listValues();
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -87,50 +74,7 @@ const updateMoveMysteries = () => {
             var guid = key.substring(COMPREFIX.length, key.length);
             var comment = doLoadCommentFromGUID(guid);
 
-            if (
-                (comment.state == stSolved ||
-                    comment.state == stFound ||
-                    comment.state == stUnsolved) &&
-                !comment.archived
-            ) {
-                if (comment.lat && comment.lng) {
-                    createMovedFinal(comment, drawOrigPos);
-                }
-
-                if (
-                    includeWaypoints &&
-                    comment.waypoints &&
-                    comment.waypoints.length > 0
-                ) {
-                    var aWaypoints = [];
-                    aWaypoints.push([comment.origlat, comment.origlng]);
-
-                    for (var j = 0; j < comment.waypoints.length; j++) {
-                        var coords = parseCoordinates(
-                            comment.waypoints[j].coordinate
-                        );
-                        if (coords.length == 2) {
-                            aWaypoints.push([coords[0], coords[1]]);
-                            drawMarker(
-                                coords[0],
-                                coords[1],
-                                "wpt",
-                                null,
-                                comment.gccode
-                            );
-                            if (GM_getValue(AUTOMOVEMYSTERIESBETAAREA)) {
-                                drawCircle(coords[0], coords[1], "161");
-                            }
-                        }
-                    }
-                    // add final wpt to link the last wpt to it
-                    if (comment.lat && comment.lng) {
-                        aWaypoints.push([comment.lat, comment.lng]);
-                    }
-
-                    drawMultiline(aWaypoints, comment.state);
-                }
-            }
+            drawSingleCache(comment);
         }
     }
 };
@@ -467,7 +411,7 @@ export const drawCircleWithData = (
     gccLayer.addLayer(circle);
 };
 
-export const createMovedFinal = (comment, drawOriginCoord) => {
+export const createMovedFinal = (comment, drawOriginCoord, drawArea) => {
     log(
         "debug",
         "drawing " +
@@ -490,7 +434,7 @@ export const createMovedFinal = (comment, drawOriginCoord) => {
         comment.gccode
     );
 
-    if (GM_getValue(AUTOMOVEMYSTERIESBETAAREA)) {
+    if (drawArea) {
         drawCircle(comment.lat, comment.lng, "161");
     }
 
@@ -513,5 +457,82 @@ export const createMovedFinal = (comment, drawOriginCoord) => {
             comment.state,
             comment.gccode
         );
+    }
+};
+export const drawSingleCache = (
+    /** @type {import("../../../dataClasses/cacheComment.js").CacheComment} */ comment,
+    detailPageMode = false
+) => {
+    if (!comment) {
+        return;
+    }
+
+    const found = detailPageMode || GM_getValue(AUTOMOVEMYSTERIESBETAFOUND);
+    const solved = detailPageMode || GM_getValue(AUTOMOVEMYSTERIESBETASOLVED);
+    const unsolved =
+        detailPageMode || GM_getValue(AUTOMOVEMYSTERIESBETAUNSOLVED);
+    const drawOrigPos =
+        !detailPageMode && GM_getValue(AUTOMOVEMYSTERIESBETAHOME);
+    const includeWaypoints =
+        detailPageMode || GM_getValue(AUTOMOVEMYSTERIESBETAINCLUDEWPT);
+    const drawArea = !detailPageMode && GM_getValue(AUTOMOVEMYSTERIESBETAAREA);
+
+    var stUnsolved = null;
+    if (unsolved) {
+        stUnsolved = StateEnum.unsolved;
+    }
+
+    var stSolved = null;
+    if (solved) {
+        stSolved = StateEnum.solved;
+    }
+
+    var stFound = null;
+    if (found) {
+        stFound = StateEnum.found;
+    }
+
+    if (
+        detailPageMode ||
+        ((comment.state == stSolved ||
+            comment.state == stFound ||
+            comment.state == stUnsolved) &&
+            !comment.archived)
+    ) {
+        if (comment.lat && comment.lng) {
+            createMovedFinal(comment, drawOrigPos, drawArea);
+        }
+
+        if (
+            includeWaypoints &&
+            comment.waypoints &&
+            comment.waypoints.length > 0
+        ) {
+            var aWaypoints = [];
+            aWaypoints.push([comment.origlat, comment.origlng]);
+
+            for (var j = 0; j < comment.waypoints.length; j++) {
+                var coords = parseCoordinates(comment.waypoints[j].coordinate);
+                if (coords.length == 2) {
+                    aWaypoints.push([coords[0], coords[1]]);
+                    drawMarker(
+                        coords[0],
+                        coords[1],
+                        "wpt",
+                        null,
+                        comment.gccode
+                    );
+                    if (drawArea) {
+                        drawCircle(coords[0], coords[1], "161");
+                    }
+                }
+            }
+            // add final wpt to link the last wpt to it
+            if (comment.lat && comment.lng) {
+                aWaypoints.push([comment.lat, comment.lng]);
+            }
+
+            drawMultiline(aWaypoints, comment.state);
+        }
     }
 };
