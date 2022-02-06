@@ -15,7 +15,8 @@
     "scripts": {
         "start": "parcel watch --target dev --no-hmr",
         "build": "parcel build",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky install"
     },
     "keywords": [],
     "author": "",
@@ -32,8 +33,10 @@
         "@types/jquery": "^3.5.11",
         "@types/leaflet": "^1.7.8",
         "@types/tampermonkey": "^4.0.5",
+        "husky": "^7.0.0",
         "parcel": "^2.0.1",
         "parcel-plugin-greasemonkey": "^1.0.3",
-        "prettier": "2.5.1"
+        "prettier": "2.5.1",
+        "pretty-quick": "^3.1.3"
     }
 }
