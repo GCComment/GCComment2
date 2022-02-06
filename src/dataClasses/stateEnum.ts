@@ -4,4 +4,8 @@ export enum StateEnum {
     unsolved = "not solved",
     solved = "solved",
     found = "found"
-}
+};
+
+export function getStateKeyByValue(value:String){
+    return Object.keys(StateEnum)[Object.values(StateEnum).findIndex(x => x==value)];
+};

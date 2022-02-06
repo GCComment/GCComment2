@@ -1,9 +1,10 @@
 import { lang } from "../consts/language.js";
 
-// helper detailpage: macht aus dem Time-Long eine lesbare Zeitangabe
+// converts a long time stamp to a readable time string
 export const createTimeString = (time, simple) => {
-    if (time < 0) return lang.never;
-    else {
+    if (time === null || time < 0) {
+        return lang.never;
+    } else {
         var lastSave = null;
         if (typeof time === "object") lastSave = time;
         else lastSave = new Date(parseInt(time));
@@ -19,20 +20,10 @@ export const createTimeString = (time, simple) => {
         if (minute < 10) minute = "0" + minute;
         if (sec < 10) sec = "0" + sec;
 
-        if (simple) return lastSave.getFullYear() + "-" + month + "-" + day;
-        else
-            return (
-                lastSave.getFullYear() +
-                "-" +
-                month +
-                "-" +
-                day +
-                " " +
-                hour +
-                ":" +
-                minute +
-                ":" +
-                sec
-            );
+        if (simple) {
+            return `${lastSave.getFullYear()}-${month}-${day}`;
+        } else {
+            return `${lastSave.getFullYear()}-${month}-${day} ${hour}:${minute}:${sec}`;
+        }
     }
 };

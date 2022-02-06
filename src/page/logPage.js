@@ -2,7 +2,6 @@ import $ from "jquery";
 
 import { doLoadCommentFromGUID, doSaveCommentToGUID } from "../function/db.js";
 import { AUTOMARKARCHIVE, AUTOMARKFOUND } from "../consts/preferences.js";
-import { ARCHIVED } from "../consts/general.js";
 import { GCC_getValue } from "../helper/storage.js";
 import { html } from "lighterhtml";
 
@@ -54,7 +53,7 @@ export const gccommentOnLogPage = () => {
                                     ? StateEnum.found
                                     : c.state;
                             var markArchiveState = GCC_getValue(AUTOMARKARCHIVE)
-                                ? ARCHIVED
+                                ? true
                                 : c.archived;
 
                             c.state = markFoundState;

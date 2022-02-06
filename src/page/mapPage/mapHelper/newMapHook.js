@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { log } from "../../../helper/logger.js";
 import { waitForEl } from "../../../helper/wait.js";
 import { GMWindow } from "./../../../helper/gmWindow";
 
@@ -76,7 +77,7 @@ export const mapFinderHook = (callback) => {
                 hookResult[0]._map
             ) {
                 _mapInstance = hookResult[0]._map;
-                console.log("found map instance");
+                log("debug", "found map instance");
                 callback(_mapInstance);
             }
             return hookResult;

@@ -27,7 +27,7 @@ import { gccIcon } from "./../../../consts/icons";
 import { html, render } from "lighterhtml";
 import { lang } from "../../../consts/language.js";
 import { appendCheckBox } from "../../other/controls.js";
-import { COMPREFIX, ARCHIVED } from "../../../consts/general.js";
+import { COMPREFIX } from "../../../consts/general.js";
 import { doLoadCommentFromGUID } from "../../../function/db.js";
 import { parseCoordinates } from "../../../helper/coordinates.js";
 import { StateEnum } from "../../../dataClasses/stateEnum";
@@ -91,7 +91,7 @@ const updateMoveMysteries = () => {
                 (comment.state == stSolved ||
                     comment.state == stFound ||
                     comment.state == stUnsolved) &&
-                comment.archived != ARCHIVED
+                !comment.archived
             ) {
                 if (comment.lat && comment.lng) {
                     createMovedFinal(comment, drawOrigPos);

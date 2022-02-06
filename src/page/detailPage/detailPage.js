@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { html, render } from "lighterhtml";
-import { ARCHIVED, browser, DEFAULTCOORDS } from "../../consts/general.js";
+import { DEFAULTCOORDS } from "../../consts/general.js";
 import {
     archiveAdd,
     archiveRemove,
@@ -33,111 +33,129 @@ import toastuiEditorViewerCss from "bundle-text:@toast-ui/editor/dist/toastui-ed
 import editorFullscreenCss from "bundle-text:./../../css/editorFullscreen.css";
 import { unescapeXML } from "../../helper/xml.js";
 import { trim } from "../../helper/string.js";
-import { StateEnum } from "../../dataClasses/stateEnum";
-import { CacheComment } from "../../dataClasses/cacheComment.js";
+import { getStateKeyByValue, StateEnum } from "../../dataClasses/stateEnum";
+import { CacheComment } from "./../../dataClasses/cacheComment";
 
 var viewer_instance;
 var editor_instance;
+/**
+ * @type CacheComment
+ */
+var comment = null;
+var updateCommentSectionFunc;
 
-const generateHeaderSection = (comment) => {
+const generateHeaderSection = () => {
     return html``;
 };
 
-const viewState = {
-    isViewMode: true,
-    hasComment: false,
-    isArchived: false
-};
+const generateCommentSection = () => {
+    const viewState = {
+        isViewMode: true
+    };
 
-const updateUi = () => {
-    console.log("updateUi");
-    // Editor modes
-    if (viewState.isViewMode) {
-        $("#gccommentEditor").hide();
-        $("#gccommentViewer").show();
-    } else {
-        $("#gccommentViewer").hide();
-        $("#gccommentEditor").show();
-    }
+    const createEmptyComment = () => {
+        comment = new CacheComment({
+            guid: getGUID(),
+            gccode: getCachecode(),
+            name: getCachename()
+        });
 
-    // Icon state
-    if (viewState.isViewMode) {
-        $("#commentCommandSave").hide();
-        $("#commentCommandCancel").hide();
+        const orgigCoords = retrieveOriginalCoordinates();
+        if (comment && orgigCoords.length === 2) {
+            if (!comment.origlat || !comment.origlng) {
+                comment.origlat = orgigCoords[0];
+                comment.origlng = orgigCoords[1];
+            }
+        }
+    };
 
-        if (viewState.hasComment) {
-            $("#commentCommandEdit").show();
-            $("#commentCommandShare").show();
-            $("#commentCommandArchive").show();
-            $("#commentCommandDelete").show();
-            $("#commentCommandAdd").hide();
+    const updateCommentSection = () => {
+        // Editor modes
+        if (viewState.isViewMode) {
+            $("#gccommentEditor").hide();
+            $("#gccommentViewer").show();
         } else {
-            $("#commentCommandAdd").show();
+            $("#gccommentViewer").hide();
+            $("#gccommentEditor").show();
+        }
+
+        // Icon state
+        if (viewState.isViewMode) {
+            $("#commentCommandSave").hide();
+            $("#commentCommandCancel").hide();
+
+            if (comment) {
+                $("#commentCommandEdit").show();
+                $("#commentCommandShare").show();
+                $("#commentCommandArchive").show();
+                $("#commentCommandDelete").show();
+                $("#commentCommandAdd").hide();
+            } else {
+                $("#commentCommandAdd").show();
+                $("#commentCommandEdit").hide();
+                $("#commentCommandShare").hide();
+                $("#commentCommandArchive").hide();
+                $("#commentCommandDelete").hide();
+            }
+        } else {
+            $("#commentCommandSave").show();
+            $("#commentCommandCancel").show();
+            $("#commentCommandAdd").hide();
             $("#commentCommandEdit").hide();
             $("#commentCommandShare").hide();
             $("#commentCommandArchive").hide();
             $("#commentCommandDelete").hide();
         }
-    } else {
-        $("#commentCommandSave").show();
-        $("#commentCommandCancel").show();
-        $("#commentCommandAdd").hide();
-        $("#commentCommandEdit").hide();
-        $("#commentCommandShare").hide();
-        $("#commentCommandArchive").hide();
-        $("#commentCommandDelete").hide();
-    }
 
-    // State and final coord field state
-    if (viewState.isViewMode) {
-        $("#detailCommentCacheState").prop("disabled", true);
-        $("#detailCommentInputLatLng").prop("disabled", true);
-    } else {
-        $("#detailCommentCacheState").prop("disabled", false);
-        $("#detailCommentInputLatLng").prop("disabled", false);
-    }
+        // State and final coord field state
+        if (viewState.isViewMode) {
+            $("#detailCommentCacheState").prop("disabled", true);
+            $("#detailCommentInputLatLng").prop("disabled", true);
+        } else {
+            $("#detailCommentCacheState").prop("disabled", false);
+            $("#detailCommentInputLatLng").prop("disabled", false);
+        }
 
-    // Archive icon toggle
-    if (viewState.isArchived) {
-        $("#commentCommandArchive > img").attr("src", archiveRemove);
-        $("#commentCommandArchive > img").attr(
-            "title",
-            lang.table_removefromarchive
+        // Archive icon toggle
+        if (comment && comment.archived) {
+            $("#commentCommandArchive > img").attr("src", archiveRemove);
+            $("#commentCommandArchive > img").attr(
+                "title",
+                lang.table_removefromarchive
+            );
+        } else {
+            $("#commentCommandArchive > img").attr("src", archiveAdd);
+            $("#commentCommandArchive > img").attr(
+                "title",
+                lang.table_addtoarchive
+            );
+        }
+
+        // Update last save time
+        $("#lastSaved").text(
+            `${lang.detail_lastsaved}: ${createTimeString(
+                comment ? comment.saveTime : -1
+            )}`
         );
-    } else {
-        $("#commentCommandArchive > img").attr("src", archiveAdd);
-        $("#commentCommandArchive > img").attr(
-            "title",
-            lang.table_addtoarchive
-        );
-    }
-};
+    };
 
-const generateCommentSection = (comment) => {
-    const generateCommentSectionHeader = (
-        /** @type {import("../../dataClasses/cacheComment.js").CacheComment} */ comment
-    ) => {
+    updateCommentSectionFunc = updateCommentSection;
+
+    const generateCommentSectionHeader = () => {
         const mouseupAdd = () => {
-            if (comment && comment.commentValue) {
+            if (comment) {
                 editor_instance.setMarkdown(comment.commentValue);
+            } else {
+                createEmptyComment();
             }
             viewState.isViewMode = false;
-            viewState.hasComment = true;
-            updateUi();
+            updateCommentSection();
             setTimeout(() => {
                 editor_instance.focus();
             }, 50);
         };
 
-        const mouseupEdit = () => {
-            editor_instance.setMarkdown(comment.commentValue);
-            viewState.isViewMode = false;
-            viewState.hasComment = true;
-            updateUi();
-            setTimeout(() => {
-                editor_instance.focus();
-            }, 50);
-        };
+        const mouseupEdit = mouseupAdd;
 
         const mouseupShare = () => {
             console.log("TODO: share");
@@ -154,30 +172,24 @@ const generateCommentSection = (comment) => {
                 } else {
                     $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
                 }
-                viewState.hasComment = true;
+
+                $("#detailCommentCacheState").val(comment.state);
             } else {
-                viewState.hasComment = false;
+                $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
+                $("#detailCommentCacheState").val(StateEnum.unknown);
+                editor_instance.setMarkdown("");
+                viewer_instance.setMarkdown("");
             }
 
             viewState.isViewMode = true;
-            updateUi();
+            updateCommentSection();
         };
 
         const mouseupSave = () => {
-            console.log("debug", "Saving comment");
+            log("debug", "Saving comment");
             if (!comment) {
-                comment = new CacheComment({
-                    guid: getGUID(),
-                    gccode: getCachecode(),
-                    name: getCachename()
-                });
-                const orgigCoords = retrieveOriginalCoordinates();
-                if (comment && orgigCoords.length === 2) {
-                    if (!comment.origlat || !comment.origlng) {
-                        comment.origlat = orgigCoords[0];
-                        comment.origlng = orgigCoords[1];
-                    }
-                }
+                createEmptyComment();
+                comment.save();
             }
 
             var fin = parseCoordinates($("#detailCommentInputLatLng").val());
@@ -186,6 +198,8 @@ const generateCommentSection = (comment) => {
             if (fin.length == 2) {
                 finlat = fin[0];
                 finlng = fin[1];
+                comment.lat = finlat;
+                comment.lng = finlng;
             } else if ($("#detailCommentInputLatLng").val() != DEFAULTCOORDS) {
                 alert(lang.alert_couldnotparse + fin[0]);
                 return;
@@ -193,20 +207,27 @@ const generateCommentSection = (comment) => {
             // TODO
             // detailFinalCacheState.options.selectedIndex = detailCommentCacheState.options.selectedIndex;
 
+            // a bit complicated but required to not mess with the types (casting not possible as we are here not in ts)
+            // first get the Enum key by value to then get the value again...
+            comment.state =
+                StateEnum[
+                    getStateKeyByValue(
+                        String($("#detailCommentCacheState").val())
+                    )
+                ];
+
             comment.commentValue = editor_instance.getMarkdown();
 
             viewer_instance.setMarkdown(comment.commentValue);
             viewState.isViewMode = true;
-            viewState.hasComment = true;
-            updateUi();
-            lastSaveTime = createTimeString(new Date());
 
             comment.save();
+            updateCommentSection();
             // TODO
             // saveToCacheNote(comment);
 
             var clean = DEFAULTCOORDS;
-            if (comment.lat && comment.lng) {
+            if (comment && comment.lat && comment.lng) {
                 clean = convertDec2DMS(comment.lat, comment.lng);
             }
             $("#detailCommentInputLatLng").val(clean);
@@ -248,21 +269,20 @@ const generateCommentSection = (comment) => {
                 }
 
                 viewState.isViewMode = true;
-                viewState.hasComment = false;
-                updateUi();
+                updateCommentSection();
             }
         };
 
         const mouseupArchive = () => {
-            if (viewState.isArchived) {
-                comment.archived = "false";
-                viewState.isArchived = false;
-            } else {
-                comment.archived = "true";
-                viewState.isArchived = true;
+            if (comment) {
+                if (comment.archived) {
+                    comment.archived = false;
+                } else {
+                    comment.archived = true;
+                }
+                comment.save();
+                updateCommentSection();
             }
-            comment.save();
-            updateUi();
         };
 
         const mouseupDelete = () => {
@@ -289,9 +309,7 @@ const generateCommentSection = (comment) => {
                 $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
 
                 viewState.isViewMode = true;
-                viewState.hasComment = false;
-                updateUi();
-                lastSaveTime = createTimeString(-1);
+                updateCommentSection();
             }
         };
 
@@ -307,16 +325,11 @@ const generateCommentSection = (comment) => {
             $("#gccommentEditor").removeClass("fsEditor");
         };
 
-        viewState.hasComment = comment !== null;
-        viewState.isArchived =
-            comment !== null && comment.archived === ARCHIVED;
         var lastSaveTime =
             comment !== null && comment.saveTime
                 ? createTimeString(comment.saveTime)
                 : createTimeString(-1);
-        var commentState = viewState.hasComment
-            ? comment.state
-            : StateEnum.unknown;
+        var commentState = comment ? comment.state : StateEnum.unknown;
 
         return html`
             <p>
@@ -367,7 +380,7 @@ const generateCommentSection = (comment) => {
                     title="Enter Fullscreen" style="cursor:pointer">
                 </a>
 
-                <small>last saved: ${
+                <small id="lastSaved">${
                     lang.detail_lastsaved + ": " + lastSaveTime
                 }</small>
                 <br>
@@ -389,7 +402,7 @@ const generateCommentSection = (comment) => {
                 </select>
                 Final:
                 <input id="detailCommentInputLatLng" value=${
-                    comment.lat && comment.lng
+                    comment && comment.lat && comment.lng
                         ? convertDec2DMS(comment.lat, comment.lng)
                         : DEFAULTCOORDS
                 } style="margin-left:5px; margin-right:5px; height:35px;" disabled="true" size="30"></input>
@@ -411,17 +424,15 @@ const generateCommentSection = (comment) => {
         `;
     };
 
-    return html` ${generateCommentSectionHeader(comment)} `;
+    return html` ${generateCommentSectionHeader()} `;
 };
 
-const generateCoordinateSection = (comment) => {
+const generateCoordinateSection = () => {
     return html``;
 };
 
 const getGUID = () => {
-    const url = document
-        .getElementById("ctl00_ContentBody_lnkPrintFriendly")
-        .getAttribute("href");
+    const url = $("form").attr("action");
     const guidIndex = url.indexOf("guid=");
     const length = "3331cc55-49a2-4883-a5ad-06657e8c1aab".length;
     return url.substr(guidIndex + 5, length);
@@ -478,11 +489,11 @@ export const gccommentOnDetailpage = () => {
     // custom fullscreen css
     appendCSS("text", editorFullscreenCss);
 
-    const comment = doLoadCommentFromGUID(getGUID());
+    comment = doLoadCommentFromGUID(getGUID());
 
     const hookForHeaderSection = $("#Print");
     if (hookForHeaderSection.length > 0) {
-        render(hookForHeaderSection[0], generateHeaderSection(comment));
+        render(hookForHeaderSection[0], generateHeaderSection());
     } else {
         log("info", "Hook for header section not found.");
     }
@@ -492,7 +503,7 @@ export const gccommentOnDetailpage = () => {
         hookForCommentSection
             .parent()
             .before('<div id="gccommentarea" name="mycomments"><div>');
-        render($("#gccommentarea")[0], generateCommentSection(comment));
+        render($("#gccommentarea")[0], generateCommentSection());
     } else {
         log("info", "Hook for comment section not found.");
     }
@@ -506,19 +517,19 @@ export const gccommentOnDetailpage = () => {
             );
         hookForCoordinateSection = $("#ctl00_ContentBody_WaypointsInfo");
     }
-    render(hookForCoordinateSection[0], generateCoordinateSection(comment));
+    render(hookForCoordinateSection[0], generateCoordinateSection());
 
     viewer_instance = createViewer(
         $("#gccommentViewer")[0],
-        comment.commentValue
+        comment ? comment.commentValue : ""
     );
     editor_instance = createEditor(
         $("#gccommentEditor")[0],
-        comment.commentValue
+        comment ? comment.commentValue : ""
     );
     if (comment && comment.commentValue !== "") {
         $("#gccommentViewer").show();
     }
 
-    updateUi();
+    updateCommentSectionFunc();
 };

@@ -194,7 +194,10 @@ export const generateTableDiv = () => {
     `;
 };
 
-const generateTableRow = (comment, rowCount) => {
+const generateTableRow = (
+    /** @type {CacheComment} */ comment,
+    /** @type {number} */ rowCount
+) => {
     const getStateIcon = (state) => {
         if (state == StateEnum.unsolved) return state_unsolved;
         if (state == StateEnum.solved) return state_solved;
@@ -316,10 +319,10 @@ const generateTableRow = (comment, rowCount) => {
             comment.state = StateEnum.unknown;
             targetState = StateEnum.unknown;
         } else if (action === "addToArchive") {
-            comment.archived = ARCHIVED;
+            comment.archived;
             targetState = comment.state;
         } else if (action === "removeFromArchive") {
-            comment.archived = null;
+            comment.archived = false;
             targetState = comment.state;
         }
 
@@ -356,7 +359,7 @@ const generateTableRow = (comment, rowCount) => {
         }
     }
 
-    const createActionButtons = (comment) => {
+    const createActionButtons = (/** @type {CacheComment} */ comment) => {
         const buttons = [
             {
                 command: `#${comment.guid}=markdefault`,
@@ -418,16 +421,13 @@ const generateTableRow = (comment, rowCount) => {
                 callback: null
             },
             {
-                command:
-                    comment.archived === ARCHIVED
-                        ? `#${comment.guid}=removeFromArchive`
-                        : `#${comment.guid}=addToArchive`,
-                label:
-                    comment.archived === ARCHIVED
-                        ? lang.table_removefromarchive
-                        : lang.table_addtoarchive,
-                icon:
-                    comment.archived === ARCHIVED ? archiveRemove : archiveAdd,
+                command: comment.archived
+                    ? `#${comment.guid}=removeFromArchive`
+                    : `#${comment.guid}=addToArchive`,
+                label: comment.archived
+                    ? lang.table_removefromarchive
+                    : lang.table_addtoarchive,
+                icon: comment.archived ? archiveRemove : archiveAdd,
                 callback: changeState
             }
         ];
@@ -465,7 +465,7 @@ const generateTableRow = (comment, rowCount) => {
                           src="${finalIcon}"
                       />`
                     : null}
-                ${comment.archived === ARCHIVED
+                ${comment.archived
                     ? html`<img
                           class="haveFinalIcon"
                           title="${lang.table_isarchived}"
@@ -482,20 +482,20 @@ const generateTableRow = (comment, rowCount) => {
     `;
 };
 
-const updateCounters = (comments) => {
+const updateCounters = (/** @type {CacheComment[]} */ comments) => {
     var commentCountWhite = 0;
     var commentCountRed = 0;
     var commentCountGreen = 0;
     var commentCountGray = 0;
     var commentCountArchive = 0;
 
-    comments.forEach((comment) => {
+    comments.forEach((/** @type {CacheComment} */ comment) => {
         if (comment.state == StateEnum.unknown) commentCountWhite++;
         else if (comment.state == StateEnum.unsolved) commentCountRed++;
         else if (comment.state == StateEnum.solved) commentCountGreen++;
         else if (comment.state == StateEnum.found) commentCountGray++;
 
-        if (comment.archived === ARCHIVED) {
+        if (comment.archived) {
             commentCountArchive++;
         }
     });
@@ -537,10 +537,10 @@ export const refreshTableDiv = (show) => {
                 archivedFilter === ARCHIVE_FILTER_INCLUDE_ARCHIVED ||
                 // take non-archived caches if filter is set to "no archived"
                 (archivedFilter === ARCHIVE_FILTER_NO_ARCHIVED &&
-                    comment.archived !== ARCHIVED) ||
+                    !comment.archived) ||
                 // take archived caches if filter is set to "only archived"
                 (archivedFilter === ARCHIVE_FILTER_ONLY_ARCHIVED &&
-                    comment.archived === ARCHIVED))
+                    comment.archived))
         );
     });
 

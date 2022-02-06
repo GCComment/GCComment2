@@ -1,4 +1,5 @@
 import { LAST_IMPORT } from "../consts/general.js";
+import { log } from "../helper/logger.js";
 import { GCC_setValue } from "../helper/storage.js";
 import { unescapeXML } from "../helper/xml.js";
 import { doLoadCommentFromGUID, doSaveCommentWTimeToGUID } from "./db.js";
@@ -25,7 +26,7 @@ export const parseImport = (importText) => {
             }
         });
     } catch (ex) {
-        console.log("ex: " + ex);
+        log("ex: " + ex);
         parseXMLImport(importText);
     }
 };

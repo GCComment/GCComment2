@@ -27,7 +27,7 @@ export class CacheComment {
     /**
      * @type {number}
      */
-    saveTime = Date.now();
+    saveTime = null;
 
     /**
      * @type {StateEnum}
@@ -54,11 +54,10 @@ export class CacheComment {
      */
     origlng = null;
 
-    // TODO: to bool
     /**
-     * @type {string}
+     * @type {boolean}
      */
-    archived = "false";
+    archived = false;
 
     /**
      * @type {Array<Waypoint>}

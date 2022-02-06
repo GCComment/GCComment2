@@ -16,7 +16,7 @@ import {
 } from "../../../consts/preferences";
 import { appendCheckBox, appendRadioGroup } from "../../other/controls";
 import { log } from "../../../helper/logger";
-import { ARCHIVED, COMPREFIX } from "../../../consts/general";
+import { COMPREFIX } from "../../../consts/general";
 import { doLoadCommentFromGUID } from "../../../function/db";
 import { GCC_getValue } from "../../../helper/storage.js";
 import { StateEnum } from "../../../dataClasses/stateEnum";
@@ -49,7 +49,7 @@ function performFilteredDeleteAll() {
                     key.substr(COMPREFIX.length)
                 );
 
-                const isArchived = comment.archived === ARCHIVED;
+                const isArchived = comment.archived;
                 const archiveSetting = GCC_getValue(DELETEALL_FILTER_ARCHIVED);
                 const includeArchive =
                     archiveSetting === DELETEALL_FILTER_ARCHIVED_BOTH ||
