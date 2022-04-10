@@ -21,7 +21,7 @@ export const generateConfigDiv = () => {
             onload=${initLangSettings}
             style="display:none;margin:5px;padding:10px;outline:1px solid #D7D7D7;position:relative;background-color:#EBECED"
         >
-            <p style="width:600px">${lang.settings_intro}</p>
+            <p style="width:600px">${{ html: lang.settings_intro }}</p>
             ${appendCheckBox(ENABLE_EXPORT, lang.settings_allowExport)}
             ${appendCheckBox(LAZY_TABLE_REFRESH, lang.settings_lazyTable)}
             ${appendCheckBox(AUTO_UPDATE_GS_FINAL, lang.settings_syncWithGS)}
@@ -37,9 +37,9 @@ export const generateConfigDiv = () => {
                 size="1"
                 style="margin-left:5px;"
             >
-                <option>${lang[SETTINGS_LANGUAGE_AUTO]}</option>
-                <option>${lang[SETTINGS_LANGUAGE_EN]}</option>
-                <option>${lang[SETTINGS_LANGUAGE_DE]}</option>
+                <option>${SETTINGS_LANGUAGE_AUTO}</option>
+                <option>${SETTINGS_LANGUAGE_EN}</option>
+                <option>${SETTINGS_LANGUAGE_DE}</option>
             </select>
         </div>
     `;
