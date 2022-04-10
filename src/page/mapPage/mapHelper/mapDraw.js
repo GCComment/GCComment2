@@ -13,7 +13,7 @@ import {
     state_unsolved,
     waypointIcon
 } from "../../../consts/icons.js";
-import { lang } from "../../../consts/language.js";
+import { lang } from "../../../consts/language/language";
 import {
     AUTOMOVEMYSTERIESBETA,
     AUTOMOVEMYSTERIESBETAAREA,

@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { html, render } from "lighterhtml";
-import { lang } from "../../consts/language.js";
+import { lang } from "../../consts/language/language";
 import { AUTOMARKARCHIVE, AUTOMARKFOUND } from "../../consts/preferences.js";
 import { StateEnum } from "../../dataClasses/stateEnum";
 import {

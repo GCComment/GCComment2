@@ -23,7 +23,7 @@ import {
     commentIconShare,
     deleteMysteryIcon
 } from "../../consts/icons.js";
-import { lang } from "../../consts/language.js";
+import { lang } from "../../consts/language/language";
 import {
     AUTO_UPDATE_GS_FINAL,
     AUTO_UPLOAD_CACHE_NOTES

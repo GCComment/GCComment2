@@ -1,7 +1,7 @@
 // event handler import button (#importDivButton)
 import $ from "jquery";
 import { html } from "lighterhtml";
-import { lang } from "../../../consts/language";
+import { lang } from "../../../consts/language/language";
 import {
     importMultipleFromJSON,
     parseXMLImport

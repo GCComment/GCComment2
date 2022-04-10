@@ -1,5 +1,5 @@
 import $ from "jquery";
-import { lang } from "../../consts/language.js";
+import { lang } from "../../consts/language/language";
 import { AUTO_UPLOAD_CACHE_NOTES } from "../../consts/preferences.js";
 import { convertDec2DMS, parseCoordinates } from "../../helper/coordinates.js";
 import { GMWindow } from "../../helper/gmWindow";
@@ -42,6 +42,7 @@ export const resetUserCoordinate = () => {
         url: "/seek/cache_details.aspx/ResetUserCoordinate",
         data: JSON.stringify({
             dto: {
+                // @ts-ignore
                 ut: GMWindow.userToken
             }
         }),
@@ -83,6 +84,7 @@ export const setUserCoordinate = (lat, lng) => {
                     lat: lat,
                     lng: lng
                 },
+                // @ts-ignore
                 ut: GMWindow.userToken
             }
         }),

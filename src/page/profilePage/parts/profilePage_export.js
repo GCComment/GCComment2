@@ -1,7 +1,7 @@
 // event handler import button (#exportDivButton)
 import $ from "jquery";
 import { html } from "lighterhtml";
-import { lang } from "../../../consts/language";
+import { lang } from "../../../consts/language/language";
 import {
     EXPORT_FILTER_ALL,
     EXPORT_FILTER_ARCHIVE,

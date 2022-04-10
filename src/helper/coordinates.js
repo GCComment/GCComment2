@@ -1,4 +1,4 @@
-import { lang } from "../consts/language.js";
+import { lang } from "../consts/language/language";
 import { toRad } from "../helper/math.js";
 import { DEFAULTCOORDS } from "./../consts/general";
 import { log } from "./logger.js";

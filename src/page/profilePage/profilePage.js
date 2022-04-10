@@ -5,7 +5,7 @@ import $ from "jquery";
 import { html, render } from "lighterhtml";
 import { LAST_EXPORT, LAST_IMPORT } from "../../consts/general";
 import { gccIcon } from "../../consts/icons";
-import { lang } from "../../consts/language";
+import { lang } from "../../consts/language/language";
 import {
     ARCHIVE_FILTER_NO_ARCHIVED,
     SETTING_ARCHIVE_FILTER

@@ -1,6 +1,6 @@
 // event handler delete button (#patchDivButton)
 import { html } from "lighterhtml";
-import { lang } from "../../../consts/language";
+import { lang } from "../../../consts/language/language";
 import {
     PATCHGPX_ADDFINALWPT,
     PATCHGPX_CHANGEORIGINAL,

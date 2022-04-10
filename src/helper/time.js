@@ -1,4 +1,4 @@
-import { lang } from "../consts/language.js";
+import { lang } from "../consts/language/language";
 
 // converts a long time stamp to a readable time string
 export const createTimeString = (time, simple) => {

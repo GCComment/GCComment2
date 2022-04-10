@@ -1,12 +1,13 @@
 import $ from "jquery";
 import { html } from "lighterhtml";
-import { lang } from "../../../consts/language";
+import { lang } from "../../../consts/language/language";
 import {
     AUTO_UPDATE_GS_FINAL,
     AUTO_UPLOAD_CACHE_NOTES,
     ENABLE_EXPORT,
     LAZY_TABLE_REFRESH,
     SETTINGS_LANGUAGE,
+    SETTINGS_LANGUAGE_AUTO,
     SETTINGS_LANGUAGE_DE,
     SETTINGS_LANGUAGE_EN
 } from "../../../consts/preferences";
@@ -36,9 +37,9 @@ export const generateConfigDiv = () => {
                 size="1"
                 style="margin-left:5px;"
             >
-                <option>${lang.SETTINGS_LANGUAGE_AUTO}</option>
-                <option>${lang.SETTINGS_LANGUAGE_EN}</option>
-                <option>${lang.SETTINGS_LANGUAGE_DE}</option>
+                <option>${lang[SETTINGS_LANGUAGE_AUTO]}</option>
+                <option>${lang[SETTINGS_LANGUAGE_EN]}</option>
+                <option>${lang[SETTINGS_LANGUAGE_DE]}</option>
             </select>
         </div>
     `;
@@ -51,7 +52,7 @@ const initLangSettings = () => {
         langsetting === SETTINGS_LANGUAGE_DE
     )
         $("#languageSelector").val(langsetting);
-    else $("#languageSelector").val(lang.SETTINGS_LANGUAGE_AUTO);
+    else $("#languageSelector").val(lang[SETTINGS_LANGUAGE_AUTO]);
 };
 
 const onLanguageSelectorChange = () => {

@@ -6,7 +6,7 @@ import {
     state_solved,
     state_unsolved
 } from "../../consts/icons.js";
-import { lang } from "../../consts/language.js";
+import { lang } from "../../consts/language/language";
 import { StateEnum } from "../../dataClasses/stateEnum";
 import {
     doLoadCommentFromGCCode,

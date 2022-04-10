@@ -2,7 +2,7 @@
 import $ from "jquery";
 import { html } from "lighterhtml";
 import { COMPREFIX } from "../../../consts/general";
-import { lang } from "../../../consts/language";
+import { lang } from "../../../consts/language/language";
 import {
     DELETEALL_FILTER_ALL,
     DELETEALL_FILTER_ARCHIVED,
@@ -84,6 +84,7 @@ function performFilteredDeleteAll() {
                         comment.gccode +
                         ")</a>. " +
                         lang.tmpl_commentremoved
+                            // @ts-ignore
                             .replace("{{1}}", Base64.encode(removeTooltip))
                             .replace(
                                 "{{2}}",

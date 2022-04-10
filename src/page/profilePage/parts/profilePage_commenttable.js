@@ -16,7 +16,7 @@ import {
     state_solved,
     state_unsolved
 } from "../../../consts/icons.js";
-import { lang } from "../../../consts/language";
+import { lang } from "../../../consts/language/language";
 import {
     ARCHIVE_FILTER_INCLUDE_ARCHIVED,
     ARCHIVE_FILTER_NO_ARCHIVED,
