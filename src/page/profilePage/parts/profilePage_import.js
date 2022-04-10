@@ -53,7 +53,7 @@ export const generateImportDiv = () => {
                 id="dropboxCheck"
                 type="button"
                 value="${lang.import_fromDropboxCheckForFiles}"
-                onmouseup=${checkDropbox}
+                onclick=${checkDropbox}
             />
             <select id="dropboxSelect" />
             <input
@@ -61,7 +61,7 @@ export const generateImportDiv = () => {
                 type="button"
                 disabled
                 value="${lang.import_fromDropbox}"
-                onmouseup=${loadFromDropbox}
+                onclick=${loadFromDropbox}
             />
 
             <a
@@ -83,7 +83,7 @@ export const generateImportDiv = () => {
                 id="submitImportButton"
                 type="button"
                 value="${lang.import_perform}"
-                onmouseup=${performImport}
+                onclick=${performImport}
                 style="margin:5px"
             />
 
@@ -91,7 +91,7 @@ export const generateImportDiv = () => {
                 id="cancelImportButton"
                 type="button"
                 value="${lang.import_close}"
-                onmouseup=${onCancelImportButtonMouseUp}
+                onclick=${onCancelImportButtonMouseUp}
                 style="margin:5px"
             />
 

@@ -41,7 +41,7 @@ const generateGccRoot = (targetNode) => {
                 <a
                     id="configDivButton"
                     title="${lang.menu_options}"
-                    onmouseup=${onConfigDivButtonMouseUp}
+                    onclick=${onConfigDivButtonclick}
                     onmouseover=${onConfigDivButtonMouseover}
                     onmouseout=${onConfigDivButtonMouseOut}
                     style="cursor:pointer;padding-left:5px;padding-right:5px;margin-left:5px"
@@ -51,7 +51,7 @@ const generateGccRoot = (targetNode) => {
                 &nbsp;|&nbsp;
                 <a
                     id="gccommenttabledivButton"
-                    onmouseup=${onGccommenttabledivButtonMouseUp}
+                    onclick=${onGccommenttabledivButtonclick}
                     style="cursor:pointer;text-decoration:none;padding-left:5px;padding-right:5px"
                 >
                     ${lang.menu_showmycomments}
@@ -60,7 +60,7 @@ const generateGccRoot = (targetNode) => {
                 ${generateDisplayFilters()} &nbsp;|&nbsp;
                 <a
                     id="exportDivButton"
-                    onmouseup=${onExportDivButtonMouseUp}
+                    onclick=${onExportDivButtonclick}
                     style="cursor:pointer;text-decoration:none;padding-left:5px;padding-right:5px"
                 >
                     ${lang.menu_export}
@@ -68,7 +68,7 @@ const generateGccRoot = (targetNode) => {
                 &nbsp;|&nbsp;
                 <a
                     id="importDivButton"
-                    onmouseup=${onImportDivButtonMouseUp}
+                    onclick=${onImportDivButtonclick}
                     style="cursor:pointer;text-decoration:none;padding-left:5px;padding-right:5px"
                 >
                     ${lang.menu_import}
@@ -76,7 +76,7 @@ const generateGccRoot = (targetNode) => {
                 &nbsp;|&nbsp;
                 <a
                     id="deleteAllDivButton"
-                    onmouseup=${onDeleteAllDivButtonMouseUp}
+                    onclick=${onDeleteAllDivButtonclick}
                     style="cursor:pointer;text-decoration:none;padding-left:5px;padding-right:5px"
                 >
                     ${lang.menu_delete}
@@ -84,7 +84,7 @@ const generateGccRoot = (targetNode) => {
                 &nbsp;|&nbsp;
                 <a
                     id="patchDivButton"
-                    onmouseup=${onPatchDivButtonMouseUp}
+                    onclick=${onPatchDivButtonclick}
                     style="display:none;cursor:pointer;text-decoration:none;padding-left:5px;padding-right:5px"
                 >
                     ${lang.menu_patchgpx}
@@ -98,23 +98,23 @@ const generateGccRoot = (targetNode) => {
     );
 };
 
-const onGccommenttabledivButtonMouseUp = () => {
+const onGccommenttabledivButtonclick = () => {
     toggleTabOnProfile("gccommenttablediv");
 };
 
-const onDeleteAllDivButtonMouseUp = () => {
+const onDeleteAllDivButtonclick = () => {
     toggleTabOnProfile("deleteAllDiv");
 };
 
-const onExportDivButtonMouseUp = () => {
+const onExportDivButtonclick = () => {
     toggleTabOnProfile("exportDiv");
 };
 
-const onImportDivButtonMouseUp = () => {
+const onImportDivButtonclick = () => {
     toggleTabOnProfile("importDiv");
 };
 
-const onPatchDivButtonMouseUp = () => {
+const onPatchDivButtonclick = () => {
     toggleTabOnProfile("patchDiv");
 };
 
@@ -153,7 +153,7 @@ const onConfigDivButtonMouseover = (evt) => {
     tooltip.show(stats, 500);
 };
 
-const onConfigDivButtonMouseUp = (evt) => {
+const onConfigDivButtonclick = (evt) => {
     toggleTabOnProfile("configDiv");
 };
 

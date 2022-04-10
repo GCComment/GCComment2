@@ -69,7 +69,7 @@ export const generateDisplayFilters = () => {
                 id="filterclearIcon"
                 title="${lang.table_filter_all}"
                 src="${state_clear}"
-                onmouseup=${onFilterclearIconMouseUp}
+                onclick=${onFilterclearIconMouseUp}
                 style="cursor:pointer;vertical-align:bottom;opacity:1.0"
             />
             &nbsp;
@@ -77,7 +77,7 @@ export const generateDisplayFilters = () => {
                 id="filterallIcon"
                 title="${lang.table_filter_untyped}"
                 src="${state_default}"
-                onmouseup=${onFilterallIconMouseUp}
+                onclick=${onFilterallIconMouseUp}
                 style="cursor:pointer;vertical-align:bottom;opacity:0.3"
             />
             &nbsp;
@@ -85,7 +85,7 @@ export const generateDisplayFilters = () => {
                 id="filterunsolvedIcon"
                 title="${lang.table_filter_unsolved}"
                 src="${state_unsolved}"
-                onmouseup=${onFilterunsolvedIconMouseUp}
+                onclick=${onFilterunsolvedIconMouseUp}
                 style="cursor:pointer;vertical-align:bottom;opacity:0.3"
             />
             &nbsp;
@@ -93,7 +93,7 @@ export const generateDisplayFilters = () => {
                 id="filtersolvedIcon"
                 title="${lang.table_filter_solved}"
                 src="${state_solved}"
-                onmouseup=${onFiltersolvedIconMouseUp}
+                onclick=${onFiltersolvedIconMouseUp}
                 style="cursor:pointer;vertical-align:bottom;opacity:0.3"
             />
             &nbsp;
@@ -101,7 +101,7 @@ export const generateDisplayFilters = () => {
                 id="filterFoundIcon"
                 title="${lang.table_filter_found}"
                 src="${state_found}"
-                onmouseup=${onFilterFoundIconMouseUp}
+                onclick=${onFilterFoundIconMouseUp}
                 style="cursor:pointer;vertical-align:bottom;opacity:0.3"
             />
 

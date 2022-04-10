@@ -43,7 +43,7 @@ export const generateConfigDiv = () => {
                 <option>${SETTINGS_LANGUAGE_DE}</option>
             </select>
         </div>
-        ${initLangSettings};
+        ${initLangSettings}
     `;
 };
 

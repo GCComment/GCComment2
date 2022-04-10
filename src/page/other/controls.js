@@ -35,16 +35,12 @@ export const appendCheckBox = (
                 type="checkbox"
                 checked=${checked}
                 class="Checkbox"
-                onmouseup=${updateValue}
+                onclick=${updateValue}
                 style="margin:3px"
             />
             ${label
                 ? html`
-                      <label
-                          id="${id}_label"
-                          for=${id}
-                          onmouseup=${updateValue}
-                      >
+                      <label id="${id}_label" for=${id} onclick=${updateValue}>
                           ${imageURL
                               ? html`
                                     <img
@@ -104,12 +100,12 @@ export const appendRadioGroup = (settingsName, options, defaultSelection) => {
                         type="radio"
                         value=${option.attr}
                         checked="${checked}"
-                        onmouseup=${onInputMouseUp}
+                        onclick=${onInputMouseUp}
                     />
                     <label
                         for="id${settingsName}${option.attr}"
                         style="'margin: 0 8px 0 3px;"
-                        onmouseup=${onLabelMouseUp}
+                        onclick=${onLabelMouseUp}
                     >
                         ${option.label}
                     </label>
