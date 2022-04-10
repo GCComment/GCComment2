@@ -13,12 +13,13 @@ import {
 } from "../../../consts/preferences";
 import { GCC_getValue, GCC_setValue } from "../../../helper/storage.js";
 import { appendCheckBox } from "../../other/controls";
+import { log } from "./../../../helper/logger";
+import { waitForEl } from "./../../../helper/wait";
 
 export const generateConfigDiv = () => {
     return html`
         <div
             id="configDiv"
-            onload=${initLangSettings}
             style="display:none;margin:5px;padding:10px;outline:1px solid #D7D7D7;position:relative;background-color:#EBECED"
         >
             <p style="width:600px">${{ html: lang.settings_intro }}</p>
@@ -42,17 +43,23 @@ export const generateConfigDiv = () => {
                 <option>${SETTINGS_LANGUAGE_DE}</option>
             </select>
         </div>
+        ${initLangSettings};
     `;
 };
 
 const initLangSettings = () => {
-    var langsetting = GCC_getValue(SETTINGS_LANGUAGE);
-    if (
-        langsetting === SETTINGS_LANGUAGE_EN ||
-        langsetting === SETTINGS_LANGUAGE_DE
-    )
-        $("#languageSelector").val(langsetting);
-    else $("#languageSelector").val(lang[SETTINGS_LANGUAGE_AUTO]);
+    waitForEl("#languageSelector", () => {
+        var langsetting = GCC_getValue(SETTINGS_LANGUAGE);
+
+        if (
+            langsetting === SETTINGS_LANGUAGE_EN ||
+            langsetting === SETTINGS_LANGUAGE_DE
+        ) {
+            $("#languageSelector").val(langsetting);
+        } else {
+            $("#languageSelector").val(lang[SETTINGS_LANGUAGE_AUTO]);
+        }
+    });
 };
 
 const onLanguageSelectorChange = () => {
@@ -60,5 +67,6 @@ const onLanguageSelectorChange = () => {
         SETTINGS_LANGUAGE,
         $("#languageSelector option:selected").text()
     );
-    // showSuccessIcon(languageSelector);
+    log(`language changed to: ${GCC_getValue(SETTINGS_LANGUAGE)}`);
+    document.location.reload();
 };

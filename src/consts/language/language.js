@@ -13,7 +13,7 @@ import { language_en } from "./language_en.js";
 /**
  * @type {Record<string, Language>}
  */
-const languages = {};
+var languages = {};
 
 const loadLanguages = () => {
     registerLanguage(SETTINGS_LANGUAGE_EN, language_en);
@@ -24,7 +24,7 @@ const registerLanguage = (
     /** @type {string} */ langName,
     /** @type {Language} */ lang
 ) => {
-    var languageWithFallback = language_en;
+    var languageWithFallback = Object.assign({}, language_en);
     Object.assign(languageWithFallback, lang);
     languages[langName] = languageWithFallback;
 };
@@ -39,10 +39,11 @@ const getLanguage = () => {
     if (langsetting === SETTINGS_LANGUAGE_AUTO) {
         if ($(".selected-language > a:first")) {
             const gslang = $(".selected-language > a:first").text();
-            if (gslang.indexOf("English") > -1)
+            if (gslang.indexOf("English") > -1) {
                 return languages[SETTINGS_LANGUAGE_EN];
-            else if (gslang.indexOf("Deutsch") > -1)
+            } else if (gslang.indexOf("Deutsch") > -1) {
                 return languages[SETTINGS_LANGUAGE_DE];
+            }
         }
     } else if (languages[langsetting]) {
         return languages[langsetting];
