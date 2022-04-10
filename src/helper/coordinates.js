@@ -1,11 +1,16 @@
 import { lang } from "../consts/language.js";
 import { toRad } from "../helper/math.js";
+import { DEFAULTCOORDS } from "./../consts/general";
 import { log } from "./logger.js";
 
 export const convertDec2DMS = (
     /** @type {Number} */ lt,
     /** @type {Number} */ lg
 ) => {
+    if (lt === null || lng === null) {
+        return DEFAULTCOORDS;
+    }
+
     var lat = lt;
     var lng = lg;
     var result = "";

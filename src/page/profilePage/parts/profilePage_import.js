@@ -2,7 +2,11 @@
 import $ from "jquery";
 import { html } from "lighterhtml";
 import { lang } from "../../../consts/language";
-import { parseImport } from "../../../function/ImportExport.js";
+import {
+    importMultipleFromJSON,
+    parseXMLImport
+} from "../../../function/ImportExport.js";
+import { log } from "../../../helper/logger.js";
 import { toggleTabOnProfile } from "../profilePage.js";
 
 //TODO: Remove dropbox
@@ -16,7 +20,13 @@ const loadFromDropbox = () => {
 
 const performImport = () => {
     console.info("performImport");
-    parseImport($("#gccommentimporttextarea").val());
+    var inputResult = importMultipleFromJSON(
+        String($("#gccommentimporttextarea").val())
+    );
+    if (inputResult === null) {
+        log("info", "fallback to xml import");
+        parseXMLImport($("#gccommentimporttextarea").val());
+    }
     $("#gccommentimporttextarea").val("");
     console.info("performImport end");
 };

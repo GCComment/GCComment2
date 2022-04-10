@@ -1,12 +1,22 @@
 import { LAST_IMPORT } from "../consts/general.js";
+import { CacheComment } from "../dataClasses/cacheComment.js";
 import { log } from "../helper/logger.js";
 import { GCC_setValue } from "../helper/storage.js";
 import { unescapeXML } from "../helper/xml.js";
 import { doLoadCommentFromGUID, doSaveCommentWTimeToGUID } from "./db.js";
 
-export const parseImport = (importText) => {
+export const exportMultipleAsJSON = (
+    /** @type {CacheComment[]} */ comments
+) => {
+    return JSON.stringify(comments);
+};
+
+export const importMultipleFromJSON = (
+    /** @type {string} */ json,
+    overwriteNewer = false
+) => {
     try {
-        var aJSON = JSON.parse(importText);
+        var aJSON = JSON.parse(json);
         var aExisted = [];
         var aOverwrite = [];
         var aNew = [];
@@ -14,8 +24,8 @@ export const parseImport = (importText) => {
             var oExisting = doLoadCommentFromGUID(element.guid);
             if (oExisting) {
                 if (
-                    oExisting.saveTime != null &&
-                    oExisting.saveTime >= element.saveTime
+                    oExisting.saveTime === null ||
+                    oExisting.saveTime < element.saveTime
                 ) {
                     aExisted.push(element);
                 } else {
@@ -25,13 +35,30 @@ export const parseImport = (importText) => {
                 aNew.push(element);
             }
         });
+
+        aNew.forEach((element) => {
+            new CacheComment(element).save();
+        });
+        aExisted.forEach((element) => {
+            new CacheComment(element).save();
+        });
+
+        if (overwriteNewer) {
+            aOverwrite.forEach((element) => {
+                new CacheComment(element).save();
+            });
+        }
+
+        GCC_setValue(LAST_IMPORT, "" + (new Date() - 0));
+
+        return [aNew.length, aExisted.length, aOverwrite.length];
     } catch (ex) {
         log("ex: " + ex);
-        parseXMLImport(importText);
+        return null;
     }
 };
 
-function parseXMLImport(importText) {
+export const parseXMLImport = (importText) => {
     // log("debug", "parsing..." + importText.value);
     var parser = new DOMParser();
     var xmlDoc = parser.parseFromString(importText, "text/xml");
@@ -173,4 +200,4 @@ function parseXMLImport(importText) {
     }
 
     GCC_setValue(LAST_IMPORT, "" + (new Date() - 0));
-}
+};

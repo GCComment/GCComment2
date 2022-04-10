@@ -24,7 +24,10 @@ import {
     deleteMysteryIcon
 } from "../../consts/icons.js";
 import { lang } from "../../consts/language.js";
-import { AUTO_UPDATE_GS_FINAL } from "../../consts/preferences.js";
+import {
+    AUTO_UPDATE_GS_FINAL,
+    AUTO_UPLOAD_CACHE_NOTES
+} from "../../consts/preferences.js";
 import { getStateKeyByValue, StateEnum } from "../../dataClasses/stateEnum";
 import { doLoadCommentFromGUID } from "../../function/db.js";
 import { convertDec2DMS, parseCoordinates } from "../../helper/coordinates.js";
@@ -38,6 +41,7 @@ import { createEditor, createViewer } from "./../../helper/commentEditor";
 import {
     resetUserCoordinate,
     retrieveOriginalCoordinates,
+    saveToCacheNote,
     setUserCoordinate
 } from "./gsHelper.js";
 import { patchSmallMap } from "./smallMap.js";
@@ -51,7 +55,109 @@ var comment = null;
 var updateCommentSectionFunc;
 
 const generateHeaderSection = () => {
-    return html``;
+    const mouseupFinalSave = () => {
+        // parse coords
+        var fin = parseCoordinates($("#detailFinalInputLatLng").val());
+        if (fin.length == 2) {
+            comment.lat = fin[0];
+            comment.lng = fin[1];
+
+            const newState =
+                StateEnum[
+                    getStateKeyByValue(
+                        String($("#detailFinalCacheState").val())
+                    )
+                ];
+            if (newState !== comment.state) {
+                comment.state = newState;
+                $("#detailCommentCacheState").val(
+                    $("#detailFinalCacheState").val()
+                );
+            }
+            comment.save();
+
+            var clean = DEFAULTCOORDS;
+            if (comment && comment.lat && comment.lng) {
+                clean = convertDec2DMS(comment.lat, comment.lng);
+            }
+            $("#detailCommentInputLatLng").val(clean);
+            $("#detailFinalInputLatLng").val(clean);
+        } else if ($("#detailFinalInputLatLng").val() != DEFAULTCOORDS) {
+            alert(
+                `${lang.alert_couldnotparse} ${$(
+                    "#detailFinalInputLatLng"
+                ).val()}`
+            );
+            return;
+        }
+    };
+
+    const mouseupFinalDelete = () => {
+        var check = confirm(lang.detail_finaldeleteconfirmation);
+        if (check) {
+            $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
+            $("#detailFinalInputLatLng").css("color", "grey");
+
+            $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
+
+            // delete coord from comment
+            comment.lat = null;
+            comment.lng = null;
+            comment.save();
+
+            if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
+                resetUserCoordinate();
+            }
+            updateCommentSectionFunc();
+        }
+    };
+
+    return html`<div class="LocationData" style="margin: -10px -13px 0px -13px">
+        <td>
+            Final coordinate
+            <input
+                id="detailFinalInputLatLng"
+                value=${convertDec2DMS(comment.lat, comment.lng)}
+                style="margin-left:5px;margin-right:5px;height: 35px;"
+                size="26"
+            />
+
+            <select
+                style="margin:0 5px 0 5px;display: initial;width: auto;border-radius: 0px;"
+                name="detailFinalCacheState"
+                id="detailFinalCacheState"
+                size="1"
+            >
+                ${Object.values(StateEnum).map((state) => {
+                    if (state == comment.state) {
+                        return html`<option val="${state}" selected="selected">
+                            ${state}
+                        </option>`;
+                    }
+                    return html`<option>${state}</option>`;
+                })}</select
+            ><a
+                onclick=${mouseupFinalSave}
+                style="margin-left:3px;margin-right:3px"
+                ><img
+                    src="${commentIconSave}"
+                    title="Save final coordinate"
+                    style="cursor:pointer;vertical-align:middle;" /></a
+            ><a
+                onclick=${mouseupFinalDelete}
+                style="margin-left:3px;margin-right:3px"
+                ><img
+                    src="${deleteMysteryIcon}"
+                    title="Delete final coordinate"
+                    style="cursor:pointer;vertical-align:middle;" /></a
+            ><a style="margin-left:16px;margin-right:3px" href="#gccommentarea"
+                ><img
+                    src="${commentIcon}"
+                    title="Jump to Comment"
+                    style="cursor:pointer;vertical-align:middle;"
+            /></a>
+        </td>
+    </div>`;
 };
 
 const generateCommentSection = () => {
@@ -96,6 +202,7 @@ const generateCommentSection = () => {
                 $("#commentCommandArchive").show();
                 $("#commentCommandDelete").show();
                 $("#commentCommandAdd").hide();
+                patchSmallMap(comment);
             } else {
                 $("#commentCommandAdd").show();
                 $("#commentCommandEdit").hide();
@@ -199,19 +306,19 @@ const generateCommentSection = () => {
             }
 
             var fin = parseCoordinates($("#detailCommentInputLatLng").val());
-            // TODO: check if those lines can be removed or needs to be fixed
-            var finlat, finlng;
+
             if (fin.length == 2) {
-                finlat = fin[0];
-                finlng = fin[1];
-                comment.lat = finlat;
-                comment.lng = finlng;
+                comment.lat = fin[0];
+                comment.lng = fin[1];
             } else if ($("#detailCommentInputLatLng").val() != DEFAULTCOORDS) {
                 alert(lang.alert_couldnotparse + fin[0]);
                 return;
             }
-            // TODO
-            // detailFinalCacheState.options.selectedIndex = detailCommentCacheState.options.selectedIndex;
+
+            $("#detailFinalCacheState").prop(
+                "selectedIndex",
+                $("#detailCommentCacheState").prop("selectedIndex")
+            );
 
             // a bit complicated but required to not mess with the types (casting not possible as we are here not in ts)
             // first get the Enum key by value to then get the value again...
@@ -222,6 +329,8 @@ const generateCommentSection = () => {
                     )
                 ];
 
+            $("#detailFinalCacheState").val(comment.state);
+
             comment.commentValue = editor_instance.getMarkdown();
 
             viewer_instance.setMarkdown(comment.commentValue);
@@ -229,7 +338,11 @@ const generateCommentSection = () => {
 
             comment.save();
             updateCommentSection();
-            // TODO: add setting for savetoCacheNote
+
+            if (GM_getValue(AUTO_UPLOAD_CACHE_NOTES) == 1) {
+                saveToCacheNote();
+            }
+
             if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
                 setUserCoordinate(comment.lat, comment.lng);
             }
@@ -239,31 +352,7 @@ const generateCommentSection = () => {
                 clean = convertDec2DMS(comment.lat, comment.lng);
             }
             $("#detailCommentInputLatLng").val(clean);
-
-            // TODO
-            // $("#detailFinalInputLatLng").val(clean);
-        };
-
-        const mouseupFinalSave = () => {
-            console.log("TODO: finalSave");
-        };
-
-        const mouseupFinalDelete = () => {
-            var check = confirm(lang.detail_finaldeleteconfirmation);
-            if (check) {
-                $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
-                $("#detailFinalInputLatLng").css("color", "grey");
-
-                // TODO check and implement saveFinalCoords()
-                // saveFinalCoords();
-
-                if (GM_getValue(AUTO_UPDATE_GS_FINAL) == 1) {
-                    resetUserCoordinate();
-                }
-
-                viewState.isViewMode = true;
-                updateCommentSection();
-            }
+            $("#detailFinalInputLatLng").val(clean);
         };
 
         const mouseupArchive = () => {
@@ -295,8 +384,7 @@ const generateCommentSection = () => {
 
                 $("#detailCommentCacheState").val(StateEnum.unknown);
 
-                // TODO
-                // $("#detailFinalCacheState").val(StateEnum.unknown);
+                $("#detailFinalCacheState").val(StateEnum.unknown);
 
                 $("#detailCommentInputLatLng").val(DEFAULTCOORDS);
                 $("#detailFinalInputLatLng").val(DEFAULTCOORDS);
@@ -331,48 +419,36 @@ const generateCommentSection = () => {
         return html`
             <p>
                 <strong>My comments</strong>
-                <a id="commentCommandAdd" style="display: none;" onmouseup=${mouseupAdd}>
+                <a id="commentCommandAdd" style="display: none;" onclick=${mouseupAdd}>
                     <img src="${commentIconAdd}" 
                     title="${lang.detail_add}" style="cursor:pointer">
                 </a> 
-                <a id="commentCommandEdit" style="display: inline;" onmouseup=${mouseupEdit}>
+                <a id="commentCommandEdit" style="display: inline;" onclick=${mouseupEdit}>
                     <img src="${commentIconEdit}" 
                     title="${lang.detail_edit}" style="cursor:pointer">
                 </a>
-                <a id="commentCommandShare" style="display: inline;" onmouseup=${mouseupShare}>
+                <a id="commentCommandShare" style="display: inline;" onclick=${mouseupShare}>
                     <img src="${commentIconShare}" 
                     title="${lang.detail_share}" style="cursor:pointer">
                 </a>
-                <a id="commentCommandCancel" style="display: none;" onmouseup=${mouseupCancel}>
+                <a id="commentCommandCancel" style="display: none;" onclick=${mouseupCancel}>
                     <img src="${commentIconEditCancel}" 
                     title="${lang.detail_cancel}" style="cursor:pointer">
                 </a>
-                <a id="commentCommandSave" style="display: none;" onmouseup=${mouseupSave}>
+                <a id="commentCommandSave" style="display: none;" onclick=${mouseupSave}>
                     <img src="${commentIconSave}"
                      title="${lang.detail_save}" style="cursor:pointer">
                 </a>
-                <a id="commentCommandFinalSave" style="display: none;" onmouseup=${mouseupFinalSave}>
-                    <img src="${commentIconSave}" 
-                    title="${lang.detail_finalsave}" style="cursor:pointer">
-                </a>
-                <a id="commentFinalDelete" style="display: none;" onmouseup=${mouseupFinalDelete}>
-                    <img src="${deleteMysteryIcon}" 
-                    title="${lang.detail_finaldelete}" style="cursor:pointer">
-                </a>
-                <a id="commentCommandJump" style="display: none;" href="#gccommentarea">
-                    <img src="${commentIcon}" 
-                    title="${lang.detail_jumptocomment}" style="cursor:pointer">
-                </a>
-                <a id="commentCommandArchive" style="display: none;" onmouseup=${mouseupArchive}>
+                <a id="commentCommandArchive" style="display: none;" onclick=${mouseupArchive}>
                     <img src="${archiveAdd}" 
                     title="${lang.table_addtoarchive}"
                     style="cursor:pointer">
                 </a>
-                <a id="commentCommandDelete" style="display: none;" onmouseup=${mouseupDelete}>
+                <a id="commentCommandDelete" style="display: none;" onclick=${mouseupDelete}>
                     <img src="${commentIconDelete}"
                      title="${lang.detail_delete}" style="cursor:pointer">
                 </a>
-                <a id="commentCommandFullscreen" style="" onmouseup=${editorEnterFullscreen}>
+                <a id="commentCommandFullscreen" style="" onclick=${editorEnterFullscreen}>
                     <img src="${commentIconFullscreen}" 
                     title="Enter Fullscreen" style="cursor:pointer">
                 </a>
@@ -405,7 +481,7 @@ const generateCommentSection = () => {
                 } style="margin-left:5px; margin-right:5px; height:35px;" disabled="true" size="30"></input>
                 <div id="gccommentarea">
                     <div class="defaultFsHeader" id="gccommentCloseFullscreenheader">
-                        <div class="headerBlue" onmouseup=${editorExitFullscreen}>
+                        <div class="headerBlue" onclick=${editorExitFullscreen}>
                             <a>
                                 Click here to close the fullscreen view.
                             </a>

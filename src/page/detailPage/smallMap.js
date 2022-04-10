@@ -26,17 +26,14 @@ var layerGroupGcc;
 var layerGroupAll;
 
 export const patchSmallMap = (/** @type {CacheComment} */ comment) => {
+    if (comment === null) {
+        return;
+    }
     waitForPropOfObject("L.map", GMWindow, () => patchSmallMapInteral(comment));
 };
 
 const patchSmallMapInteral = (/** @type {CacheComment} */ comment) => {
-    // Destroy original map (hooks getting the original map are not reliable)
-    $("#map_canvas")
-        .after(
-            '<div id="map_canvas_gcc" style="width: 325px; height: 325px; position: relative;" class="leaflet-container leaflet-fade-anim" tabindex="0"></div>'
-        )
-        .hide();
-    // Recreate original map, but get us a accass so that we can manipulate
+    // Recreate original map, but get us a access so that we can manipulate
     recreateSmallMap();
     // link the map instace with our map lib
     setMap(map);
@@ -53,12 +50,24 @@ const recreateSmallMap = () => {
     /**
      * @type L
      */
+    // @ts-ignore
     const leaflet = GMWindow.L;
     /**
      * @type object[]
      */
+    // @ts-ignore
     const additionalWPs = GMWindow.cmapAdditionalWaypoints;
+    // @ts-ignore
     const cacheInfo = GMWindow.mapLatLng;
+
+    // Remove a gcc existing map
+    $("#map_canvas_gcc").remove();
+    // Destroy original map (hooks getting the original map are not reliable)
+    $("#map_canvas")
+        .after(
+            '<div id="map_canvas_gcc" style="width: 325px; height: 325px; position: relative;" class="leaflet-container leaflet-fade-anim" tabindex="0"></div>'
+        )
+        .hide();
 
     map = leaflet.map("map_canvas_gcc", {
         center: [cacheInfo.lat, cacheInfo.lng],

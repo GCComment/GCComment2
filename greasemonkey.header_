@@ -3,7 +3,6 @@
 // @namespace  https://gccomment.lukiam.de
 // @description Add comments to your geocaches on geocaching.com.
 // @include   /^https?://.*geocaching\.com/.*$/
-// @include   /^https://api.dropbox.com/.*$/
 // @grant    GM_getValue
 // @grant    GM_setValue
 // @grant    GM_deleteValue

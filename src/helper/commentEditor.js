@@ -18,7 +18,7 @@ export const createEditor = (div, content) => {
         initialValue: sanitize(content),
         usageStatistics: false
     });
-
+    editor.removeToolbarItem("image");
     return editor;
 };
 

@@ -2,6 +2,11 @@ import $ from "jquery";
 import { log } from "./helper/logger.js";
 import { gccommentOnDetailpage } from "./page/detailPage/detailPage.js";
 import { gccommentOnHidePage } from "./page/hidePage/hidePage.js";
+import {
+    gccommentOnLogPage,
+    gccommentOnNewLogPage
+} from "./page/logPage/logPage.js";
+import { gccommentOnManageLocations } from "./page/manageLocation/manageLocation.js";
 import { gccommentOnMapPage } from "./page/mapPage/mapPage.js";
 import { gccommentOnNewMapPage } from "./page/mapPage/newMapPage.js";
 import { addCommentBubblesToPage } from "./page/other/addCommentBubblesToPage.js";
@@ -53,11 +58,7 @@ $(() => {
     } else if (document.URL.search("/sendtogps.aspx") >= 0) {
         log("debug", "matched sendToGPS");
         sendToGPS();
-    } else if (
-        document.URL.search(
-            "www.geocaching.com/account/settings/homelocation"
-        ) >= 0
-    ) {
+    } else if (document.URL.search("/account/settings/homelocation") >= 0) {
         log("debug", "matched gccommentOnManageLocations");
         gccommentOnManageLocations();
     } else if (document.URL.search("/seek/log.aspx") >= 0) {
@@ -69,9 +70,6 @@ $(() => {
     } else if (document.URL.search("/hide/planning") >= 0) {
         log("debug", "matched gccommentOnHidePage");
         gccommentOnHidePage();
-    } else if (document.URL.search("lukeiam.github.io/gcc") >= 0) {
-        log("debug", "matched gccommentOnSharingPage");
-        gccommentOnSharingPage();
     } else {
         log("debug", "nothing matched");
     }

@@ -75,4 +75,16 @@ export class CacheComment {
     delete() {
         deleteCommentFromDB(this);
     }
+
+    toJson() {
+        return JSON.stringify(this);
+    }
+
+    /**
+     * @param {string} json
+     * @returns {CacheComment}
+     */
+    static fromJson(json) {
+        return new CacheComment(JSON.parse(json));
+    }
 }
