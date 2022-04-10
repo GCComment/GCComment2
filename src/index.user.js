@@ -10,7 +10,9 @@ import { gccommentOnManageLocations } from "./page/manageLocation/manageLocation
 import { gccommentOnMapPage } from "./page/mapPage/mapPage.js";
 import { gccommentOnNewMapPage } from "./page/mapPage/newMapPage.js";
 import { addCommentBubblesToPage } from "./page/other/addCommentBubblesToPage.js";
+import { gccommentOnPrintPage } from "./page/printPage/printPage.js";
 import { gccommentOnProfilePage } from "./page/profilePage/profilePage.js";
+import { gccommentOnSendToGpsPage } from "./page/sendToGps/sendToGps";
 
 $(() => {
     // starting the GCC
@@ -57,7 +59,7 @@ $(() => {
         gccommentOnNewMapPage();
     } else if (document.URL.search("/sendtogps.aspx") >= 0) {
         log("debug", "matched sendToGPS");
-        sendToGPS();
+        gccommentOnSendToGpsPage();
     } else if (document.URL.search("/account/settings/homelocation") >= 0) {
         log("debug", "matched gccommentOnManageLocations");
         gccommentOnManageLocations();
