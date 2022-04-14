@@ -43,3 +43,22 @@ export const createViewerFromDivDataAttr = (div) => {
 
     return viewer;
 };
+
+/** @type {Editor} */
+var mdRenderViewer = null;
+
+export const getHtmlFromMarkdown = (markdown) => {
+    if (!mdRenderViewer) {
+        $(document.body).append(
+            '<div id="mdRenderViewer" style="display:none;"></div>'
+        );
+        mdRenderViewer = new Editor({
+            el: $("#mdRenderViewer")[0],
+            usageStatistics: false
+        });
+    }
+
+    mdRenderViewer.setMarkdown(markdown);
+
+    return mdRenderViewer.getHTML();
+};

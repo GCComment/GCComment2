@@ -12,6 +12,7 @@ import {
     doLoadCommentFromGCCode,
     doLoadCommentFromGUID
 } from "../../function/db.js";
+import { getHtmlFromMarkdown } from "../../helper/commentEditor.js";
 import { convertDec2DMS } from "../../helper/coordinates.js";
 import { log } from "../../helper/logger.js";
 import { tooltip } from "../../helper/tooltip.js";
@@ -86,8 +87,6 @@ export const addCommentBubblesToPage = () => {
                 let targetNode = evt.relatedTarget;
                 if (!targetNode) return;
 
-                let cacheLink, commValue;
-
                 while (targetNode.nodeName.toLowerCase() != "td") {
                     targetNode = targetNode.parentNode;
                     if (!targetNode) break;
@@ -97,29 +96,29 @@ export const addCommentBubblesToPage = () => {
 
                 const gccimg = $(targetNode).find("img[guid]");
                 const guid = gccimg.attr("guid");
-                commValue = doLoadCommentFromGUID(guid);
+                const comment = doLoadCommentFromGUID(guid);
 
-                if (commValue == null) {
+                if (comment == null) {
                     log("debug", "could not load comment for guid " + guid);
                     return;
                 }
 
                 var commentTooltip = null;
-                if (commValue.lat != null && commValue.lng != null) {
+                if (comment.lat != null && comment.lng != null) {
                     commentTooltip = html`
                         <strong>${lang.myfinalcoords}</strong>
                         <br />
-                        ${convertDec2DMS(commValue.lat, commValue.lng)}
+                        ${convertDec2DMS(comment.lat, comment.lng)}
                     `;
                 }
-                if (commValue.commentValue) {
+                if (comment.commentValue) {
                     commentTooltip = html`
                         ${commentTooltip}
                         <br />
                         <br />
                         <strong>${lang.mycomment}</strong>
                         <br />
-                        ${commValue.commentValue.replace(/\n/g, "<br/>")}
+                        ${{ html: getHtmlFromMarkdown(comment.commentValue) }}
                     `;
                 }
                 tooltip.show(commentTooltip, 400);
