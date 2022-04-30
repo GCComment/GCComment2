@@ -244,7 +244,7 @@ const SlideMenu = function () {
             this._contents.innerHTML = this._innerHTML;
         },
 
-        _animate: (menu, from, to, isOpen, ispx, unit) => {
+        _animate: function (menu, from, to, isOpen, ispx, unit) {
             if (this._isHorizontal) {
                 if (this._isLeftPosition) {
                     menu.style.left = from + (ispx ? "px" : "%");
