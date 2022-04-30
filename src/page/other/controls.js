@@ -12,11 +12,11 @@ export const appendCheckBox = (
 ) => {
     const updateValue = () => {
         const checked = $("#" + id).is(":checked");
-        log("debug", "update : " + id + " to new value " + !checked);
-        GCC_setValue(id, !checked);
+        log("debug", "update : " + id + " to new value " + checked);
+        GCC_setValue(id, checked);
 
         if (extrafunction) {
-            extrafunction.apply(this, [!checked]);
+            extrafunction.apply(this, [checked]);
         }
     };
 
@@ -58,7 +58,7 @@ export const appendCheckBox = (
 };
 
 export const appendRadioGroup = (settingsName, options, defaultSelection) => {
-    const onInputMouseUp = (event) => {
+    const onInputClick = (event) => {
         GCC_setValue(settingsName, event.target.value);
         log(
             "debug",
@@ -66,7 +66,7 @@ export const appendRadioGroup = (settingsName, options, defaultSelection) => {
         );
     };
 
-    const onLabelMouseUp = (event) => {
+    const onLabelClick = (event) => {
         GCC_setValue(settingsName, event.target.previousSibling.value);
         log(
             "debug",
@@ -100,12 +100,12 @@ export const appendRadioGroup = (settingsName, options, defaultSelection) => {
                         type="radio"
                         value=${option.attr}
                         checked="${checked}"
-                        onclick=${onInputMouseUp}
+                        onclick=${onInputClick}
                     />
                     <label
                         for="id${settingsName}${option.attr}"
                         style="'margin: 0 8px 0 3px;"
-                        onclick=${onLabelMouseUp}
+                        onclick=${onLabelClick}
                     >
                         ${option.label}
                     </label>
