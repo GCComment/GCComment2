@@ -38,11 +38,13 @@ var map = null;
 var leaflet = null;
 /** @type {L.LayerGroup} */
 var gccLayer = null;
+var makerClickCallback = null;
 
-export const setMap = (m) => {
+export const setMap = (m, makerClick = null) => {
     map = m;
     // @ts-ignore
     leaflet = GMWindow.L;
+    makerClickCallback = makerClick;
 };
 
 /**
@@ -177,7 +179,6 @@ export const addGccMenuHide = () => {
             </div>
         `
     );
-
     setTimeout(() => {
         $("#mmSub").slideToggle();
         _updateMapViewHide();
@@ -281,37 +282,8 @@ export const drawMarker = (
     var marker = new leaflet.Marker(new leaflet.LatLng(lat, lng), {
         icon: finalMarker
     });
-    marker.on("click", (event) => {
-        /*
-        var gcurl = "https://tiles01.geocaching.com/map/map.details?i=" + gccode + "&jsoncallback=?";
-        var success = (a) => {            
-            var b = "cd" + Math.ceil(9999999999999 * Math.random());
-            var h = `<div id="${b}"></div>`;           
-
-            var popup = new leaflet.Popup({
-                offset: new leaflet.Point(-178, 2)
-            });
-            popup.setContent(h);
-            popup.setLatLng(marker.getLatLng());
-            map.openPopup(popup);
-
-            $('#map_canvas').find("#" + b).link(a, "#cachePopupTemplate")
-                .delegate("a.prev-item", "click", (a) => {
-                        a.preventDefault();
-                        $(this).parents("div.map-item").hide().prev().show();
-                        return false;
-                }).delegate("a.next-item", "click", (a) => {
-                    a.preventDefault();
-                    $(this).parents("div.map-item").hide().next().show();
-                    return false;
-                });
-            $('#map_canvas').find("#" + b).parent().width('401px');
-            setTimeout(() => {
-                popup._adjustPan();
-            }, 100);
-        };
-        $.getJSON(gcurl, success);
-        */
+    marker.on("click", () => {
+        makerClickCallback(gccode, marker, map, leaflet);
     });
 
     gccLayer.addLayer(marker);
