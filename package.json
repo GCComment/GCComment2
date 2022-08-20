@@ -37,7 +37,7 @@
         "lighterhtml": "^4.2.0"
     },
     "devDependencies": {
-        "@parcel/transformer-inline-string": "^2.3.0",
+        "@parcel/transformer-inline-string": "^2.7.0",
         "@types/dropzone": "^5.7.4",
         "@types/file-saver": "^2.0.5",
         "@types/gapi": "^0.0.41",
