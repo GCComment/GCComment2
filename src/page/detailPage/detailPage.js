@@ -57,7 +57,7 @@ var updateCommentSectionFunc;
 const generateHeaderSection = () => {
     const mouseupFinalSave = () => {
         // parse coords
-        var fin = parseCoordinates($("#detailFinalInputLatLng").val());
+        var fin = parseCoordinates(String($("#detailFinalInputLatLng").val()));
         if (fin.length == 2) {
             comment.lat = fin[0];
             comment.lng = fin[1];
@@ -160,25 +160,25 @@ const generateHeaderSection = () => {
     </div>`;
 };
 
+const createEmptyComment = () => {
+    comment = new CacheComment({
+        guid: getGUID(),
+        gccode: getCachecode(),
+        name: getCachename()
+    });
+
+    const orgigCoords = retrieveOriginalCoordinates();
+    if (comment && orgigCoords.length === 2) {
+        if (!comment.origlat || !comment.origlng) {
+            comment.origlat = orgigCoords[0];
+            comment.origlng = orgigCoords[1];
+        }
+    }
+};
+
 const generateCommentSection = () => {
     const viewState = {
         isViewMode: true
-    };
-
-    const createEmptyComment = () => {
-        comment = new CacheComment({
-            guid: getGUID(),
-            gccode: getCachecode(),
-            name: getCachename()
-        });
-
-        const orgigCoords = retrieveOriginalCoordinates();
-        if (comment && orgigCoords.length === 2) {
-            if (!comment.origlat || !comment.origlng) {
-                comment.origlat = orgigCoords[0];
-                comment.origlng = orgigCoords[1];
-            }
-        }
     };
 
     const updateCommentSection = () => {
@@ -502,7 +502,7 @@ const generateCoordinateSection = () => {
 };
 
 const getGUID = () => {
-    const url = $("form").attr("action");
+    const url = $("#hlViewWhoFavorited").attr("href");
     const guidIndex = url.indexOf("guid=");
     const length = "3331cc55-49a2-4883-a5ad-06657e8c1aab".length;
     return url.substr(guidIndex + 5, length);
@@ -530,6 +530,10 @@ export const gccommentOnDetailpage = () => {
     appendCSS("text", editorFullscreenCss);
 
     comment = doLoadCommentFromGUID(getGUID());
+
+    if (comment === null) {
+        createEmptyComment();
+    }
 
     const hookForHeaderSection = $("#Print");
     if (hookForHeaderSection.length > 0) {

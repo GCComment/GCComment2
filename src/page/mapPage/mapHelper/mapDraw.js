@@ -23,6 +23,7 @@ import {
     AUTOMOVEMYSTERIESBETASOLVED,
     AUTOMOVEMYSTERIESBETAUNSOLVED
 } from "../../../consts/preferences.js";
+import { CacheComment } from "../../../dataClasses/cacheComment.js";
 import { StateEnum } from "../../../dataClasses/stateEnum";
 import { doLoadCommentFromGUID } from "../../../function/db.js";
 import { parseCoordinates } from "../../../helper/coordinates.js";
@@ -245,6 +246,7 @@ const createGccLayerIfRequired = () => {
 };
 
 export const drawMarker = (
+    /** @type {CacheComment}**/ comment,
     /** @type {number} */ lat,
     /** @type {number} */ lng,
     /** @type {string} */ type,
@@ -282,9 +284,12 @@ export const drawMarker = (
     var marker = new leaflet.Marker(new leaflet.LatLng(lat, lng), {
         icon: finalMarker
     });
-    marker.on("click", () => {
-        makerClickCallback(gccode, marker, map, leaflet);
-    });
+
+    if (makerClickCallback) {
+        marker.on("click", () => {
+            makerClickCallback(comment, gccode, marker, map, leaflet);
+        });
+    }
 
     gccLayer.addLayer(marker);
 };
@@ -399,6 +404,7 @@ export const createMovedFinal = (comment, drawOriginCoord, drawArea) => {
     );
 
     drawMarker(
+        comment,
         comment.lat,
         comment.lng,
         "final",
@@ -423,6 +429,7 @@ export const createMovedFinal = (comment, drawOriginCoord, drawArea) => {
             comment.state
         );
         drawMarker(
+            comment,
             parseFloat(comment.origlat),
             parseFloat(comment.origlng),
             "originCoord",
@@ -488,6 +495,7 @@ export const drawSingleCache = (
                 if (coords.length == 2) {
                     aWaypoints.push([coords[0], coords[1]]);
                     drawMarker(
+                        comment,
                         coords[0],
                         coords[1],
                         "wpt",

@@ -246,10 +246,6 @@ export class Language {
     /**
      * @type {string}
      */
-    export_step3;
-    /**
-     * @type {string}
-     */
     export_explain;
     /**
      * @type {string}
@@ -258,27 +254,7 @@ export class Language {
     /**
      * @type {string}
      */
-    export_toServer;
-    /**
-     * @type {string}
-     */
-    export_toDropbox;
-    /**
-     * @type {string}
-     */
-    export_toDropboxEnterFileName;
-    /**
-     * @type {string}
-     */
-    export_toDropboxPerformFilteredExport;
-    /**
-     * @type {string}
-     */
-    export_toGistPerformFilteredExport;
-    /**
-     * @type {string}
-     */
-    export_toServer_result;
+    export_toDrive;
     /**
      * @type {string}
      */
@@ -290,19 +266,12 @@ export class Language {
     /**
      * @type {string}
      */
-    import_fromServer;
+    import_fromDrive;
+
     /**
      * @type {string}
      */
-    import_fromDropbox;
-    /**
-     * @type {string}
-     */
-    import_fromGist;
-    /**
-     * @type {string}
-     */
-    import_fromDropboxCheckForFiles;
+    import_updateDriveList;
     /**
      * @type {string}
      */

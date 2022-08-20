@@ -47,6 +47,11 @@ export const convertDec2DMS = (
     return result;
 };
 
+/**
+ *
+ * @param {string} cstr
+ * @returns {number[]}
+ */
 export const parseCoordinates = (cstr) => {
     var regexDegMin =
         /([NS])\s*(\d+)\D\s*(\d+\.\d+)'*\s*([EW])\s*(\d+)\D\s*(\d+\.\d+)'*/i;
@@ -59,7 +64,7 @@ export const parseCoordinates = (cstr) => {
         while (lat1.indexOf(0) == 0) {
             lat1 = lat1.substring(1, lat1.length);
         }
-        if (lat1.length == 0) lat1 = 0;
+        if (lat1.length == 0) lat1 = "0";
 
         var lat2 = RegExp.$3;
         var lat = parseInt(lat1) + parseFloat(lat2) / 60;
@@ -69,7 +74,7 @@ export const parseCoordinates = (cstr) => {
         while (lng1.indexOf(0) == 0) {
             lng1 = lng1.substring(1, lng1.length);
         }
-        if (lng1.length == 0) lng1 = 0;
+        if (lng1.length == 0) lng1 = "0";
         var lng2 = RegExp.$6;
         var lng = parseInt(lng1) + parseFloat(lng2) / 60;
         if (RegExp.$4 == "W") lng = lng * -1;

@@ -11,6 +11,7 @@ import {
     SETTING_ARCHIVE_FILTER
 } from "../../consts/preferences.js";
 import { getNumberOfComments } from "../../function/db";
+import { checkForUpdates } from "../../function/update.js";
 import { appendCSS } from "../../helper/css.js";
 import { log } from "../../helper/logger";
 import { GCC_getValue, GCC_setValue } from "../../helper/storage.js";
@@ -38,6 +39,7 @@ const generateGccRoot = (targetNode) => {
                 class="tableGCComment"
                 style="outline:1px solid #D7D7D7;margin-bottom:-10px;padding:2px;min-width:1000px;max-width:1300px;margin:auto;"
             >
+                <div id="gccupdateinfo"></div>
                 <a
                     id="configDivButton"
                     title="${lang.menu_options}"
@@ -260,4 +262,7 @@ export const gccommentOnProfilePage = (newGcDesign = false) => {
         );
         generateGccRoot($("#gccRootContainer")[0]);
     }
+
+    // Trigger update check
+    checkForUpdates();
 };

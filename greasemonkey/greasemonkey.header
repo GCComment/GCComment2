@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name       GCComment Dev
+// @name       GCComment 2
 // @namespace  https://gccomment.lukiam.de
 // @description Add comments to your geocaches on geocaching.com.
 // @include   /^https?://.*geocaching\.com/.*$/
@@ -12,6 +12,6 @@
 // @grant    GM_log
 // @grant    GM.info
 // @icon     https://raw.githubusercontent.com/ramirezhr/GCComment/master/resources/icon.png
-// @version  101
-// @author   Birnbaum2001, lukeIam, ramirez
+// @version  1
+// @author   Birnbaum2001, ramirez, lukeIam
 // ==/UserScript==

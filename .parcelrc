@@ -1,4 +1,4 @@
 {
   "extends": ["@parcel/config-default"],
-  "transformers": {}
+  "transformers": {}  
 }

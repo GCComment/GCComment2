@@ -14,7 +14,7 @@ export const gccommentOnMapPage = () => {
     });
 };
 
-function onClickMarker(gccode, marker, map, leaflet) {
+function onClickMarker(comment, gccode, marker, map, leaflet) {
     var gcurl = "https://tiles01.geocaching.com/map/map.details?i=" + gccode;
     var success = (a) => {
         var b = "cd" + Math.ceil(9999999999999 * Math.random());

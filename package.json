@@ -4,41 +4,51 @@
     "description": "",
     "source": "src/index.user.js",
     "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead",
+    "custommain": "dist/gccomment.user.js",
+    "dev": "distDev/gccomment_dev.js",
     "targets": {
-        "main": {},
+        "custommain": {
+            "optimize": true
+        },
         "dev": {
+            "optimize": false,
             "sourceMap": {
                 "inline": true
             }
         }
     },
     "scripts": {
-        "start": "parcel watch --target dev --no-hmr",
-        "build": "parcel build",
+        "start": "node greasemonkey/copyDevScript.js && parcel watch --target dev --no-hmr",
+        "build": "parcel build --target custommain",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prepare": "husky install"
     },
     "keywords": [],
     "author": "",
     "dependencies": {
+        "@swc/helpers": "^0.4.6",
         "@toast-ui/editor": "^3.1.2",
-        "@types/gapi": "^0.0.41",
-        "@types/gapi.auth2": "^0.0.56",
-        "@types/gapi.client.drive": "^3.0.13",
         "async": "^3.2.3",
         "datatables.net": "^1.11.3",
         "datatables.net-dt": "^1.11.3",
+        "dropzone": "^6.0.0-beta.2",
+        "file-saver": "^2.0.5",
         "jquery": "^3.6.0",
         "lighterhtml": "^4.2.0"
     },
     "devDependencies": {
         "@parcel/transformer-inline-string": "^2.3.0",
+        "@types/dropzone": "^5.7.4",
+        "@types/file-saver": "^2.0.5",
+        "@types/gapi": "^0.0.41",
+        "@types/gapi.auth2": "^0.0.56",
+        "@types/gapi.client.drive": "^3.0.13",
         "@types/jquery": "^3.5.11",
         "@types/leaflet": "^1.7.8",
+        "@types/node": "^18.7.8",
         "@types/tampermonkey": "^4.0.5",
         "husky": "^7.0.0",
         "parcel": "^2.3.0",
-        "parcel-plugin-greasemonkey": "^1.0.3",
         "prettier": "2.5.1",
         "prettier-plugin-organize-imports": "^2.3.4",
         "pretty-quick": "^3.1.3",

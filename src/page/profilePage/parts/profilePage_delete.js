@@ -1,7 +1,6 @@
 // event handler delete button (#deleteAllDivButton)
 import $ from "jquery";
 import { html } from "lighterhtml";
-import { COMPREFIX } from "../../../consts/general";
 import { lang } from "../../../consts/language/language";
 import {
     DELETEALL_FILTER_ALL,
@@ -12,10 +11,10 @@ import {
     DELETEALL_FILTER_FOUND,
     DELETEALL_FILTER_SOLVED,
     DELETEALL_FILTER_UNSOLVED,
-    DELETEALL_FILTER_UNTYPED
+    DELETEALL_FILTER_UNTYPED,
+    FILTER_TYPE_DELETE
 } from "../../../consts/preferences";
-import { StateEnum } from "../../../dataClasses/stateEnum";
-import { doLoadCommentFromGUID } from "../../../function/db";
+import { getFilteredComments } from "../../../function/db.js";
 import { log } from "../../../helper/logger";
 import { GCC_getValue } from "../../../helper/storage.js";
 import { appendCheckBox, appendRadioGroup } from "../../other/controls";
@@ -41,73 +40,13 @@ function performFilteredDeleteAll() {
         // log("info", "all keys: " + keys);
         let resultRemoved = "<ul>";
         let removedCount = 0;
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            if (key.indexOf(COMPREFIX) > -1) {
-                const comment = doLoadCommentFromGUID(
-                    key.substr(COMPREFIX.length)
-                );
 
-                const isArchived = comment.archived;
-                const archiveSetting = GCC_getValue(DELETEALL_FILTER_ARCHIVED);
-                const includeArchive =
-                    archiveSetting === DELETEALL_FILTER_ARCHIVED_BOTH ||
-                    (archiveSetting === DELETEALL_FILTER_ARCHIVED_ARCHIVED &&
-                        isArchived) ||
-                    (archiveSetting ===
-                        DELETEALL_FILTER_ARCHIVED_NOT_ARCHIVED &&
-                        !isArchived);
-
-                if (
-                    (GCC_getValue(DELETEALL_FILTER_ALL) && includeArchive) ||
-                    (comment.state === StateEnum.unknown &&
-                        GCC_getValue(DELETEALL_FILTER_UNTYPED) &&
-                        includeArchive) ||
-                    (comment.state === StateEnum.unsolved &&
-                        GCC_getValue(DELETEALL_FILTER_UNSOLVED) &&
-                        includeArchive) ||
-                    (comment.state === StateEnum.solved &&
-                        GCC_getValue(DELETEALL_FILTER_SOLVED) &&
-                        includeArchive) ||
-                    (comment.state === StateEnum.found &&
-                        GCC_getValue(DELETEALL_FILTER_FOUND) &&
-                        includeArchive)
-                ) {
-                    const removeTooltip = createCachePrintout(comment);
-                    resultRemoved =
-                        resultRemoved +
-                        "<li><a target='blank' href='http://www.geocaching.com/seek/cache_details.aspx?guid=" +
-                        comment.guid +
-                        "'>" +
-                        comment.name +
-                        " (" +
-                        comment.gccode +
-                        ")</a>. " +
-                        lang.tmpl_commentremoved
-                            // @ts-ignore
-                            .replace("{{1}}", Base64.encode(removeTooltip))
-                            .replace(
-                                "{{2}}",
-                                encodeURIComponent(removeTooltip)
-                            ) +
-                        "</li>";
-                    removedCount++;
-
-                    log(
-                        "info",
-                        "deleted: " + key + "(" + GCC_getValue(key) + ")"
-                    );
-                    comment.delete();
-                }
-            }
+        const commentsToDelete = getFilteredComments(FILTER_TYPE_DELETE);
+        for (let i = 0; i < commentsToDelete.length; i++) {
+            var comment = commentsToDelete[i];
+            log("info", `deleted: ${comment.gccode} (${comment.name})`);
+            comment.delete();
         }
-        deleteAllResult.innerHTML =
-            "<h4>" +
-            lang.delete_result +
-            ": " +
-            removedCount +
-            "</h4>" +
-            resultRemoved;
     }
 }
 
