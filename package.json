@@ -40,7 +40,7 @@
         "@parcel/transformer-inline-string": "^2.3.0",
         "@types/dropzone": "^5.7.4",
         "@types/file-saver": "^2.0.5",
-        "@types/gapi": "^0.0.41",
+        "@types/gapi": "^0.0.42",
         "@types/gapi.auth2": "^0.0.56",
         "@types/gapi.client.drive": "^3.0.13",
         "@types/jquery": "^3.5.11",
