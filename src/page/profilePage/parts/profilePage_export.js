@@ -15,7 +15,7 @@ import {
     FILTER_TYPE_EXPORT
 } from "../../../consts/preferences";
 import { getFilteredComments } from "../../../function/db.js";
-import { exportMultipleAsJSON } from "../../../function/ImportExport.js";
+import { exportMultipleAsJSON } from "../../../function/importExport.js";
 import { toIsoString } from "../../../helper/date.js";
 import { saveFile } from "../../../helper/fileSaver.js";
 import { GCC_getValue } from "../../../helper/storage.js";
