@@ -8,7 +8,7 @@ import { lang } from "../../../consts/language/language";
 import {
     importMultipleFromJSON,
     parseXMLImport
-} from "../../../function/ImportExport.js";
+} from "../../../function/importExport.js";
 import { appendCSS } from "../../../helper/css.js";
 import { log } from "../../../helper/logger.js";
 
