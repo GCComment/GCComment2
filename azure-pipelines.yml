@@ -17,10 +17,3 @@ steps:
 - script: |
     npm run build
   displayName: 'npm build'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'dist'
-    ArtifactName: 'GCComment 2 Tampermonkey script'
-    publishLocation: 'Container'
-  displayName: 'Publish build script'
