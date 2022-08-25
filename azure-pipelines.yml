@@ -18,6 +18,11 @@ steps:
           npm run build
       displayName: "npm build"
 
+    - script: |
+          node .\greasemonkey\patchVersion.js ${{Build.SourceBranchName}}
+      displayName: "Patch version tag in release files"
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+
     - task: PublishBuildArtifacts@1
       inputs:
           PathtoPublish: "dist"
