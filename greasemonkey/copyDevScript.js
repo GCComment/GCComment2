@@ -1,4 +1,5 @@
 var fs = require("fs");
+
 fs.readFile(
     "greasemonkey/greasemonkey_dev.user.js",
     "utf8",
