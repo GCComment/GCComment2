@@ -23,6 +23,10 @@ fs.readFile("dist/gccomment.user.js", "utf8", function (err, data) {
             /gccomment\.user\.js\.map/g,
             `${rootUrl}/${tag}/gccomment_${tag}.user.js.map`
         );
+        var result = result.replace(
+            /@version  0.0.0/g,
+            `@version  ${tag.replace("v", "")}`
+        );
     }
 
     fs.writeFile(

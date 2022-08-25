@@ -3,6 +3,7 @@ import { html, render } from "lighterhtml";
 import { lang } from "../consts/language/language";
 import { log } from "../helper/logger.js";
 import { GCC_getValue, GCC_setValue } from "../helper/storage.js";
+import { versionCompare } from "../helper/versionCompare.js";
 import { updatechangesurl, updateurl, version } from "../helper/versionInfo.js";
 
 const updateAvailable = (oChanges) => {
@@ -79,7 +80,7 @@ export const checkForUpdates = () => {
                             ", server version=" +
                             serverVersion
                     );
-                    if (serverVersion > version) {
+                    if (versionCompare(serverVersion, version) > 0) {
                         updateAvailable(oChanges);
                     }
                 } catch (JSONException) {

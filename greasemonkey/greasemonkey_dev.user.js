@@ -12,7 +12,7 @@
 // @grant    GM_log
 // @grant    GM.info
 // @icon     https://raw.githubusercontent.com/ramirezhr/GCComment/master/resources/icon.png
-// @version  1
+// @version  0.0.1
 // @author   Birnbaum2001, ramirez, lukeIam
 // @require file:///${rootfolder}/distDev/gccomment_dev.js
 // ==/UserScript==
