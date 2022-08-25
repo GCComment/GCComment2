@@ -19,7 +19,7 @@ steps:
       displayName: "npm build"
 
     - script: |
-          node .\greasemonkey\patchVersion.js ${{Build.SourceBranchName}}
+          node .\greasemonkey\patchVersion.js ${{variables['Build.SourceBranchName']}}
       displayName: "Patch version tag in release files"
       condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
 
