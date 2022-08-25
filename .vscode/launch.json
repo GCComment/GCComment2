@@ -6,10 +6,37 @@
     "configurations": [
         {
             "command": "npm start",
-            "name": "Run npm start",
+            "name": "Build and serve GCComment",
             "request": "launch",
             "type": "node-terminal",
             "outputCapture": "std"
+        },
+        {
+            "name": "Launch getReleaseNodes",
+            "program": "${workspaceFolder}/greasemonkey/getReleaseNodes.js",
+            "request": "launch",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch patchVersion",
+            "program": "${workspaceFolder}/greasemonkey/patchVersion.js",
+
+            "request": "launch",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node",
+            "args": ["v1.2.3"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch copyDevScript",
+            "program": "${workspaceFolder}/greasemonkey/copyDevScript.js",
+
+            "request": "launch",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
