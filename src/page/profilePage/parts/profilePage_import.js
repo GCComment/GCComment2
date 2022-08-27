@@ -32,7 +32,9 @@ export const generateImportDiv = () => {
             style="display:none; margin:5px;padding:10px;outline:1px solid #D7D7D7;position:relative;background-color:#EBECED"
         >
             <p>${lang.import_explain}</p>
-            <div style="column-count: 2;">
+            <div
+                style="column-count: 2; column-rule-width: 1px;column-rule-color: darkgray;column-rule-style: solid;"
+            >
                 <div
                     style="page-break-inside: avoid; break-inside: avoid-column; display: flex;justify-content: center;align-items: center;height: 200px;"
                 >
