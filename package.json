@@ -18,7 +18,7 @@
         }
     },
     "scripts": {
-        "start": "node greasemonkey/copyDevScript.js && parcel watch --target dev --no-hmr",
+        "start": "node scripts/copyDevScript.js && parcel watch --target dev --no-hmr",
         "build": "parcel build --target custommain",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prepare": "husky install"

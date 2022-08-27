@@ -13,7 +13,7 @@
         },
         {
             "name": "Launch getReleaseNodes",
-            "program": "${workspaceFolder}/greasemonkey/getReleaseNodes.js",
+            "program": "${workspaceFolder}/scripts/getReleaseNodes.js",
             "request": "launch",
             "skipFiles": ["<node_internals>/**"],
             "type": "node",
@@ -21,7 +21,7 @@
         },
         {
             "name": "Launch patchVersion",
-            "program": "${workspaceFolder}/greasemonkey/patchVersion.js",
+            "program": "${workspaceFolder}/scripts/patchVersion.js",
 
             "request": "launch",
             "skipFiles": ["<node_internals>/**"],
@@ -31,7 +31,7 @@
         },
         {
             "name": "Launch copyDevScript",
-            "program": "${workspaceFolder}/greasemonkey/copyDevScript.js",
+            "program": "${workspaceFolder}/scripts/copyDevScript.js",
 
             "request": "launch",
             "skipFiles": ["<node_internals>/**"],
