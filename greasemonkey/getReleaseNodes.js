@@ -5,10 +5,12 @@ const urlChangeLog =
 
 const handleChangelog = (changeLog) => {
     const currentVersion = changeLog["latestVersion"];
+    process.env["latestVersion"] = currentVersion;
+
     for (var change of changeLog["changes"]) {
         if (change["version"] == currentVersion) {
             const releaseMessage = change["change"].join("\n");
-            console.log(releaseMessage);
+            process.env["releaseMessage"] = releaseMessage;
             break;
         }
     }
