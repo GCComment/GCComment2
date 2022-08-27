@@ -32,7 +32,7 @@ export const language_de = new Language({
     ov_lastim: "Letzter Import",
     ov_lastup: "Letzte Prüfung auf Aktualisierung",
     settings_intro:
-        "Vielen Dank für die Verwendung von GCComment. Besuche <a href='https://github.com/Birnbaum2001/GCComment' target='blank'>github.com</a> für allgemeine Informationen und Fehlerberichte oder <a href='http://www.geoclub.de/viewtopic.php?f=117&t=44631' target='blank'>geoclub.de</a> für Diskussionen und allgemeine Fragen.",
+        "Vielen Dank für die Verwendung von GCComment. Besuche <a href='https://github.com/GCComment/GCComment2' target='blank'>github.com</a> für allgemeine Informationen und Fehlerberichte oder <a href='http://www.geoclub.de/viewtopic.php?f=117&t=44631' target='blank'>geoclub.de</a> für Diskussionen und allgemeine Fragen.",
     settings_feelfree:
         "Zögere nicht, deiner Wertschätzung Ausdruck zu verleihen :)",
     settings_enterUUID: "UUID zur Serversynchronisierung",
