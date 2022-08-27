@@ -318,7 +318,7 @@ const generateTableRow = (
             comment.state = StateEnum.unknown;
             targetState = StateEnum.unknown;
         } else if (action === "addToArchive") {
-            comment.archived;
+            comment.archived = true;
             targetState = comment.state;
         } else if (action === "removeFromArchive") {
             comment.archived = false;
