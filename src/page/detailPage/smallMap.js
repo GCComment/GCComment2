@@ -61,7 +61,12 @@ const recreateSmallMap = () => {
     const cacheInfo = GMWindow.mapLatLng;
 
     // Remove a gcc existing map
-    $("#map_canvas_gcc").remove();
+    // Workaround for a bug (remove causes infinite regresion)
+    if ($("#map_canvas_gcc").length) {
+        $("#map_canvas_gcc").each((i, e) => {
+            e.parentNode.removeChild(e);
+        });
+    }
     // Destroy original map (hooks getting the original map are not reliable)
     $("#map_canvas")
         .after(

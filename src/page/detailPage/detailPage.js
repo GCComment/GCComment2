@@ -376,7 +376,12 @@ const generateCommentSection = () => {
                 editor_instance.setMarkdown("");
                 viewer_instance.setMarkdown("");
 
-                $(".customWaypointRow").remove();
+                // Workaround for a bug (remove causes infinite regresion)
+                if ($(".customWaypointRow").length) {
+                    $(".customWaypointRow").each((i, e) => {
+                        e.parentNode.removeChild(e);
+                    });
+                }
                 var $table = $("#ctl00_ContentBody_Waypoints");
                 if ($table.find("tbody").children().length === 0) {
                     $table.remove();
