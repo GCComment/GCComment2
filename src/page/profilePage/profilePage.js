@@ -249,16 +249,15 @@ export const gccommentOnProfilePage = (newGcDesign = false) => {
     // add overview of all comments on top of page
     var anchorNode;
     if (newGcDesign) {
-        anchorNode = document.getElementsByClassName("alert");
+        anchorNode = document.getElementById("dashboard-root");
     } else {
-        anchorNode = document.getElementsByTagName("h2");
+        anchorNode = document.getElementsByTagName("h2")[0].nextSibling;
     }
 
-    if (anchorNode.length > 0) {
-        const root = anchorNode[0];
-        root.parentNode.insertBefore(
+    if (anchorNode != null) {
+        anchorNode.parentNode.insertBefore(
             html.node`<div id="gccRootContainer"/>`,
-            root.nextSibling
+            anchorNode
         );
         generateGccRoot($("#gccRootContainer")[0]);
     }
