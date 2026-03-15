@@ -1,5 +1,6 @@
 // Filter icons for Show my comments
-import * as dt from "datatables.net";
+
+import dt from "datatables.net";
 import $ from "jquery";
 import { html, render } from "lighterhtml";
 import { ARCHIVED, COMPREFIX } from "../../../consts/general";
@@ -41,9 +42,6 @@ import {
     GCC_setValue
 } from "../../../helper/storage.js";
 import { CacheComment } from "./../../../dataClasses/cacheComment";
-
-// @ts-ignore
-// connect datatables with jquery
 dt(window, $);
 
 let filter = null;
